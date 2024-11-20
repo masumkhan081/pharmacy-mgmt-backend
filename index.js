@@ -1,39 +1,31 @@
-const express = require("express");
-const app = express();
-const bodyParser = require("body-parser");
-const cookieParser = require("cookie-parser");
-const cors = require("cors");
+/* eslint-disable no-undef */
+const app = require("./src/app");
+const mongodbConnection = require("./src/config/mongodb");
+const config = require("./src/config");
 require("dotenv").config();
-const initDB = require("./src/data-tier/mongodb");
-const { originControl } = require("./src/middleware/middlewares");
 
-// initialize the database
-initDB();
+async function bootstrap() {
+  const server = app.listen(config.port, async () => {
+    console.log(`Server running on port ${config.port}`);
+    await mongodbConnection();
+  });
 
-// middlewares
-// middlewares
-app.use(express.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(cookieParser());
+  const exitHandler = () => {
+    if (server) {
+      server.close(() => {
+        console.log("Server closed");
+      });
+    }
+    process.exit(1);
+  };
 
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
-app.use(originControl);
-//
+  const unexpectedErrorHandler = (error) => {
+    console.log(error);
+    exitHandler();
+  };
 
-// routes
-app.use("/auth", require("./src/routes/auth"));
-app.use("/formulations", require("./src/routes/formulation"));
-app.use("/units", require("./src/routes/unit.js"));
-app.use("/groups", require("./src/routes/group"));
-app.use("/generics", require("./src/routes/generic"));
-app.use("/brands", require("./src/routes/brand"));
-app.use("/manufacturers", require("./src/routes/manufacturer"));
-app.use("/stock", require("./src/routes/drug"));
-app.use("/sale", require("./src/routes/sale"));
-app.use("/purchases", require("./src/routes/purchase"));
-app.use("/staff", require("./src/routes/staff"));
-app.use("/salaries", require("./src/routes/salary"));
+  process.on("uncaughtException", unexpectedErrorHandler);
+  process.on("unhandledRejection", unexpectedErrorHandler);
+}
 
-app.listen(3000, () => {
-  console.log("running ...");
-});
+bootstrap();

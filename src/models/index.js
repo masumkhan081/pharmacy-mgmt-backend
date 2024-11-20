@@ -17,13 +17,10 @@ const brandSchema = new Schema({
     ref: "manufacturers",
     required: true,
   },
-})
-brandSchema.index({ name: 'text', 'name': 'text' });
+});
+brandSchema.index({ name: "text", name: "text" });
 
-const Brand = mongoose.model(
-  "brands",
-  brandSchema
-);
+const Brand = mongoose.model("brands", brandSchema);
 //
 const Drug = mongoose.model(
   "drugs",
@@ -272,7 +269,7 @@ const Staff = mongoose.model(
     user: {
       type: Schema.Types.ObjectId,
       ref: "users",
-      default: null
+      default: null,
     },
   })
 );
