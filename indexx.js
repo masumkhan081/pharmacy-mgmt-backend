@@ -15,10 +15,85 @@ initDB();
 app.use(express.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
-
-app.use(cors({ origin: "http://localhost:5173", credentials: true }));
-app.use(originControl);
 //
+const cookieParser = require("cookie-parser"); 
+const cors = require("cors");
+const express = require("express"); 
+const httpStatus = require("http-status"); 
+
+const allowedOrigins = [
+  "http://localhost:3001",
+  "http://localhost:5173",
+  "http://localhost:5000",
+];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
+    credentials: true,
+  })
+);
+//
+app.use(express.json());
+// app.use(bodyParser.urlencoded({ extended: true })) 
+app.use(express.urlencoded({ extended: false }));
+app.use("/public", express.static("public"));
+//
+app.get("/", (req, res) => {
+  res.status(200).json({
+    statusCode: httpStatus.OK,
+    success: true,
+    message: "I am functional !",
+    data: null,
+  });
+});
+ 
+
+app.use((req, res, next) => {
+  res.status(httpStatus.NOT_FOUND).json({
+    success: false,
+    message: "Not Found",
+    errorMessages: [
+      {
+        path: req.originalUrl,
+        message: "API Not Found",
+      },
+    ],
+  });
+  next();
+});
+// 
+async function bootstrap() {
+  const server = app.listen(config.port, async () => {
+    console.log(`Server running on port ${config.port}`);
+    await mongodbConnection();
+  });
+
+  const exitHandler = () => {
+    if (server) {
+      server.close(() => {
+        console.log("Server closed");
+      });
+    }
+    process.exit(1);
+  };
+
+  const unexpectedErrorHandler = (error) => {
+    console.log(error);
+    exitHandler();
+  };
+
+  process.on("uncaughtException", unexpectedErrorHandler);
+  process.on("unhandledRejection", unexpectedErrorHandler);
+}
+
+bootstrap();
 
 // routes
 app.use("/auth", require("./src/routes/auth.js"));
@@ -34,6 +109,6 @@ app.use("/purchases", require("./src/routes/purchase.js"));
 app.use("/staff", require("./src/routes/staff.js"));
 app.use("/salaries", require("./src/routes/salary.js"));
 
-app.listen(3000, () => {
-  console.log("running ...");
-});
+
+
+module.exports = app;
