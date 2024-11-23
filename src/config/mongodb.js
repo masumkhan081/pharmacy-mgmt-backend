@@ -1,15 +1,16 @@
-const mongoose = require("mongoose");
-require("dotenv").config();
+import mongoose, {Schema}  from "mongoose";
+import dotenv from "dotenv";
+dotenv.config();
 
 const mongodbConnection = async () => {
   try {
     await mongoose.connect(process.env.DB_URL, {
-      dbName: "e-com-shop",
+      dbName: "pharmacy-management",
     });
     console.log("Mongodb connected!");
   } catch (error) {
-    console.log("Mongodb not connected!");
+    console.log("Mongodb not connected! " + error.message);
   }
 };
 
-module.exports = mongodbConnection;
+export default mongodbConnection;

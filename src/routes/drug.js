@@ -1,10 +1,11 @@
-const {
+import {
   saveDrug,
   getStock,
   deleteDrug,
   updateDrug,
-} = require("../controllers/drugs");
-const router = require("express").Router();
+} from "../controllers/drugs.js";
+import express from "express";
+const router = express.Router();
 //
 
 router.get("/", (req, res) => {
@@ -20,4 +21,4 @@ router.delete("/:id", (req, res) => {
   deleteDrug(req, res);
 });
 
-module.exports = router;
+export default router;

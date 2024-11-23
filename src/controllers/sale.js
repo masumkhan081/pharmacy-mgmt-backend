@@ -1,5 +1,5 @@
-const obj = require("../data-tier/settings");
-const { Sale } = require("../models");
+
+import  Sale  from "../models/sale.model.js";
 
 async function getSales(req, res) {
   const { pagenumb } = req.query;
@@ -60,4 +60,4 @@ async function deleteSale(req, res) {
     : res.status(400).send({ message: "Error in deletion" });
 }
 
-module.exports = { getSales, saveSale, updateSale, deleteSale };
+export default { getSales, saveSale, updateSale, deleteSale };

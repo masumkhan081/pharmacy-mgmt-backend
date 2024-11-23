@@ -1,5 +1,5 @@
-const obj = require("../data-tier/settings");
-const { Staff } = require("../models");
+
+import  Staff from "../models/staff.model.js";
 
 async function getStaff(req, res, searchObj) {
   const { pagenumb } = req.query;
@@ -75,4 +75,4 @@ async function deleteStaff(req, res) {
     : res.status(400).send({ message: "Error in deletion" });
 }
 
-module.exports = { getStaff, saveStaff, updateStaff, deleteStaff };
+export default { getStaff, saveStaff, updateStaff, deleteStaff };

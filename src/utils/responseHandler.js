@@ -1,4 +1,4 @@
-const httpStatus = require("http-status");
+const httpStatus from "http-status");
 //
 //
 function sendFetchResponse({ res, data, what }) {
@@ -122,7 +122,7 @@ const responseMap = {
   creation_failed: { code: 400, message: "Creation failed" },
 };
 
-module.exports = {
+export default {
   sendFetchResponse,
   sendCreateResponse,
   sendDeletionResponse,

@@ -1,12 +1,13 @@
-const router = require("express").Router();
+import express from "express";
+const router = express.Router();
 //------------------------------------------------     model & controller
-const {
+import {
   getGroups,
   getAllGroups,
   saveGroup,
   deleteGroup,
   updateGroup,
-} = require("../controllers/group");
+} from "../controllers/group.js";
 //
 router.get("/", (req, res) => {
   console.log("got hit ");
@@ -19,4 +20,4 @@ router.patch("/", (req, res) => updateGroup(req, res));
 
 router.delete("/:id", (req, res) => deleteGroup(req, res));
 
-module.exports = router;
+export default router;

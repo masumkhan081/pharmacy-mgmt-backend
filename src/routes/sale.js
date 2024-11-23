@@ -1,10 +1,11 @@
-const router = require("express").Router();
-const {
+import express from "express";
+const router = express.Router();
+import {
   getSales,
   saveSale,
   updateSale,
   deleteSale,
-} = require("../controllers/sale");
+} from "../controllers/sale.js";
 //
 router.get("/", (req, res) => {
   getSales(req, res);
@@ -24,4 +25,4 @@ router.get("/search", (req, res) => {
   getSales(req, res, { name: name });
 });
 
-module.exports = router;
+export default router;

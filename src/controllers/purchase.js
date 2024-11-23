@@ -1,5 +1,5 @@
-const obj = require("../data-tier/settings");
-const { Purchase } = require("../models");
+
+import  Purchase   from "../models/purchase.model.js";
 
 async function getPurchases(req, res, searchObj) {
   const { pagenumb } = req.query;
@@ -61,4 +61,4 @@ async function deletePurchase(req, res) {
     : res.status(400).send({ message: "Error in deletion" });
 }
 
-module.exports = { getPurchases, savePurchase, deletePurchase, updatePurchase };
+export default { getPurchases, savePurchase, deletePurchase, updatePurchase };

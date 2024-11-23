@@ -1,12 +1,12 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const {
+import {
   getAllMFR,
   getMFR,
   saveMFR,
   deleteMFR,
   updateMFR,
-} = require("../controllers/manufacturer"); // controller functions
+} from "../controllers/manufacturer.js"; // controller functions
 
 router.get("/", (req, res) => {
   getMFR(req, res);
@@ -29,4 +29,4 @@ router.delete("/:id", (req, res) => {
 });
 
 //
-module.exports = router;
+export default router;

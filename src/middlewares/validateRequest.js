@@ -1,6 +1,6 @@
-var http = require("http");
-var util = require("util");
-const multer = require("multer");
+import http from "http";
+import util from "util";
+import multer from "multer";
 const upload = multer();
 
 const validateRequest = (requestBodySchema) => async (req, res, next) => {
@@ -37,4 +37,4 @@ const validateRequest = (requestBodySchema) => async (req, res, next) => {
   }
 };
 
-module.exports = validateRequest;
+export default validateRequest;

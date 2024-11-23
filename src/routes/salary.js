@@ -1,11 +1,11 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const {
+import {
   getSalaries,
   saveSalary,
   updateSalary,
   deleteSalary,
-} = require("../controllers/salary"); // controller functions
+} from "../controllers/salary.js"; // controller functions
 
 router.get("/", (req, res) => {
   getSalaries(req, res);
@@ -22,4 +22,4 @@ router.delete("/:id", (req, res) => {
   deleteSalary(req, res);
 });
 //
-module.exports = router;
+export default router;

@@ -1,4 +1,4 @@
-const zod = require("zod");
+const zod from "zod");
 
 const createBlog = zod.object({
   body: zod
@@ -135,6 +135,6 @@ const createBlog = zod.object({
     .strict(),
 });
 
-module.exports = {
+export default {
   createBlog,
 };

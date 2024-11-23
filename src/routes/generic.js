@@ -1,11 +1,12 @@
-const router = require("express").Router();
-const {
+import express from "express";
+const router = express.Router();
+import {
   getGenericByGroup,
   getGenerics,
   saveGeneric,
   deleteGeneric,
   updateGeneric,
-} = require("../controllers/generic");
+} from "../controllers/generic.js";
 //
 
 router.get("/", (req, res) => { 
@@ -22,4 +23,4 @@ router.patch("/", (req, res) => updateGeneric(req, res));
 
 router.delete("/:id", (req, res) => deleteGeneric(req, res));
 
-module.exports = router;
+export default router;

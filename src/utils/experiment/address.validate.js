@@ -1,4 +1,4 @@
-const { z } = require("zod");
+const { z } from "zod");
 
 // Define a Zod schema for address validation
 const addressSchema = z.object({
@@ -9,4 +9,4 @@ const addressSchema = z.object({
   building: z.string().min(1).max(100).optional(), //
 });
 
-module.exports = addressSchema;
+export default addressSchema;

@@ -1,11 +1,11 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const {
+import {
   getUnits,
   saveUnit,
   deleteUnit,
   updateUnit,
-} = require("../controllers/unit"); // controller functions
+} from "../controllers/unit.js"; // controller functions
 
 router.get("/", (req, res) => {
   getUnits(req, res);
@@ -24,4 +24,4 @@ router.delete("/:id", (req, res) => {
 });
 
 //
-module.exports = router;
+export default router;

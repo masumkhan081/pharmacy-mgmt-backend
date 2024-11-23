@@ -1,10 +1,11 @@
-const router = require("express").Router();
-const {
+import express from "express";
+const router = express.Router();
+import {
   getPurchases,
   savePurchase,
   deletePurchase,
   updatePurchase,
-} = require("../controllers/purchase");
+} from "../controllers/purchase.js";
 //
 router.get("/", (req, res) => {
   getPurchases(req, res);
@@ -23,4 +24,4 @@ router.get("/search", (req, res) => {
   const name = req.query.frmname;
   getPurchases(req, res, { name: name });
 });
-module.exports = router;
+export default router;

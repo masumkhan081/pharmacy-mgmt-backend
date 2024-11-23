@@ -1,11 +1,11 @@
-const express = require("express");
+import express from "express";
 const router = express.Router();
-const {
+import {
   getStaff,
   saveStaff,
   updateStaff,
   deleteStaff,
-} = require("../controllers/staff"); // controller functions
+} from "../controllers/staff.js"; // controller functions
 
 router.get("/", (req, res) => {
   getStaff(req, res);
@@ -22,4 +22,4 @@ router.delete("/:id", (req, res) => {
   deleteStaff(req, res);
 });
 //
-module.exports = router;
+export default router;

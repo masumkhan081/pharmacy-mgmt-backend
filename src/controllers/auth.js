@@ -1,9 +1,10 @@
-const jwt = require("jsonwebtoken");
-const { User, Staff } = require("../models");
-require("dotenv").config();
-const tokenSecret = process.env.JWT_SECRET;
-const tokenHeaderKey = process.env.HEADER_KEY;
-const { sendNewUserMail, sendResetMail } = require("../util/mail");
+import jwt from "jsonwebtoken";
+import User from "../models/user.model.js";
+import Staff from "../models/staff.model.js";
+import dotenv from "dotenv";
+dotenv.config();
+import config from "../config/index.js"
+// import mailSender from "../utils/mail";
 
 //
 
@@ -93,7 +94,7 @@ async function checkPassReset({ token, res }) {
 
 async function updatePassword({ password, res }) {}
 
-module.exports = {
+export default {
   checkUserAddition,
   saveUser,
   loginUser,

@@ -1,5 +1,4 @@
-const { Drug } = require("../models");
-const obj = require("../data-tier/settings");
+import Drug  from "../models/drug.model.js"; 
 
 async function getStock(req, res, searchObj) {
   const { pagenumb } = req.query;
@@ -72,4 +71,4 @@ async function deleteDrug(req, res) {
     : res.status(400).send({ message: "Error in deletion" });
 }
 
-module.exports = { saveDrug, getStock, updateDrug, deleteDrug };
+export default { saveDrug, getStock, updateDrug, deleteDrug };

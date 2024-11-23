@@ -1,10 +1,11 @@
-const router = require("express").Router();
-const {
+import express from "express";
+const router = express.Router();
+import {
   getFormulations,
   saveFormulation,
   updateFormulation,
   deleteFormulation,
-} = require("../controllers/formulation");
+} from "../controllers/formulation.js";
 //
 router.get("/", (req, res) => {
   getFormulations(req, res);
@@ -19,4 +20,4 @@ router.delete("/:id", (req, res) => {
   deleteFormulation(req, res);
 });
 
-module.exports = router;
+export default router;

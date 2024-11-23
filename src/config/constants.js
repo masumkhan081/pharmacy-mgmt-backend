@@ -154,7 +154,7 @@ const map_searchables = {
   [operableEntities.user]: ["username", "email"], // Adding user as well
 };
 
-module.exports = {
+export default {
   paginationFields,
   defaultViewLimit,
   map_searchables,

@@ -1,29 +1,30 @@
-require("dotenv").config();
-const nodemailer = require("nodemailer");
-const CryptoJS = require("crypto-js");
-const jwt = require("jsonwebtoken");
-const config = require("../config");
+import dotenv from "dotenv";
+import nodemailer from "nodemailer";
+import CryptoJS from "crypto-js";
+import jwt from "jsonwebtoken";
+import config from "../config/index.js"; // Ensure correct extension for ES modules
 
-//  send otp to user email for email verification
+dotenv.config();
+
+// send otp to user email for email verification
 const sendOTPMail = ({ user, res, successMessage }) => {
   try {
     const generatedOTP = generateOTP();
-    //
     const mailOptions = getMailOptions({
       to: user.email,
       subject: () => setSubject("verification"),
       html: () => getVerificationMessage(generatedOTP),
     });
-    //
+
     const transporter = getTransporter();
     transporter
       .jsonMail(mailOptions)
       .then((result) => {
         result.accepted.includes(user.email)
           ? res.status(200).json({
-            message: successMessage,
-            token: getOtpToken({ otp: generatedOTP, email: user.email }),
-          })
+              message: successMessage,
+              token: getOtpToken({ otp: generatedOTP, email: user.email }),
+            })
           : res.status(400).json({ message: "Error sending otp to the mail" });
       })
       .catch((err) => {
@@ -35,26 +36,24 @@ const sendOTPMail = ({ user, res, successMessage }) => {
   }
 };
 
-//  send password reset link to user email
-async function sendResetMail({ user, res, successMessage }) {
-  //
+// send password reset link to user email
+const sendResetMail = async ({ user, res, successMessage }) => {
   try {
     const mailOptions = getMailOptions({
       to: user.email,
       subject: () => setSubject("recovery"),
       html: () => getResetLink(user),
     });
-    //
+
     const transporter = getTransporter();
-    //
     transporter
       .jsonMail(mailOptions)
       .then((result) => {
         result
           ? res.status(200).json({ message: successMessage })
           : res
-            .status(400)
-            .json({ message: "Error sending password reset mail" });
+              .status(400)
+              .json({ message: "Error sending password reset mail" });
       })
       .catch((err) => {
         console.log("err: sending mail  " + err.message);
@@ -63,7 +62,7 @@ async function sendResetMail({ user, res, successMessage }) {
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
-}
+};
 
 const generateOTP = () => {
   var digits = "0123456789";
@@ -78,24 +77,25 @@ const getVerificationMessage = (otp) =>
   `<h4 style="color:blue;text-align:center;">Please copy or type the OTP provided below: <br><br>${otp}`;
 
 function getResetLink(user) {
-  return `<h4 style="color:blue;text-align:center;">Please click the link to reset your password: </h4><br><br>${config.baseUrl
-    }/auth/recovery/${jwt.sign(
-      {
-        id: user.id,
-        email: user.email,
-        expireAt: new Date().getTime() + 5 * 60000,
-      },
-      config.tokenSecret
-    )}`;
+  return `<h4 style="color:blue;text-align:center;">Please click the link to reset your password: </h4><br><br>${
+    config.baseUrl
+  }/auth/recovery/${jwt.sign(
+    {
+      id: user.id,
+      email: user.email,
+      expireAt: new Date().getTime() + 5 * 60000,
+    },
+    config.tokenSecret
+  )}`;
 }
 
-// return a relatable email sibject based on purpose of the mail
+// return a relatable email subject based on the purpose of the mail
 const setSubject = (action) =>
   action === "recovery"
     ? "Auction-platform: Recover Your Password"
     : action === "verification"
-      ? "Auction-platform: Verify Your Email"
-      : "";
+    ? "Auction-platform: Verify Your Email"
+    : "";
 
 const getMailOptions = ({ to, subject, html }) => {
   return {
@@ -120,7 +120,7 @@ const getTransporter = () =>
     },
   });
 
-//  create and return a encrypted token holding data: otp and expiration time for it
+// create and return an encrypted token holding data: otp and expiration time for it
 const getOtpToken = ({ otp, email }) =>
   CryptoJS.AES.encrypt(
     JSON.stringify({
@@ -131,7 +131,7 @@ const getOtpToken = ({ otp, email }) =>
     config.tokenSecret
   ).toString();
 
-module.exports = {
+export default {
   sendResetMail,
   sendOTPMail,
 };

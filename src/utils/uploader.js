@@ -1,9 +1,9 @@
-const multer = require("multer");
+const multer from "multer");
 const upload = multer({ dest: "../../public/" });
-const { storageMap } = require("./fileHandle");
-const { operableEntities } = require("../config/constants");
-const fs = require("fs");
-const path = require("path");
+const { storageMap } from "./fileHandle");
+const { operableEntities } from "../config/constants");
+const fs from "fs");
+const path from "path");
 
 const fieldsMap = {
   [operableEntities.brand]: [
@@ -103,7 +103,7 @@ async function uploadHandler({ type, what, file }) {
   }
 }
 
-module.exports = {
+export default {
   uploadHandler,
   fieldsMap,
   uploadBrandLogo,

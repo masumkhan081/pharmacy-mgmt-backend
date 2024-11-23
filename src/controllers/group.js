@@ -1,16 +1,14 @@
-const { Group } = require("../models");
-const obj = require("../data-tier/settings");
+import Group from "../models/group.model.js";
 //
 
 async function getAllGroups(req, res) {
-  
   let msg = "";
   Group.find()
-    .sort({ $natural: -1 }) 
+    .sort({ $natural: -1 })
     .then((data) => {
       res.send({
         groups: data,
-        msg, 
+        msg,
       });
     })
     .catch((err) => {
@@ -70,7 +68,7 @@ async function deleteGroup(req, res) {
     : res.status(400).send({ message: "Error in deletion" });
 }
 
-module.exports = {
+export default {
   getGroups,
   getAllGroups,
   saveGroup,

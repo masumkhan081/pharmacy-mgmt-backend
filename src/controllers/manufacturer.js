@@ -1,7 +1,5 @@
-const obj = require("../data-tier/settings");
-const { MFR } = require("../models");
+import MFR from "../models/mfr.model.ts";
 //
-
 
 async function getAllMFR(req, res) {
   MFR.find()
@@ -47,10 +45,10 @@ async function saveMFR(req, res) {
   (await MFR.findOne({ name }))
     ? res.status(400).send({ message: "Already exist" })
     : (await new MFR({
-      name,
-    }).save())
-      ? res.status(200).send({ message: "Saved successfully" })
-      : res.status(400).send({ message: "Error saving new unit" });
+        name,
+      }).save())
+    ? res.status(200).send({ message: "Saved successfully" })
+    : res.status(400).send({ message: "Error saving new unit" });
 }
 
 async function updateMFR(req, res) {
@@ -74,4 +72,4 @@ const cmpFunctions = {
   deleteMFR,
   updateMFR,
 };
-module.exports = cmpFunctions;
+export default cmpFunctions;

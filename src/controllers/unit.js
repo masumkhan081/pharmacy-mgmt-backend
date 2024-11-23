@@ -1,5 +1,5 @@
-const obj = require("../data-tier/settings");
-const { Unit } = require("../models");
+
+import  Unit  from "../models/unit.model.js";
 //
 
 async function getUnits(req, res) {
@@ -54,7 +54,7 @@ async function deleteUnit(req, res) {
     : res.status(400).send({ message: "Error in deletion" });
 }
 
-module.exports = {
+export default {
   getUnits,
   saveUnit,
   deleteUnit,

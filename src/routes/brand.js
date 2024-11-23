@@ -1,11 +1,12 @@
-const router = require("express").Router(); 
+import express from "express";
+const router = express.Router();
 //------------------------------------------------     model & controller
-const {
+import {
   getBrands,
   saveBrand,
   updateBrand,
   deleteBrand,
-} = require("../controllers/brand");
+} from "../controllers/brand.js";
 //
 
 router.get("/", (req, res) => {
@@ -24,4 +25,4 @@ router.delete("/:id", (req, res) => {
   deleteBrand(req, res);
 });
 
-module.exports = router;
+export default router;

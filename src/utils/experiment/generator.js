@@ -1,4 +1,4 @@
-const fs = require("fs");
+const fs from "fs");
 
 const operableEntities = {
   product: "Products",

@@ -1,5 +1,4 @@
-const { Generic } = require("../models");
-const obj = require("../data-tier/settings");
+import Generic from "../models/generic.model.js"; 
 //
 
 async function getGenericByGroup(req, res) {
@@ -74,7 +73,7 @@ async function deleteGeneric(req, res) {
     : res.status(400).send({ message: "Error in deletion" });
 }
 
-module.exports = {
+export default {
   getGenerics,
   getGenericByGroup,
   saveGeneric,

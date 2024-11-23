@@ -1,22 +1,22 @@
-const router = require("express").Router();
-const { sendOtpMail, sendResetMail } = require("../util/mail");
-const {
+import express from "express";
+const router = express.Router();
+// import { sendOtpMail, sendResetMail } from "../utils/mail";
+import {
   checkUserAddition,
-saveUser,
-loginUser,
-logOut,
-checkPassReset,
-updatePassword,
-} = require("../controllers/auth");
-const { cookieValidation } = require("../middleware/middlewares");
-const { User } = require("../models");
-
+  saveUser,
+  loginUser,
+  logOut,
+  checkPassReset,
+  updatePassword,
+} from "../controllers/auth.js";
+// const { cookieValidation } from "../middlewares/");
+import User from "../models/user.model.js";
 
 router.get("/register/:token", (req, res) => {
   // destructuring the expected
   const { token } = req.params;
   // validation and insertion
-  checkUserAddition({token, res });
+  checkUserAddition({ token, res });
 });
 
 router.post("/register", (req, res) => {
@@ -63,5 +63,4 @@ router.post("/reset", (req, res) => {
   updatePassword({ password, res });
 });
 
-
-module.exports = router;
+export default router;

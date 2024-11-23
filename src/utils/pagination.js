@@ -1,7 +1,7 @@
 /* eslint-disable no-empty */
 /* eslint-disable no-unused-vars */
 
-const { defaultViewLimit, map_searchables } = require("../config/constants");
+const { defaultViewLimit, map_searchables } from "../config/constants");
 
 function getSearchAndPagination({ query: query, what }) {
   const { search, page, limit, search_by, sort_by, sort_order } = query;
@@ -74,4 +74,4 @@ function getSearchAndPagination({ query: query, what }) {
   };
 }
 
-module.exports = { getSearchAndPagination };
+export default { getSearchAndPagination };

@@ -1,5 +1,4 @@
-const { Formulation } = require("../models");
-const obj = require("../data-tier/settings");
+import Formulation  from "../models/formulation.model.js";
 //
 
 async function getFormulations(req, res, searchObj = { name: "" }) {
@@ -57,7 +56,7 @@ async function deleteFormulation(req, res) {
     : res.status(400).send({ message: "Error in deletion" });
 }
 
-module.exports = {
+export default {
   getFormulations,
   saveFormulation,
   updateFormulation,

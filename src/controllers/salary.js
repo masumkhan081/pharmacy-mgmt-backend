@@ -1,5 +1,5 @@
-const obj = require("../data-tier/settings");
-const { Salary } = require("../models");
+
+import   Salary   from "../models/salary.model.js";
 
 async function getSalaries(req, res, searchObj) {
   const { pagenumb } = req.query;
@@ -65,4 +65,4 @@ async function deleteSalary(req, res) {
     : res.status(400).send({ message: "Error in deletion" });
 }
 
-module.exports = { getSalaries, saveSalary, updateSalary, deleteSalary };
+export default { getSalaries, saveSalary, updateSalary, deleteSalary };

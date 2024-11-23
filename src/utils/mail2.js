@@ -1,9 +1,9 @@
-const nodemailer = require("nodemailer");
-const CryptoJS = require("crypto-js");
-const jwt = require("jsonwebtoken");
-require("dotenv").config();
-const tokenSecret = process.env.TOKEN_SECRET;
-const pharmacyName = process.env.PHARMACY_NAME;
+import  nodemailer from "nodemailer";
+import CryptoJS from "crypto-js";
+import jwt from "jsonwebtoken";
+import dotenv from "dotenv";
+dotenv.config();
+import config from "../config/index"
 
 //  send otp to user email for email verification
 const sendUserInvitation = ({ user, res, successMessage }) => {
@@ -40,7 +40,7 @@ const getInvitationMessage = (user) =>
       expireAt: new Date().getTime() + 5 * 60000,
       role: "salesman",
     },
-    tokenSecret
+    config.tokenSecret
   )}`;
 
 function sendResetMail(user) {
@@ -52,7 +52,7 @@ function sendResetMail(user) {
       email: user.email,
       expireAt: new Date().getTime() + 5 * 60000,
     },
-    tokenSecret
+    config.tokenSecret
   )}`;
 }
 
@@ -66,7 +66,7 @@ const setSubject = (action) =>
 
 const getMailOptions = ({ to, subject, html }) => {
   return {
-    from: process.env.SENDER,
+    from: config.hostEmail,
     to,
     subject: subject(),
     html: html(),
@@ -98,7 +98,7 @@ const getOtpToken = ({ otp, email }) =>
     tokenSecret
   ).toString();
 
-module.exports = {
+export default {
   sendResetMail,
   sendUserInvitation,
 };
