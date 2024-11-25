@@ -1,11 +1,29 @@
-/* eslint-disable no-undef */
 import dotenv from "dotenv";
 dotenv.config();
 
-const config = {
+interface Config {
+  baseUrl: string;
+  appName: string;
+  port: number;
+  dbName: string;
+  dbUrl: string;
+  tokenSecret: string;
+  refreshTokenSecret: string;
+  tokenHeaderKey: string;
+  mailHost: string;
+  saltRounds: number;
+  jwtOptions: {
+    expiresIn: string;
+  };
+  senderMail: string;
+  senderMailPassword: string;
+}
+
+const config:Config = {
   baseUrl: process.env.BASE_URL || "http://localhost:3000/",
   appName: "pharmacy-mgmt",
-  port: process.env.PORT || 3000,
+  port: Number(process.env.PORT) || 3000,
+  dbName: "pharmacy-management",
   dbUrl:
     process.env.DB_URL ||
     "mongodb+srv://masumkhan:pddrgj3q@cluster0.48jxv.mongodb.net/",

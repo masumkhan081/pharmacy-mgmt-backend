@@ -19,5 +19,6 @@ const corsMiddleware = cors({
   methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
   credentials: true,
 });
+ 
 
 export default corsMiddleware;

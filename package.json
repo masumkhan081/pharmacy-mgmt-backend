@@ -1,53 +1,34 @@
 {
-  "name": "pharmacy-management",
+  "name": "a",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node --esm index.ts",
-    "dev": "nodemon index.ts",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "prettier": "prettier --check **/*.js",
-    "prettier:fix": "prettier --write **/*.js"
+    "start": "tsc && node dist/index.js",
+    "dev": "nodemon --exec ts-node index.ts",
+    "check-types": "tsc --noemit",
+    "eslint": "eslint",
+    "lint": "npm run eslint && npm run check-types",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "type": "module",
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
-  "dependencies": {
-    "bcrypt": "^5.1.1",
-    "body-parser": "^1.20.3",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "crypto-js": "^4.2.0",
-    "dotenv": "^16.4.5",
-    "ejs": "^3.1.10",
-    "express": "^4.21.1",
-    "express-ejs-layouts": "^2.5.1",
-    "express-session": "^1.18.0",
-    "fs": "^0.0.1-security",
-    "http-status": "^1.7.4",
-    "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.8.2",
-    "multer": "^1.4.5-lts.1",
-    "nodemailer": "^6.9.16",
-    "zod": "^3.23.8"
-  },
   "devDependencies": {
-    "@babel/preset-typescript": "^7.26.0",
-    "@babel/register": "^7.25.9",
     "@eslint/js": "^9.15.0",
-    "@types/cors": "^2.8.17",
     "@types/express": "^5.0.0",
-    "@types/node": "^22.9.1",
+    "@types/node": "^22.9.3",
+    "@typescript-eslint/eslint-plugin": "^8.15.0",
+    "@typescript-eslint/parser": "^8.15.0",
     "eslint": "^9.15.0",
     "globals": "^15.12.0",
     "nodemon": "^3.1.7",
-    "prettier": "^2.0.5",
     "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.15.0"
+  },
+  "dependencies": {
+    "express": "^4.21.1",
+    "http-status": "^2.0.0"
   }
 }
