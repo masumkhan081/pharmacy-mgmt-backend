@@ -6,7 +6,6 @@ dotenv.config();
 import initDB from "./src/config/mongodb";
 import originControl from "./src/middlewares/corsMiddleware";
 import config from "./src/config";
-import httpStatus from "http-status";
 // import config from "./src/config/index";
 
 // middlewares
@@ -15,9 +14,9 @@ app.use(originControl);
 app.use(express.urlencoded({ extended: false }));
 app.use("/public", express.static("public"));
 //
-app.get("/", (req, res) => {
+app.get("/", (req: Request, res: Response) => {
   res.status(200).json({
-    statusCode: httpStatus.OK,
+    statusCode: 200,
     success: true,
     message: "I am functional !",
     data: null,
@@ -25,7 +24,7 @@ app.get("/", (req, res) => {
 });
 //
 app.use((req, res, next) => {
-  res.status(httpStatus.NOT_FOUND).json({
+  res.status(404).json({
     success: false,
     message: "Not Found",
     errorMessages: [
@@ -52,7 +51,7 @@ async function bootstrap() {
     }
     process.exit(1);
   };
-  const unexpectedErrorHandler = (error:Error) => {
+  const unexpectedErrorHandler = (error: Error) => {
     console.log(error);
     exitHandler();
   };
