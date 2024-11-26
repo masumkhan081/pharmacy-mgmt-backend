@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 const { entities } = require("../../config/constants");
 const { getSearchAndPagination } = require("../../utils/pagination");
 const Bid = require("./bid.model");

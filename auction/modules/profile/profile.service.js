@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 const { entities } = require("../../config/constants");
 const Profile = require("./profile.model");
 const User = require("../auth/auth.model");

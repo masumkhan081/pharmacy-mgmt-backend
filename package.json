@@ -5,17 +5,24 @@
   "scripts": {
     "start": "npx tsc && node dist/index.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky",
-    "eslint": "eslint",
+    "prepare": "husky install",
+    "eslint": "eslint . --fix",
+    "check-types": "tsc --noEmit",
     "lint": "npm run eslint && npm run check-types"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint"
+    }
+  },
+  "lint-staged": {
+    "**/*.ts": "eslint --fix",
+    "**/*.js": "eslint --fix"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
-  "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
-  },
   "dependencies": {
     "bcrypt": "^5.1.1",
     "cors": "^2.8.5",
@@ -35,11 +42,8 @@
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.0",
     "eslint": "^9.15.0",
-    "eslint-config-prettier": "^9.1.0",
     "globals": "^15.12.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.2.10",
-    "prettier": "3.4.0",
+    "husky": "^8.0.0",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.16.0"
   }

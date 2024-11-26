@@ -1,10 +1,10 @@
-/* eslint-disable no-unused-vars */
+ 
 const User = require("./auth.model");
 const bcrypt = require("bcrypt");
 const { sendOTPMail } = require("../../utils/mail");
 const config = require("../../config");
 const httpStatus = require("http-status");
-/* eslint-disable no-unused-vars */
+ 
 const { getSearchAndPagination } = require("../../utils/pagination");
 const { entities } = require("../../config/constants");
 const jwt = require("jsonwebtoken");

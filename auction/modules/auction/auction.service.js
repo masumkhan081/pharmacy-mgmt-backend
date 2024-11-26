@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 const { entities } = require("../../config/constants");
 const Auction = require("./auction.model");
 const Product = require("../product/product.model");

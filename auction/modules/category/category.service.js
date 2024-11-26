@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 const { entities } = require("../../config/constants");
 const Category = require("./category.model");
 const { getSearchAndPagination } = require("../../utils/pagination");

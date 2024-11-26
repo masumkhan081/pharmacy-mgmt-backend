@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+ 
 const { Router } = require("express");
 const router = Router();
 //    auth & profiles
