@@ -1,4 +1,4 @@
-import mongoose, { Schema } from "mongoose";
+import mongoose, {Schema}  from "mongoose";
 //
 export default mongoose.model(
   "units",
@@ -8,5 +8,5 @@ export default mongoose.model(
       unique: true,
       required: true,
     },
-  }),
+  })
 );

@@ -14,7 +14,7 @@ function accessControl(accessRoles: string[]) {
   return async (
     req: RequestWithUser,
     res: Response,
-    next: NextFunction
+    next: NextFunction,
   ): Promise<void | Response> => {
     try {
       const token = req.headers.authorization;
@@ -50,7 +50,7 @@ function accessControl(accessRoles: string[]) {
     } catch (error) {
       console.error(
         "Error at accessControl:",
-        error instanceof Error ? error.message : "Unknown error"
+        error instanceof Error ? error.message : "Unknown error",
       );
       return res.status(httpStatus.FORBIDDEN).json({
         success: false,

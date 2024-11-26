@@ -19,7 +19,7 @@ interface Config {
   senderMailPassword: string;
 }
 
-const config:Config = {
+const config: Config = {
   baseUrl: process.env.BASE_URL || "http://localhost:3000/",
   appName: "pharmacy-mgmt",
   port: Number(process.env.PORT) || 3000,

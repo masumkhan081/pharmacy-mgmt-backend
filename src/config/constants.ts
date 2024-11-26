@@ -7,7 +7,7 @@ export const userRoles = {
 export const entities = {
   drug: "Drugs",
   generic: "Generics",
-  unit:"Units"
+  unit: "Units",
 };
 
 export const paginationFields = ["page", "limit", "sortBy", "sortOrder"];

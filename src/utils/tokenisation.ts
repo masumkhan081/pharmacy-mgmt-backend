@@ -30,7 +30,7 @@ const createToken = ({
 };
 
 const verifyToken = (
-  token: string
+  token: string,
 ): { success: boolean; payload: TokenPayload | null } => {
   try {
     const payload = jwt.verify(token, config.tokenSecret) as TokenPayload;

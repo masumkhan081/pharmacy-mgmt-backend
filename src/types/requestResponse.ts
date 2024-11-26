@@ -7,7 +7,7 @@ export type TypeController = (req: Request, res: Response) => Promise<void>;
 export type TypeReqResNext = (
   req: Request,
   res: Response,
-  next: NextFunction
+  next: NextFunction,
 ) => Promise<void>;
 
 export interface TypeResponsePayload {

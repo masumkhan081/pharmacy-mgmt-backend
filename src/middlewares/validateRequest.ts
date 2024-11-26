@@ -40,7 +40,7 @@ const validateRequest =
       // Catching any errors in the validation process
       console.error(
         "Error processing Zod schema: " +
-          (error instanceof Error ? error.message : "Unknown error")
+          (error instanceof Error ? error.message : "Unknown error"),
       );
 
       return res.status(400).json({

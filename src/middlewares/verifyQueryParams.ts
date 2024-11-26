@@ -6,7 +6,7 @@ const validateQueryParams =
     const validParams = [...mapSearchable[entity], "searchBy", "search"];
 
     const invalidParams = Object.keys(req.query).filter(
-      (key) => !validParams.includes(key)
+      (key) => !validParams.includes(key),
     );
 
     if (

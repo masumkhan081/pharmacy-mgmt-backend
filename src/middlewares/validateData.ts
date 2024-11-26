@@ -1,4 +1,4 @@
-import z,{ ZodError } from "zod";
+import z, { ZodError } from "zod";
 
 interface ValidationResult {
   success: boolean;
@@ -40,7 +40,7 @@ function validateData<T>({
         message: "Invalid data",
         messages: error.issues.reduce(
           (acc, issue) => ({ ...acc, [issue.path[0]]: issue.message }),
-          {}
+          {},
         ),
       };
     } else {

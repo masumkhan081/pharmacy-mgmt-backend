@@ -1,5 +1,5 @@
 import { Response } from "express";
-import { TypeResponsePayload } from "../types/requestResponse"; 
+import { TypeResponsePayload } from "../types/requestResponse";
 //
 export const sendFetchResponse = ({
   res,
