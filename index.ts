@@ -7,7 +7,7 @@ import initDB from "./src/config/mongodb";
 import originControl from "./src/middlewares/corsMiddleware";
 import config from "./src/config";
 // routes
-import unitRoutes from "./src/routes/unit";
+import unitRoutes from "./src/routes/unit.route";
 // import formulationRoutes from "./src/routes/formulation";
 // import mfrRoutes from "./src/routes/mfr";
 // import genericRoutes from "./src/routes/generic";

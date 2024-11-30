@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const unitSchema = new mongoose.Schema({
+const formulationSchema = new mongoose.Schema({
   shortName: {
     type: String,
     required: [true, "Short name is required"],
@@ -17,4 +17,4 @@ const unitSchema = new mongoose.Schema({
   },
 });
 
-export default mongoose.model("units", unitSchema);
+export default mongoose.model("formulations", formulationSchema);

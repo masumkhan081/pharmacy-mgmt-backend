@@ -1,13 +1,18 @@
 import { Request, Response, NextFunction } from "express";
+import { Types } from "mongoose";
 // import { Error } from "mongoose";
 // import { ValidationError } from "mongoose";
+
+// The reusable ID type
+export type IDType = Types.ObjectId | string;
+
 
 export type TypeController = (req: Request, res: Response) => Promise<void>;
 
 export type TypeReqResNext = (
   req: Request,
   res: Response,
-  next: NextFunction,
+  next: NextFunction
 ) => Promise<void>;
 
 export interface TypeResponsePayload {
