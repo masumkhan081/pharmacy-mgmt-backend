@@ -28,7 +28,7 @@ export const getSingleUnit: TypeController = async (req, res) => {
     console.log("result: " + JSON.stringify(result));
     sendSingleFetchResponse({ res, result, entity: entities.unit });
   } catch (error) {
-    console.error("Error fetching unit:", error);
+    // console.error("Error fetching unit:", error);
     sendErrorResponse({ res, error, entity: entities.unit });
   }
 };

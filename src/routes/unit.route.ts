@@ -9,12 +9,13 @@ import {
 } from "../controllers/unit.controller.js"; // controller functions
 import validateRequest from "../middlewares/validateRequest.js";
 import { unitSchema } from "../schemas/unit.schema.js";
+import { validateObjectId } from "../middlewares/validateId.js";
 
 router.get("/", (req, res) => {
   getUnits(req, res);
 });
 
-router.get("/:id", (req, res) => {
+router.get("/:id", validateObjectId, (req, res) => {
   getSingleUnit(req, res);
 });
 
