@@ -1,6 +1,10 @@
 import { entities } from "../config/constants.js";
 import unitService from "../services/unit.service.js";
-import { sendFetchResponse } from "../utils/responseHandler.js";
+import {
+  sendFetchResponse,
+  sendSingleFetchResponse,
+  sendErrorResponse,
+} from "../utils/responseHandler.js";
 import { TypeController } from "../types/requestResponse.js";
 //
 
@@ -21,14 +25,11 @@ export const getUnits: TypeController = async (req, res) => {
 export const getSingleUnit: TypeController = async (req, res) => {
   try {
     const result = await unitService.getSingleUnit(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    console.log("result: " + JSON.stringify(result));
+    sendSingleFetchResponse({ res, result, entity: entities.unit });
   } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    console.error("Error fetching unit:", error);
+    sendErrorResponse({ res, error, entity: entities.unit });
   }
 };
 

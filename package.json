@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "start": "npx tsc && node dist/index.js",
+    "start": "tsc && node dist/index.js",
+    "dev": "concurrently \"tsc --watch\" \"npx nodemon --watch dist dist/index.js\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install",
     "eslint": "eslint . --fix",
@@ -41,9 +42,11 @@
     "@types/http-status": "^0.2.30",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.0",
+    "concurrently": "^9.1.0",
     "eslint": "^9.15.0",
     "globals": "^15.12.0",
     "husky": "^8.0.0",
+    "nodemon": "^3.1.7",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.16.0"
   }

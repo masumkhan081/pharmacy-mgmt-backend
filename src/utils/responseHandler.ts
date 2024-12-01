@@ -1,6 +1,31 @@
 import { Response } from "express";
 import { TypeResponsePayload } from "../types/requestResponse";
 //
+interface ErrorPayload {
+  res: Response;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  error: any;
+  entity?: string; // Optional entity for specific error messages
+}
+//
+export const sendSingleFetchResponse = ({
+  res,
+  result,
+  entity,
+}: TypeResponsePayload) => {
+  const statusCode: number = result
+    ? responseMap.fetch.code
+    : responseMap.notFound.code;
+  res.status(statusCode).json({
+    statusCode,
+    success: result ? true : false,
+    message: result
+      ? responseMap.fetch.message(entity)
+      : responseMap.idNotFound.message(entity),
+    data: result,
+  });
+};
+//
 export const sendFetchResponse = ({
   res,
   result,
@@ -22,14 +47,11 @@ export const sendFetchResponse = ({
   });
 };
 
-interface ErrorPayload {
-  res: Response;
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  error: any;
-  entity?: string; // Optional entity for specific error messages
-}
-
-const sendErrorResponse = ({ res, error, entity }: ErrorPayload): void => {
+export const sendErrorResponse = ({
+  res,
+  error,
+  entity,
+}: ErrorPayload): void => {
   let statusCode = 500;
   let message = "An unexpected error occurred";
   const messages: Record<string, string> = {};

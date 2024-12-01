@@ -4,6 +4,7 @@ import Unit from "../models/unit.model";
 import { IDType, QueryParams } from "../types/requestResponse";
 import { IUnit, IUnitUpdatePayload } from "../types/unit.type";
 import getSearchAndPagination from "../utils/queryHandler";
+import { sendFetchResponse } from "../utils/responseHandler";
 
 //
 
@@ -55,19 +56,7 @@ export const saveUnit = async (data: IUnit) => {
   }
 };
 
-export const getSingleUnit = async (id: IDType) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
+const getSingleUnit = async (id: IDType) => Unit.findById(id);
 
 export const updateUnit = async ({ id, data }: IUnitUpdatePayload) => {
   try {
