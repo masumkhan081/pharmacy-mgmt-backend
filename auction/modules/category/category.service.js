@@ -13,6 +13,22 @@ async function getSingleCategory(updatableId) {
   return Category.findById(updatableId);
 }
 
+//
+async function updateCategory({ id, data }) {
+  const { name, description } = data;
+  const updateResult = await Category.findByIdAndUpdate(
+    id,
+    {
+      name,
+      description,
+    },
+    { new: true }
+  );
+  return updateResult;
+}
+//
+const deleteCategory = async (id) => await Category.findByIdAndDelete(id);
+
 async function getCategories(query) {
   try {
     const {
@@ -46,21 +62,7 @@ async function getCategories(query) {
     return error;
   }
 }
-//
-async function updateCategory({ id, data }) {
-  const { name, description } = data;
-  const updateResult = await Category.findByIdAndUpdate(
-    id,
-    {
-      name,
-      description,
-    },
-    { new: true }
-  );
-  return updateResult;
-}
-//
-const deleteCategory = async (id) => await Category.findByIdAndDelete(id);
+
 
 module.exports = {
   createCategory,

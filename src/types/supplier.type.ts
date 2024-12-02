@@ -1,12 +1,19 @@
-import { Document } from "mongoose";
 import { IDType } from "./requestResponse";
 
-export interface IUnit extends Document {
-  name: string;
+export interface ISupplier {
+  fullName: string;
+  phone: string;
+  altPhone: string;
+  gender: "MALE" | "FEMALE" | "OTHER";
+  email: string;
+  manufacturer: string; // Adjust type based on manufacturer reference
+  address: string;
+  deliveryFrequency: "Daily" | "Weekly" | "Monthly" | "On-demand";
+  isActive: boolean;
+  notes: string;
 }
 
-// Update the interface to use IDType
-export interface IUnitUpdatePayload {
+export interface ISupplierUpdatePayload {
   id: IDType;
-  data: Partial<IUnit>;
+  data: Partial<ISupplier>;
 }

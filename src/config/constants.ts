@@ -1,6 +1,3 @@
-
-
-
 export const userRoles = {
   admin: "ADMIN",
   seller: "MANAGER",
@@ -11,6 +8,10 @@ export const entities = {
   drug: "Drugs",
   generic: "Generics",
   unit: "Units",
+  brand: "Brands",
+  formulation: "Formulations",
+  staff: "Staff",
+  supplier: "Supplier",
 };
 
 export const paginationFields = ["page", "limit", "sortBy", "sortOrder"];

@@ -1,13 +1,13 @@
 import { entities } from "../config/constants.js";
-import unitService from "../services/unit.service.js";
+import formulationService from "../services/formulation.service.js";
 import { sendFetchResponse } from "../utils/responseHandler.js";
 import { TypeController } from "../types/requestResponse.js";
 //
 
-export const getUnits: TypeController = async (req, res) => {
+export const getFormulations: TypeController = async (req, res) => {
   try {
-    const result = await unitService.getUnits(req.query);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await formulationService.getFormulations(req.query);
+    sendFetchResponse({ res, result, entity: entities.formulation });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -18,10 +18,10 @@ export const getUnits: TypeController = async (req, res) => {
   }
 };
 
-export const getSingleUnit: TypeController = async (req, res) => {
+export const getSingleFormulation: TypeController = async (req, res) => {
   try {
-    const result = await unitService.getSingleUnit(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await formulationService.getSingleFormulation(req.params.id);
+    sendFetchResponse({ res, result, entity: entities.formulation });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -32,10 +32,10 @@ export const getSingleUnit: TypeController = async (req, res) => {
   }
 };
 
-export const saveUnit: TypeController = async (req, res) => {
+export const createFormulation: TypeController = async (req, res) => {
   try {
-    const result = await unitService.saveUnit(req.body);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await formulationService.createFormulation(req.body);
+    sendFetchResponse({ res, result, entity: entities.formulation });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -46,13 +46,13 @@ export const saveUnit: TypeController = async (req, res) => {
   }
 };
 
-export const updateUnit: TypeController = async (req, res) => {
+export const updateFormulation: TypeController = async (req, res) => {
   try {
-    const result = await unitService.updateUnit({
+    const result = await formulationService.updateFormulation({
       id: req.params.id,
       data: req.body,
     });
-    sendFetchResponse({ res, result, entity: entities.unit });
+    sendFetchResponse({ res, result, entity: entities.formulation });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -63,10 +63,10 @@ export const updateUnit: TypeController = async (req, res) => {
   }
 };
 
-export const deleteUnit: TypeController = async (req, res) => {
+export const deleteFormulation: TypeController = async (req, res) => {
   try {
-    const result = await unitService.deleteUnit(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await formulationService.deleteFormulation(req.params.id);
+    sendFetchResponse({ res, result, entity: entities.formulation });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -78,8 +78,8 @@ export const deleteUnit: TypeController = async (req, res) => {
 };
 
 export default {
-  getUnits,
-  saveUnit,
-  updateUnit,
-  deleteUnit,
+  getFormulations,
+  createFormulation,
+  updateFormulation,
+  deleteFormulation,
 };

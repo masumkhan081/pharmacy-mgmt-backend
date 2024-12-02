@@ -1,13 +1,22 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 import { entities } from "../config/constants";
-import Unit from "../models/unit.model";
+import Supplier from "../models/supplier.model";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { IUnit, IUnitUpdatePayload } from "../types/unit.type";
+import { ISupplierUpdatePayload, ISupplier } from "../types/supplier.type";
 import getSearchAndPagination from "../utils/queryHandler";
-
+//
+const createSupplier = async (data: ISupplier) => await Supplier.create(data);
+//
+const getSingleSupplier = async (id: IDType) => Supplier.findById(id);
+//
+const updateSupplier = async ({ id, data }: ISupplierUpdatePayload) =>
+  await Supplier.findByIdAndUpdate(id, data, { new: true });
+//
+const deleteSupplier = async (id: IDType) =>
+  await Supplier.findByIdAndDelete(id);
 //
 
-async function getUnits(query: QueryParams) {
+async function getSuppliers(query: QueryParams) {
   try {
     const {
       currentPage,
@@ -19,12 +28,12 @@ async function getUnits(query: QueryParams) {
       sortConditions,
     } = getSearchAndPagination({ query, entity: entities.unit });
 
-    const fetchResult = await Unit.find(filterConditions)
+    const fetchResult = await Supplier.find(filterConditions)
       .sort(sortConditions)
       .skip(viewSkip)
       .limit(viewLimit);
 
-    const total = await Unit.countDocuments(filterConditions);
+    const total = await Supplier.countDocuments(filterConditions);
     return {
       meta: {
         total,
@@ -41,66 +50,10 @@ async function getUnits(query: QueryParams) {
   }
 }
 
-export const saveUnit = async (data: IUnit) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
-export const getSingleUnit = async (id: IDType) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
-export const updateUnit = async ({ id, data }: IUnitUpdatePayload) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
-export const deleteUnit = async (id: string) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
 export default {
-  getUnits,
-  getSingleUnit,
-  saveUnit,
-  updateUnit,
-  deleteUnit,
+  getSuppliers,
+  getSingleSupplier,
+  createSupplier,
+  updateSupplier,
+  deleteSupplier,
 };

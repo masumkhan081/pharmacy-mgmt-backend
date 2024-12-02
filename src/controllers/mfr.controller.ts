@@ -32,9 +32,9 @@ export const getSingleUnit: TypeController = async (req, res) => {
   }
 };
 
-export const saveUnit: TypeController = async (req, res) => {
+export const createUnit: TypeController = async (req, res) => {
   try {
-    const result = await unitService.saveUnit(req.body);
+    const result = await unitService.createUnit(req.body);
     sendFetchResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error);
@@ -79,7 +79,7 @@ export const deleteUnit: TypeController = async (req, res) => {
 
 export default {
   getUnits,
-  saveUnit,
+  createUnit,
   updateUnit,
   deleteUnit,
 };

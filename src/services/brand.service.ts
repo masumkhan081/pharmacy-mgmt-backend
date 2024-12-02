@@ -1,13 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 import { entities } from "../config/constants";
-import Unit from "../models/unit.model";
+import Brand from "../models/brand.model";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { IUnit, IUnitUpdatePayload } from "../types/unit.type";
+import { IBrand, IBrandUpdatePayload } from "../types/brand.type";
 import getSearchAndPagination from "../utils/queryHandler";
-
 //
-
-async function getUnits(query: QueryParams) {
+const createBrand = async (data: IBrand) => await Brand.create(data);
+//
+const getSingleBrand = async (id: IDType) => Brand.findById(id);
+//
+const updateBrand = async ({ id, data }: IBrandUpdatePayload) =>
+  await Brand.findByIdAndUpdate(id, data, { new: true });
+//
+const deleteBrand = async (id: IDType) => await Brand.findByIdAndDelete(id);
+//
+async function getBrands(query: QueryParams) {
   try {
     const {
       currentPage,
@@ -17,14 +24,14 @@ async function getUnits(query: QueryParams) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, entity: entities.unit });
+    } = getSearchAndPagination({ query, entity: entities.brand });
 
-    const fetchResult = await Unit.find(filterConditions)
+    const fetchResult = await Brand.find(filterConditions)
       .sort(sortConditions)
       .skip(viewSkip)
       .limit(viewLimit);
 
-    const total = await Unit.countDocuments(filterConditions);
+    const total = await Brand.countDocuments(filterConditions);
     return {
       meta: {
         total,
@@ -41,66 +48,10 @@ async function getUnits(query: QueryParams) {
   }
 }
 
-export const saveUnit = async (data: IUnit) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
-export const getSingleUnit = async (id: IDType) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
-export const updateUnit = async ({ id, data }: IUnitUpdatePayload) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
-export const deleteUnit = async (id: string) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
 export default {
-  getUnits,
-  getSingleUnit,
-  saveUnit,
-  updateUnit,
-  deleteUnit,
+  createBrand,
+  updateBrand,
+  getSingleBrand,
+  deleteBrand,
+  getBrands,
 };

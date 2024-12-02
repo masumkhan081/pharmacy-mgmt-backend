@@ -1,13 +1,20 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 import { entities } from "../config/constants";
-import Unit from "../models/unit.model";
+import Formulation from "../models/formulation.model";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { IUnit, IUnitUpdatePayload } from "../types/unit.type";
+import { IFormulation, IFormulationUpdatePayload } from "../types/formulation.type";
 import getSearchAndPagination from "../utils/queryHandler";
-
+ //
+const createFormulation = async (data: IFormulation) => await Formulation.create(data);
 //
-
-async function getUnits(query: QueryParams) {
+const getSingleFormulation = async (id: IDType) => Formulation.findById(id);
+//
+const updateFormulation = async ({ id, data }: IFormulationUpdatePayload) =>
+  await Formulation.findByIdAndUpdate(id, data, { new: true });
+//
+const deleteFormulation = async (id: IDType) => await Formulation.findByIdAndDelete(id);
+//
+async function getFormulations(query: QueryParams) {
   try {
     const {
       currentPage,
@@ -17,14 +24,14 @@ async function getUnits(query: QueryParams) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, entity: entities.unit });
+    } = getSearchAndPagination({ query, entity: entities.formulation });
 
-    const fetchResult = await Unit.find(filterConditions)
+    const fetchResult = await Formulation.find(filterConditions)
       .sort(sortConditions)
       .skip(viewSkip)
       .limit(viewLimit);
 
-    const total = await Unit.countDocuments(filterConditions);
+    const total = await Formulation.countDocuments(filterConditions);
     return {
       meta: {
         total,
@@ -41,66 +48,10 @@ async function getUnits(query: QueryParams) {
   }
 }
 
-export const saveUnit = async (data: IUnit) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
-export const getSingleUnit = async (id: IDType) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
-export const updateUnit = async ({ id, data }: IUnitUpdatePayload) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
-export const deleteUnit = async (id: string) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
 export default {
-  getUnits,
-  getSingleUnit,
-  saveUnit,
-  updateUnit,
-  deleteUnit,
+  createFormulation,
+  updateFormulation,
+  getSingleFormulation,
+  deleteFormulation,
+  getFormulations,
 };

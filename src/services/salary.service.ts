@@ -41,7 +41,7 @@ async function getUnits(query: QueryParams) {
   }
 }
 
-export const saveUnit = async (data: IUnit) => {
+export const createUnit = async (data: IUnit) => {
   try {
     // const result = await unitService.deleteUnit(req.query);
     // sendFetchResponse({ res, result, entity: entities.unit });
@@ -100,7 +100,7 @@ export const deleteUnit = async (id: string) => {
 export default {
   getUnits,
   getSingleUnit,
-  saveUnit,
+  createUnit,
   updateUnit,
   deleteUnit,
 };

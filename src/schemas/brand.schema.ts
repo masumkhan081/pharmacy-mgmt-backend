@@ -1,8 +1,10 @@
-import { z } from "zod";
+import * as z from "zod";
 
-export const unitSchema = z.object({
+export const brandSchema = z.object({
+  generic: z.string(), // Assuming generic ID is a string
+  mfr: z.string(), // Assuming manufacturer ID is a string
   name: z
     .string()
-    .min(1, { message: "Name is required" })
-    .max(50, { message: "Name cannot exceed 50 characters" }),
+    .min(3, "Brand name must be at least 3 characters long")
+    .max(35, "Brand name cannot exceed 35 characters"),
 });

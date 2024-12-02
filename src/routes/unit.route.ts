@@ -1,7 +1,7 @@
 import express from "express";
 const router = express.Router();
 import {
-  saveUnit,
+  createUnit,
   getUnits,
   getSingleUnit,
   updateUnit,
@@ -20,7 +20,7 @@ router.get("/:id", validateObjectId, (req, res) => {
 });
 
 router.post("/", validateRequest(unitSchema), (req, res) => {
-  saveUnit(req, res);
+  createUnit(req, res);
 });
 
 router.patch("/:id", (req, res) => {

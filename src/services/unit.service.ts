@@ -1,13 +1,19 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 import { entities } from "../config/constants";
 import Unit from "../models/unit.model";
 import { IDType, QueryParams } from "../types/requestResponse";
 import { IUnit, IUnitUpdatePayload } from "../types/unit.type";
 import getSearchAndPagination from "../utils/queryHandler";
-import { sendFetchResponse } from "../utils/responseHandler";
-
 //
-
+const createUnit = async (data: IUnit) => await Unit.create(data);
+//
+const getSingleUnit = async (id: IDType) => Unit.findById(id);
+//
+const updateUnit = async ({ id, data }: IUnitUpdatePayload) =>
+  await Unit.findByIdAndUpdate(id, data, { new: true });
+//
+const deleteUnit = async (id: IDType) => await Unit.findByIdAndDelete(id);
+//
 async function getUnits(query: QueryParams) {
   try {
     const {
@@ -42,54 +48,10 @@ async function getUnits(query: QueryParams) {
   }
 }
 
-export const saveUnit = async (data: IUnit) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
-const getSingleUnit = async (id: IDType) => Unit.findById(id);
-
-export const updateUnit = async ({ id, data }: IUnitUpdatePayload) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
-export const deleteUnit = async (id: string) => {
-  try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
-
 export default {
-  getUnits,
-  getSingleUnit,
-  saveUnit,
+  createUnit,
   updateUnit,
+  getSingleUnit,
   deleteUnit,
+  getUnits,
 };
