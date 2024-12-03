@@ -1,33 +1,33 @@
 import express from "express";
 const router = express.Router();
 import {
-  createUnit,
-  getUnits,
-  getSingleUnit,
-  updateUnit,
-  deleteUnit,
-} from "../controllers/unit.controller.js"; // controller functions
+  createGroup,
+  getGroups,
+  getSingleGroup,
+  updateGroup,
+  deleteGroup,
+} from "../controllers/group.controller.js"; // controller functions
 import validateRequest from "../middlewares/validateRequest.js";
-import { unitSchema } from "../schemas/unit.schema.js";
+import { groupSchema } from "../schemas/group.schema.js";
 
 router.get("/", (req, res) => {
-  getUnits(req, res);
+  getGroups(req, res);
 });
 
 router.get("/:id", (req, res) => {
-  getSingleUnit(req, res);
+  getSingleGroup(req, res);
 });
 
-router.post("/", validateRequest(unitSchema), (req, res) => {
-  createUnit(req, res);
+router.post("/", validateRequest(groupSchema), (req, res) => {
+  createGroup(req, res);
 });
 
 router.patch("/:id", (req, res) => {
-  updateUnit(req, res);
+  updateGroup(req, res);
 });
 
 router.delete("/:id", (req, res) => {
-  deleteUnit(req, res);
+  deleteGroup(req, res);
 });
 
 //

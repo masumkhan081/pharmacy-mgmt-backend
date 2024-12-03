@@ -6,10 +6,12 @@ export const userRoles = {
 
 export const entities = {
   drug: "Drugs",
+  group: "Group",
   generic: "Generics",
   unit: "Units",
   brand: "Brands",
   formulation: "Formulations",
+  manufacturer: "Manufacturer",
   staff: "Staff",
   supplier: "Supplier",
 };

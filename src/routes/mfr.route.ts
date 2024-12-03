@@ -1,33 +1,33 @@
 import express from "express";
 const router = express.Router();
 import {
-  createUnit,
-  getUnits,
-  getSingleUnit,
-  updateUnit,
-  deleteUnit,
-} from "../controllers/unit.controller.js"; // controller functions
+  createManufacturer,
+  getManufacturers,
+  getSingleManufacturer,
+  updateManufacturer,
+  deleteManufacturer,
+} from "../controllers/mfr.controller.js"; // controller functions
 import validateRequest from "../middlewares/validateRequest.js";
-import { unitSchema } from "../schemas/unit.schema.js";
+import { manufacturerSchema } from "../schemas/mfr.schema.js";
 
 router.get("/", (req, res) => {
-  getUnits(req, res);
+  getManufacturers(req, res);
 });
 
 router.get("/:id", (req, res) => {
-  getSingleUnit(req, res);
+  getSingleManufacturer(req, res);
 });
 
-router.post("/", validateRequest(unitSchema), (req, res) => {
-  createUnit(req, res);
+router.post("/", validateRequest(manufacturerSchema), (req, res) => {
+  createManufacturer(req, res);
 });
 
 router.patch("/:id", (req, res) => {
-  updateUnit(req, res);
+  updateManufacturer(req, res);
 });
 
 router.delete("/:id", (req, res) => {
-  deleteUnit(req, res);
+  deleteManufacturer(req, res);
 });
 
 //

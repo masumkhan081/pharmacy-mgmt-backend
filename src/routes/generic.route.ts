@@ -1,33 +1,33 @@
 import express from "express";
 const router = express.Router();
 import {
-  createUnit,
-  getUnits,
-  getSingleUnit,
-  updateUnit,
-  deleteUnit,
-} from "../controllers/unit.controller.js"; // controller functions
+  createGeneric,
+  getGenerics,
+  getSingleGeneric,
+  updateGeneric,
+  deleteGeneric,
+} from "../controllers/generic.controller.js"; // controller functions
 import validateRequest from "../middlewares/validateRequest.js";
-import { unitSchema } from "../schemas/unit.schema.js";
+import { genericSchema } from "../schemas/generic.schema.js";
 
 router.get("/", (req, res) => {
-  getUnits(req, res);
+  getGenerics(req, res);
 });
 
 router.get("/:id", (req, res) => {
-  getSingleUnit(req, res);
+  getSingleGeneric(req, res);
 });
 
-router.post("/", validateRequest(unitSchema), (req, res) => {
-  createUnit(req, res);
+router.post("/", validateRequest(genericSchema), (req, res) => {
+  createGeneric(req, res);
 });
 
 router.patch("/:id", (req, res) => {
-  updateUnit(req, res);
+  updateGeneric(req, res);
 });
 
 router.delete("/:id", (req, res) => {
-  deleteUnit(req, res);
+  deleteGeneric(req, res);
 });
 
 //

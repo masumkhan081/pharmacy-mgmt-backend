@@ -1,20 +1,19 @@
- 
 import { entities } from "../config/constants";
-import Unit from "../models/unit.model";
+import Generic from "../models/generic.model";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { IUnit, IUnitUpdatePayload } from "../types/unit.type";
+import { IGeneric, IGenericUpdatePayload } from "../types/generic.type";
 import getSearchAndPagination from "../utils/queryHandler";
- //
-const createUnit = async (data: IUnit) => await Unit.create(data);
 //
-const getSingleUnit = async (id: IDType) => Unit.findById(id);
+const createGeneric = async (data: IGeneric) => await Generic.create(data);
 //
-const updateUnit = async ({ id, data }: IUnitUpdatePayload) =>
-  await Unit.findByIdAndUpdate(id, data, { new: true });
+const getSingleGeneric = async (id: IDType) => Generic.findById(id);
 //
-const deleteUnit = async (id: IDType) => await Unit.findByIdAndDelete(id);
+const updateGeneric = async ({ id, data }: IGenericUpdatePayload) =>
+  await Generic.findByIdAndUpdate(id, data, { new: true });
 //
-async function getUnits(query: QueryParams) {
+const deleteGeneric = async (id: IDType) => await Generic.findByIdAndDelete(id);
+//
+async function getGenerics(query: QueryParams) {
   try {
     const {
       currentPage,
@@ -24,14 +23,14 @@ async function getUnits(query: QueryParams) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, entity: entities.unit });
+    } = getSearchAndPagination({ query, entity: entities.generic });
 
-    const fetchResult = await Unit.find(filterConditions)
+    const fetchResult = await Generic.find(filterConditions)
       .sort(sortConditions)
       .skip(viewSkip)
       .limit(viewLimit);
 
-    const total = await Unit.countDocuments(filterConditions);
+    const total = await Generic.countDocuments(filterConditions);
     return {
       meta: {
         total,
@@ -49,9 +48,9 @@ async function getUnits(query: QueryParams) {
 }
 
 export default {
-  createUnit,
-  updateUnit,
-  getSingleUnit,
-  deleteUnit,
-  getUnits,
+  createGeneric,
+  updateGeneric,
+  getSingleGeneric,
+  deleteGeneric,
+  getGenerics,
 };

@@ -1,20 +1,19 @@
- 
 import { entities } from "../config/constants";
-import Unit from "../models/unit.model";
+import Group from "../models/group.model";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { IUnit, IUnitUpdatePayload } from "../types/unit.type";
+import { Igroup, IgroupUpdatePayload } from "../types/group.type";
 import getSearchAndPagination from "../utils/queryHandler";
- //
-const createUnit = async (data: IUnit) => await Unit.create(data);
 //
-const getSingleUnit = async (id: IDType) => Unit.findById(id);
+const createGroup = async (data: Igroup) => await Group.create(data);
 //
-const updateUnit = async ({ id, data }: IUnitUpdatePayload) =>
-  await Unit.findByIdAndUpdate(id, data, { new: true });
+const getSingleGroup = async (id: IDType) => Group.findById(id);
 //
-const deleteUnit = async (id: IDType) => await Unit.findByIdAndDelete(id);
+const updateGroup = async ({ id, data }: IgroupUpdatePayload) =>
+  await Group.findByIdAndUpdate(id, data, { new: true });
 //
-async function getUnits(query: QueryParams) {
+const deleteGroup = async (id: IDType) => await Group.findByIdAndDelete(id);
+//
+async function getGroups(query: QueryParams) {
   try {
     const {
       currentPage,
@@ -24,14 +23,14 @@ async function getUnits(query: QueryParams) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, entity: entities.unit });
+    } = getSearchAndPagination({ query, entity: entities.group });
 
-    const fetchResult = await Unit.find(filterConditions)
+    const fetchResult = await Group.find(filterConditions)
       .sort(sortConditions)
       .skip(viewSkip)
       .limit(viewLimit);
 
-    const total = await Unit.countDocuments(filterConditions);
+    const total = await Group.countDocuments(filterConditions);
     return {
       meta: {
         total,
@@ -49,9 +48,9 @@ async function getUnits(query: QueryParams) {
 }
 
 export default {
-  createUnit,
-  updateUnit,
-  getSingleUnit,
-  deleteUnit,
-  getUnits,
+  createGroup,
+  updateGroup,
+  getSingleGroup,
+  deleteGroup,
+  getGroups,
 };

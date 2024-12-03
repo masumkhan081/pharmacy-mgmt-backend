@@ -1,8 +1,9 @@
 import { z } from "zod";
 
-export const unitSchema = z.object({
+export const genericSchema = z.object({
+  group: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ObjectId"), // Validates MongoDB ObjectId format
   name: z
     .string()
-    .min(1, { message: "Name is required" })
-    .max(50, { message: "Name cannot exceed 50 characters" }),
+    .min(3, "Generic name must be at least 3 characters long")
+    .max(35, "Generic name cannot exceed 35 characters"),
 });

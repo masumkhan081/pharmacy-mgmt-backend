@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const unitSchema = z.object({
+export const manufacturerSchema = z.object({
   name: z
     .string()
     .min(1, { message: "Name is required" })

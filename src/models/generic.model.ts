@@ -1,7 +1,6 @@
 import mongoose from "mongoose";
 import Group from "./group.model";
 //
-
 const genericSchema = new mongoose.Schema({
   group: {
     type: mongoose.Schema.Types.ObjectId,

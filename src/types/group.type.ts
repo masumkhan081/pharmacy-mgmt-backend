@@ -1,12 +1,12 @@
 import { Document } from "mongoose";
 import { IDType } from "./requestResponse";
 
-export interface IUnit extends Document {
+export interface Igroup extends Document {
   name: string;
 }
 
 // Update the interface to use IDType
-export interface IUnitUpdatePayload {
+export interface IgroupUpdatePayload {
   id: IDType;
-  data: Partial<IUnit>;
+  data: Partial<Igroup>;
 }
