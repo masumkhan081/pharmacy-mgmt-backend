@@ -1,21 +1,21 @@
  
 import { entities } from "../config/constants";
-import Unit from "../models/unit.model";
+import Drug from "../models/drug.model";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { IUnit, IUnitUpdatePayload } from "../types/unit.type";
+import { IDrug,IDrugUpdatePayload } from "../types/drug.type";
 import getSearchAndPagination from "../utils/queryHandler";
 //
 //
-const createUnit = async (data: IUnit) => await Unit.create(data);
+const createDrug = async (data: IDrug) => await Drug.create(data);
 //
-const getSingleUnit = async (id: IDType) => Unit.findById(id);
+const getSingleDrug = async (id: IDType) => Drug.findById(id);
 //
-const updateUnit = async ({ id, data }: IUnitUpdatePayload) =>
-  await Unit.findByIdAndUpdate(id, data, { new: true });
+const updateDrug = async ({ id, data }: IDrugUpdatePayload) =>
+  await Drug.findByIdAndUpdate(id, data, { new: true });
 //
-const deleteUnit = async (id: IDType) => await Unit.findByIdAndDelete(id);
+const deleteDrug = async (id: IDType) => await Drug.findByIdAndDelete(id);
 //
-async function getUnits(query: QueryParams) {
+async function getDrugs(query: QueryParams) {
   try {
     const {
       currentPage,
@@ -25,14 +25,14 @@ async function getUnits(query: QueryParams) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, entity: entities.unit });
+    } = getSearchAndPagination({ query, entity: entities.drug });
 
-    const fetchResult = await Unit.find(filterConditions)
+    const fetchResult = await Drug.find(filterConditions)
       .sort(sortConditions)
       .skip(viewSkip)
       .limit(viewLimit);
 
-    const total = await Unit.countDocuments(filterConditions);
+    const total = await Drug.countDocuments(filterConditions);
     return {
       meta: {
         total,
@@ -50,9 +50,9 @@ async function getUnits(query: QueryParams) {
 }
 
 export default {
-  createUnit,
-  updateUnit,
-  getSingleUnit,
-  deleteUnit,
-  getUnits,
+  createDrug,
+  updateDrug,
+  getSingleDrug,
+  deleteDrug,
+  getDrugs,
 };

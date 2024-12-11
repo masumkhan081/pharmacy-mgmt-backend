@@ -17,6 +17,7 @@ export const entities = {
   purchase: "Purchase",
   sale:"Sale",
   salary: "Salary",
+  attendance:"Attendance"
 };
 
 export const paginationFields = ["page", "limit", "sortBy", "sortOrder"];

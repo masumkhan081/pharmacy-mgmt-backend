@@ -83,19 +83,8 @@ export const updateSale = async ({ id, data }: ISaleUpdatePayload) => {
   }
 };
 
-export const deleteSale = async (id: string) => {
-  try {
-    // const result = await saleService.deleteSale(req.query);
-    // sendFetchResponse({ res, result, entity: entities.sale });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
+const deleteSale = async (id: IDType) => await Sale.findByIdAndDelete(id);
+
 
 export default {
   getSales,

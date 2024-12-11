@@ -83,19 +83,7 @@ export const updatePurchase = async ({ id, data }: IPurchaseUpdatePayload) => {
   }
 };
 
-export const deletePurchase = async (id: string) => {
-  try {
-    // const result = await purchaseService.deletePurchase(req.query);
-    // sendFetchResponse({ res, result, entity: entities.purchase });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
+const deletePurchase = async (id: IDType) => await Purchase.findByIdAndDelete(id);
 
 export default {
   getPurchases,

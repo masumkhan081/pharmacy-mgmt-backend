@@ -82,20 +82,9 @@ export const updateSalary = async ({ id, data }: ISalaryUpdatePayload) => {
     // });
   }
 };
-
-export const deleteSalary = async (id: string) => {
-  try {
-    // const result = await salaryService.deleteSalary(req.query);
-    // sendFetchResponse({ res, result, entity: entities.salary });
-  } catch (error) {
-    console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
-  }
-};
+ 
+const deleteSalary = async (id: IDType) => await Salary.findByIdAndDelete(id);
+ 
 
 export default {
   getSalaries,

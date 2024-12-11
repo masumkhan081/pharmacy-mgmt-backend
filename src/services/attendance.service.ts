@@ -1,20 +1,20 @@
  
 import { entities } from "../config/constants";
-import Unit from "../models/unit.model";
+import Attendance from "../models/attendance.model";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { IUnit, IUnitUpdatePayload } from "../types/unit.type";
+import { IAttendance, IAttendanceUpdatePayload } from "../types/attendance.type";
 import getSearchAndPagination from "../utils/queryHandler";
 //
-const createUnit = async (data: IUnit) => await Unit.create(data);
+const createAttendance = async (data: IAttendance) => await Attendance.create(data);
 //
-const getSingleUnit = async (id: IDType) => Unit.findById(id);
+const getSingleAttendance = async (id: IDType) => Attendance.findById(id);
 //
-const updateUnit = async ({ id, data }: IUnitUpdatePayload) =>
-  await Unit.findByIdAndUpdate(id, data, { new: true });
+const updateAttendance = async ({ id, data }: IAttendanceUpdatePayload) =>
+  await Attendance.findByIdAndUpdate(id, data, { new: true });
 //
-const deleteUnit = async (id: IDType) => await Unit.findByIdAndDelete(id);
+const deleteAttendance = async (id: IDType) => await Attendance.findByIdAndDelete(id);
 //
-async function getUnits(query: QueryParams) {
+async function getAttendances(query: QueryParams) {
   try {
     const {
       currentPage,
@@ -24,14 +24,14 @@ async function getUnits(query: QueryParams) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, entity: entities.unit });
+    } = getSearchAndPagination({ query, entity: entities.attendance });
 
-    const fetchResult = await Unit.find(filterConditions)
+    const fetchResult = await Attendance.find(filterConditions)
       .sort(sortConditions)
       .skip(viewSkip)
       .limit(viewLimit);
 
-    const total = await Unit.countDocuments(filterConditions);
+    const total = await Attendance.countDocuments(filterConditions);
     return {
       meta: {
         total,
@@ -49,9 +49,9 @@ async function getUnits(query: QueryParams) {
 }
 
 export default {
-  createUnit,
-  updateUnit,
-  getSingleUnit,
-  deleteUnit,
-  getUnits,
+  createAttendance,
+  updateAttendance,
+  getSingleAttendance,
+  deleteAttendance,
+  getAttendances,
 };

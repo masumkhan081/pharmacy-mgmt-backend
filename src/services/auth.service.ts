@@ -4,9 +4,7 @@ import Unit from "../models/unit.model";
 import { IDType, QueryParams } from "../types/requestResponse";
 import { IUnit, IUnitUpdatePayload } from "../types/unit.type";
 import getSearchAndPagination from "../utils/queryHandler";
-
 //
-
 async function getUnits(query: QueryParams) {
   try {
     const {

@@ -1,18 +1,22 @@
- 
 import { entities } from "../config/constants";
 import Formulation from "../models/formulation.model";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { IFormulation, IFormulationUpdatePayload } from "../types/formulation.type";
+import {
+  IFormulation,
+  IFormulationUpdatePayload,
+} from "../types/formulation.type";
 import getSearchAndPagination from "../utils/queryHandler";
- //
-const createFormulation = async (data: IFormulation) => await Formulation.create(data);
+//
+const createFormulation = async (data: IFormulation) =>
+  await Formulation.create(data);
 //
 const getSingleFormulation = async (id: IDType) => Formulation.findById(id);
 //
 const updateFormulation = async ({ id, data }: IFormulationUpdatePayload) =>
   await Formulation.findByIdAndUpdate(id, data, { new: true });
 //
-const deleteFormulation = async (id: IDType) => await Formulation.findByIdAndDelete(id);
+const deleteFormulation = async (id: IDType) =>
+  await Formulation.findByIdAndDelete(id);
 //
 async function getFormulations(query: QueryParams) {
   try {
