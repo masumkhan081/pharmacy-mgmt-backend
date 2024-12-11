@@ -9,26 +9,34 @@ import {
 } from "../controllers/staff.controller.js"; // controller functions
 import validateRequest from "../middlewares/validateRequest.js";
 import { staffSchema } from "../schemas/staff.schema.js";
+import { userRoles } from "../config/constants.js";
+import accessControl from "../middlewares/aceessControl.js";
+import { validateObjectId } from "../middlewares/validateId.js";
 
-router.get("/", (req, res) => {
-  getStaffs(req, res);
-});
+router.get("/", getStaffs);
 
-router.get("/:id", (req, res) => {
-  getSingleStaff(req, res);
-});
+router.get("/:id", validateObjectId, getSingleStaff);
 
-router.post("/", validateRequest(staffSchema), (req, res) => {
-  createStaff(req, res);
-});
+router.post(
+  "/",
+  accessControl([userRoles.admin]),
+  validateRequest(staffSchema),
+  createStaff
+);
 
-router.patch("/:id", (req, res) => {
-  updateStaff(req, res);
-});
+router.patch(
+  "/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  updateStaff
+);
 
-router.delete("/:id", (req, res) => {
-  deleteStaff(req, res);
-});
+router.delete(
+  "/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  deleteStaff
+);
 
 //
 export default router;

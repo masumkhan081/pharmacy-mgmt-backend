@@ -1,34 +1,44 @@
 import express from "express";
 const router = express.Router();
-import {
-  createUnit,
-  getUnits,
-  getSingleUnit,
-  updateUnit,
-  deleteUnit,
-} from "../controllers/unit.controller.js"; // controller functions
+
 import validateRequest from "../middlewares/validateRequest.js";
-import { unitSchema } from "../schemas/unit.schema.js";
+import { drugSchema } from "../schemas/drug.schema.js";
+import { validateObjectId } from "../middlewares/validateId.js";
+import accessControl from "../middlewares/aceessControl.js";
+import { userRoles } from "../config/constants.js";
+import {
+  getDrugs,
+  getSingleDrug,
+  updateDrug,
+  deleteDrug,
+  createDrug,
+} from "../controllers/drug.controller.js";
+//
 
-router.get("/", (req, res) => {
-  getUnits(req, res);
-});
+router.get("/", getDrugs);
 
-router.get("/:id", (req, res) => {
-  getSingleUnit(req, res);
-});
+router.get("/:id", validateObjectId, getSingleDrug);
 
-router.post("/", validateRequest(unitSchema), (req, res) => {
-  createUnit(req, res);
-});
+router.post(
+  "/",
+  accessControl([userRoles.admin]),
+  validateRequest(drugSchema),
+  createDrug
+);
 
-router.patch("/:id", (req, res) => {
-  updateUnit(req, res);
-});
+router.patch(
+  "/:id",
+  validateObjectId,
+  accessControl([userRoles.admin]),
+  updateDrug
+);
 
-router.delete("/:id", (req, res) => {
-  deleteUnit(req, res);
-});
+router.delete(
+  "/:id",
+  validateObjectId,
+  accessControl([userRoles.admin]),
+  deleteDrug
+);
 
 //
 export default router;

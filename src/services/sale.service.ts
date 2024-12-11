@@ -1,13 +1,13 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { entities } from "../config/constants";
-import Unit from "../models/unit.model";
+import Sale from "../models/sale.model";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { IUnit, IUnitUpdatePayload } from "../types/unit.type";
+import { ISale, ISaleUpdatePayload } from "../types/sale.type";
 import getSearchAndPagination from "../utils/queryHandler";
 
 //
 
-async function getUnits(query: QueryParams) {
+async function getSales(query: QueryParams) {
   try {
     const {
       currentPage,
@@ -17,14 +17,14 @@ async function getUnits(query: QueryParams) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, entity: entities.unit });
+    } = getSearchAndPagination({ query, entity: entities.sale });
 
-    const fetchResult = await Unit.find(filterConditions)
+    const fetchResult = await Sale.find(filterConditions)
       .sort(sortConditions)
       .skip(viewSkip)
       .limit(viewLimit);
 
-    const total = await Unit.countDocuments(filterConditions);
+    const total = await Sale.countDocuments(filterConditions);
     return {
       meta: {
         total,
@@ -41,10 +41,10 @@ async function getUnits(query: QueryParams) {
   }
 }
 
-export const createUnit = async (data: IUnit) => {
+export const createSale = async (data: ISale) => {
   try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
+    // const result = await saleService.deleteSale(req.query);
+    // sendFetchResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -55,10 +55,10 @@ export const createUnit = async (data: IUnit) => {
   }
 };
 
-export const getSingleUnit = async (id: IDType) => {
+export const getSingleSale = async (id: IDType) => {
   try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
+    // const result = await saleService.deleteSale(req.query);
+    // sendFetchResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -69,10 +69,10 @@ export const getSingleUnit = async (id: IDType) => {
   }
 };
 
-export const updateUnit = async ({ id, data }: IUnitUpdatePayload) => {
+export const updateSale = async ({ id, data }: ISaleUpdatePayload) => {
   try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
+    // const result = await saleService.deleteSale(req.query);
+    // sendFetchResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -83,10 +83,10 @@ export const updateUnit = async ({ id, data }: IUnitUpdatePayload) => {
   }
 };
 
-export const deleteUnit = async (id: string) => {
+export const deleteSale = async (id: string) => {
   try {
-    // const result = await unitService.deleteUnit(req.query);
-    // sendFetchResponse({ res, result, entity: entities.unit });
+    // const result = await saleService.deleteSale(req.query);
+    // sendFetchResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -98,9 +98,9 @@ export const deleteUnit = async (id: string) => {
 };
 
 export default {
-  getUnits,
-  getSingleUnit,
-  createUnit,
-  updateUnit,
-  deleteUnit,
+  getSales,
+  getSingleSale,
+  createSale,
+  updateSale,
+  deleteSale,
 };

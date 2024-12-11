@@ -1,34 +1,42 @@
 import express from "express";
 const router = express.Router();
 import {
-  createUnit,
-  getUnits,
-  getSingleUnit,
-  updateUnit,
-  deleteUnit,
-} from "../controllers/unit.controller.js"; // controller functions
+  createSalary,
+  getSalaries,
+  getSingleSalary,
+  updateSalary,
+  deleteSalary,
+} from "../controllers/salary.controller.js"; // controller functions
 import validateRequest from "../middlewares/validateRequest.js";
-import { unitSchema } from "../schemas/unit.schema.js";
+import { salarySchema } from "../schemas/salary.schema.js";
+import { validateObjectId } from "../middlewares/validateId.js";
+import { userRoles } from "../config/constants.js";
+import accessControl from "../middlewares/aceessControl.js";
 
-router.get("/", (req, res) => {
-  getUnits(req, res);
-});
+router.get("/", getSalaries);
 
-router.get("/:id", (req, res) => {
-  getSingleUnit(req, res);
-});
+router.get("/:id", validateObjectId, getSingleSalary);
 
-router.post("/", validateRequest(unitSchema), (req, res) => {
-  createUnit(req, res);
-});
+router.post(
+  "/",
+  accessControl([userRoles.admin]),
+  validateRequest(salarySchema),
+  createSalary
+);
 
-router.patch("/:id", (req, res) => {
-  updateUnit(req, res);
-});
+router.patch(
+  "/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  updateSalary
+);
 
-router.delete("/:id", (req, res) => {
-  deleteUnit(req, res);
-});
+router.delete(
+  "/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  deleteSalary
+);
 
 //
 export default router;

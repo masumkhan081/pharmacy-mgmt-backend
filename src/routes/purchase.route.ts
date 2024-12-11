@@ -1,34 +1,47 @@
 import express from "express";
 const router = express.Router();
 import {
-  createUnit,
-  getUnits,
-  getSingleUnit,
-  updateUnit,
-  deleteUnit,
-} from "../controllers/unit.controller.js"; // controller functions
+  createPurchase,
+  getPurchases,
+  getSinglePurchase,
+  updatePurchase,
+  deletePurchase,
+} from "../controllers/purchase.controller.js"; // controller functions
 import validateRequest from "../middlewares/validateRequest.js";
-import { unitSchema } from "../schemas/unit.schema.js";
+import { purchaseSchema } from "../schemas/purchase.schema.js";
+import { validateObjectId } from "../middlewares/validateId.js";
+import accessControl from "../middlewares/aceessControl.js";
+import { userRoles } from "../config/constants.js";
 
-router.get("/", (req, res) => {
-  getUnits(req, res);
-});
+router.get("/", getPurchases);
 
-router.get("/:id", (req, res) => {
-  getSingleUnit(req, res);
-});
+router.get(
+  "/:id",
 
-router.post("/", validateRequest(unitSchema), (req, res) => {
-  createUnit(req, res);
-});
+  validateObjectId,
+  getSinglePurchase
+);
 
-router.patch("/:id", (req, res) => {
-  updateUnit(req, res);
-});
+router.post(
+  "/",
+  accessControl([userRoles.admin]),
+  validateRequest(purchaseSchema),
+  createPurchase
+);
 
-router.delete("/:id", (req, res) => {
-  deleteUnit(req, res);
-});
+router.patch(
+  "/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  updatePurchase
+);
+
+router.delete(
+  "/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  deletePurchase
+);
 
 //
 export default router;

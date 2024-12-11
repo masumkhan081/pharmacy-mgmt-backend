@@ -9,26 +9,34 @@ import {
 } from "../controllers/generic.controller.js"; // controller functions
 import validateRequest from "../middlewares/validateRequest.js";
 import { genericSchema } from "../schemas/generic.schema.js";
+import { validateObjectId } from "../middlewares/validateId.js";
+import accessControl from "../middlewares/aceessControl.js";
+import { userRoles } from "../config/constants.js";
 
-router.get("/", (req, res) => {
-  getGenerics(req, res);
-});
+router.get("/", getGenerics);
 
-router.get("/:id", (req, res) => {
-  getSingleGeneric(req, res);
-});
+router.get("/:id", validateObjectId, getSingleGeneric);
 
-router.post("/", validateRequest(genericSchema), (req, res) => {
-  createGeneric(req, res);
-});
+router.post(
+  "/",
+  accessControl([userRoles.admin]),
+  validateRequest(genericSchema),
+  createGeneric
+);
 
-router.patch("/:id", (req, res) => {
-  updateGeneric(req, res);
-});
+router.patch(
+  "/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  updateGeneric
+);
 
-router.delete("/:id", (req, res) => {
-  deleteGeneric(req, res);
-});
+router.delete(
+  "/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  deleteGeneric
+);
 
 //
 export default router;

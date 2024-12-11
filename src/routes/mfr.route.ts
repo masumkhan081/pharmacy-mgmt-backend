@@ -9,26 +9,23 @@ import {
 } from "../controllers/mfr.controller.js"; // controller functions
 import validateRequest from "../middlewares/validateRequest.js";
 import { manufacturerSchema } from "../schemas/mfr.schema.js";
+import { validateObjectId } from "../middlewares/validateId.js";
+import accessControl from "../middlewares/aceessControl.js";
+import { userRoles } from "../config/constants.js";
 
-router.get("/", (req, res) => {
-  getManufacturers(req, res);
-});
+router.get("/", getManufacturers);
 
-router.get("/:id", (req, res) => {
-  getSingleManufacturer(req, res);
-});
+router.get(
+  "/:id",
+  validateObjectId,
+  getSingleManufacturer
+);
 
-router.post("/", validateRequest(manufacturerSchema), (req, res) => {
-  createManufacturer(req, res);
-});
+router.post("/", accessControl([userRoles.admin]), validateRequest(manufacturerSchema), createManufacturer);
 
-router.patch("/:id", (req, res) => {
-  updateManufacturer(req, res);
-});
+router.patch("/:id",accessControl([userRoles.admin]), validateObjectId,updateManufacturer);
 
-router.delete("/:id", (req, res) => {
-  deleteManufacturer(req, res);
-});
+router.delete("/:id",accessControl([userRoles.admin]), validateObjectId,deleteManufacturer);
 
 //
 export default router;

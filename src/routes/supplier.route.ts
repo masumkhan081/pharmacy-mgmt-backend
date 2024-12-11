@@ -9,26 +9,34 @@ import {
 } from "../controllers/supplier.controller.js"; // controller functions
 import validateRequest from "../middlewares/validateRequest.js";
 import { supplierSchema } from "../schemas/supplier.schema.js";
+import { validateObjectId } from "../middlewares/validateId.js";
+import accessControl from "../middlewares/aceessControl.js";
+import { userRoles } from "../config/constants.js";
 
-router.get("/", (req, res) => {
-  getSuppliers(req, res);
-});
+router.get("/", getSuppliers);
 
-router.get("/:id", (req, res) => {
-  getSingleSupplier(req, res);
-});
+router.get("/:id", validateObjectId, getSingleSupplier);
 
-router.post("/", validateRequest(supplierSchema), (req, res) => {
-  createSupplier(req, res);
-});
+router.post(
+  "/",
+  accessControl([userRoles.admin]),
+  validateRequest(supplierSchema),
+  createSupplier
+);
 
-router.patch("/:id", (req, res) => {
-  updateSupplier(req, res);
-});
+router.patch(
+  "/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  updateSupplier
+);
 
-router.delete("/:id", (req, res) => {
-  deleteSupplier(req, res);
-});
+router.delete(
+  "/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  deleteSupplier
+);
 
 //
 export default router;

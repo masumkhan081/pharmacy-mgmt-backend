@@ -9,26 +9,28 @@ import {
 } from "../controllers/formulation.controller.js"; // controller functions
 import validateRequest from "../middlewares/validateRequest.js";
 import { formulationSchema } from "../schemas/formulation.schema.js";
+import { validateObjectId } from "../middlewares/validateId.js";
+import accessControl from "../middlewares/aceessControl.js";
+import { userRoles } from "../config/constants.js";
 
-router.get("/", (req, res) => {
-  getFormulations(req, res);
-});
+ 
 
-router.get("/:id", (req, res) => {
-  getSingleFormulation(req, res);
-});
+router.get("/",
+  getFormulations);
 
-router.post("/", validateRequest(formulationSchema), (req, res) => {
-  createFormulation(req, res);
-});
+router.get("/:id",
+  validateObjectId,
+  getSingleFormulation);
 
-router.patch("/:id", (req, res) => {
-  updateFormulation(req, res);
-});
+router.post("/",accessControl([userRoles.admin]), validateRequest(formulationSchema), createFormulation);
 
-router.delete("/:id", (req, res) => {
-  deleteFormulation(req, res);
-});
+router.patch("/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  updateFormulation);
+
+router.delete("/:id",accessControl([userRoles.admin]),validateObjectId,
+  deleteFormulation);
 
 //
 export default router;

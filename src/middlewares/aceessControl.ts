@@ -14,35 +14,36 @@ function accessControl(accessRoles: string[]) {
   return async (
     req: RequestWithUser,
     res: Response,
-    next: NextFunction,
-  ): Promise<void | Response> => {
+    next: NextFunction
+  ): Promise<void> => {
     try {
       const token = req.headers.authorization;
 
       if (!token) {
-        return res.status(httpStatus.FORBIDDEN).json({
+        res.status(httpStatus.FORBIDDEN).json({
           success: false,
           message: "Access Forbidden!",
         });
+        return; // Explicitly return to avoid further execution
       }
 
       const { success, payload } = verifyToken(token);
 
       if (!success) {
-        return res.status(httpStatus.FORBIDDEN).json({
+        res.status(httpStatus.FORBIDDEN).json({
           success: false,
           message: "Access Forbidden!",
         });
+        return;
       }
 
       req.userId = payload?.userId;
       req.role = payload?.role;
 
       if (accessRoles.includes(req.role as string)) {
-        // handle possible undefined role
         next();
       } else {
-        return res.status(httpStatus.FORBIDDEN).json({
+        res.status(httpStatus.FORBIDDEN).json({
           success: false,
           message: "Access Forbidden!",
         });
@@ -50,9 +51,9 @@ function accessControl(accessRoles: string[]) {
     } catch (error) {
       console.error(
         "Error at accessControl:",
-        error instanceof Error ? error.message : "Unknown error",
+        error instanceof Error ? error.message : "Unknown error"
       );
-      return res.status(httpStatus.FORBIDDEN).json({
+      res.status(httpStatus.FORBIDDEN).json({
         success: false,
         message: "Access Forbidden!",
       });

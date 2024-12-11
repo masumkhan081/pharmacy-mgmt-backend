@@ -4,7 +4,7 @@ import { sendFetchResponse } from "../utils/responseHandler.js";
 import { TypeController } from "../types/requestResponse.js";
 //
 
-export const getUnits: TypeController = async (req, res) => {
+export const getDrugs: TypeController = async (req, res) => {
   try {
     const result = await unitService.getUnits(req.query);
     sendFetchResponse({ res, result, entity: entities.unit });
@@ -18,7 +18,7 @@ export const getUnits: TypeController = async (req, res) => {
   }
 };
 
-export const getSingleUnit: TypeController = async (req, res) => {
+export const getSingleDrug: TypeController = async (req, res) => {
   try {
     const result = await unitService.getSingleUnit(req.params.id);
     sendFetchResponse({ res, result, entity: entities.unit });
@@ -32,7 +32,7 @@ export const getSingleUnit: TypeController = async (req, res) => {
   }
 };
 
-export const createUnit: TypeController = async (req, res) => {
+export const createDrug: TypeController = async (req, res) => {
   try {
     const result = await unitService.createUnit(req.body);
     sendFetchResponse({ res, result, entity: entities.unit });
@@ -46,7 +46,7 @@ export const createUnit: TypeController = async (req, res) => {
   }
 };
 
-export const updateUnit: TypeController = async (req, res) => {
+export const updateDrug: TypeController = async (req, res) => {
   try {
     const result = await unitService.updateUnit({
       id: req.params.id,
@@ -63,7 +63,7 @@ export const updateUnit: TypeController = async (req, res) => {
   }
 };
 
-export const deleteUnit: TypeController = async (req, res) => {
+export const deleteDrug: TypeController = async (req, res) => {
   try {
     const result = await unitService.deleteUnit(req.params.id);
     sendFetchResponse({ res, result, entity: entities.unit });
@@ -78,8 +78,8 @@ export const deleteUnit: TypeController = async (req, res) => {
 };
 
 export default {
-  getUnits,
-  createUnit,
-  updateUnit,
-  deleteUnit,
+  getDrugs,
+  createDrug,
+  updateDrug,
+  deleteDrug,
 };

@@ -9,26 +9,30 @@ import {
 } from "../controllers/group.controller.js"; // controller functions
 import validateRequest from "../middlewares/validateRequest.js";
 import { groupSchema } from "../schemas/group.schema.js";
+import { userRoles } from "../config/constants.js";
+import accessControl from "../middlewares/aceessControl.js";
+import { validateObjectId } from "../middlewares/validateId.js";
 
-router.get("/", (req, res) => {
-  getGroups(req, res);
-});
+router.get("/", getGroups);
 
-router.get("/:id", (req, res) => {
-  getSingleGroup(req, res);
-});
+router.get("/:id", validateObjectId, getSingleGroup);
 
-router.post("/", validateRequest(groupSchema), (req, res) => {
-  createGroup(req, res);
-});
+router.post(
+  "/",
 
-router.patch("/:id", (req, res) => {
-  updateGroup(req, res);
-});
+  accessControl([userRoles.admin]),
+  validateRequest(groupSchema),
+  createGroup
+);
 
-router.delete("/:id", (req, res) => {
-  deleteGroup(req, res);
-});
+router.patch("/:id", validateObjectId, updateGroup);
+
+router.delete(
+  "/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  deleteGroup
+);
 
 //
 export default router;

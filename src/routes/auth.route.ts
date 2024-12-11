@@ -10,25 +10,15 @@ import {
 import validateRequest from "../middlewares/validateRequest.js";
 import { unitSchema } from "../schemas/unit.schema.js";
 
-router.get("/", (req, res) => {
-  getUnits(req, res);
-});
+router.get("/", getUnits);
 
-router.get("/:id", (req, res) => {
-  getSingleUnit(req, res);
-});
+router.get("/:id", getSingleUnit);
 
-router.post("/", validateRequest(unitSchema), (req, res) => {
-  createUnit(req, res);
-});
+router.post("/", validateRequest(unitSchema), createUnit);
 
-router.patch("/:id", (req, res) => {
-  updateUnit(req, res);
-});
+router.patch("/:id", updateUnit);
 
-router.delete("/:id", (req, res) => {
-  deleteUnit(req, res);
-});
+router.delete("/:id", deleteUnit);
 
 //
 export default router;

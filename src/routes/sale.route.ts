@@ -1,34 +1,42 @@
 import express from "express";
 const router = express.Router();
 import {
-  createUnit,
-  getUnits,
-  getSingleUnit,
-  updateUnit,
-  deleteUnit,
-} from "../controllers/unit.controller.js"; // controller functions
+  createSale,
+  getSales,
+  getSingleSale,
+  updateSale,
+  deleteSale,
+} from "../controllers/sale.controller.js"; // controller functions
 import validateRequest from "../middlewares/validateRequest.js";
-import { unitSchema } from "../schemas/unit.schema.js";
+import { saleSchema } from "../schemas/sale.schema.js";
+import { validateObjectId } from "../middlewares/validateId.js";
+import accessControl from "../middlewares/aceessControl.js";
+import { userRoles } from "../config/constants.js";
 
-router.get("/", (req, res) => {
-  getUnits(req, res);
-});
+router.get("/", getSales);
 
-router.get("/:id", (req, res) => {
-  getSingleUnit(req, res);
-});
+router.get("/:id", validateObjectId, getSingleSale);
 
-router.post("/", validateRequest(unitSchema), (req, res) => {
-  createUnit(req, res);
-});
+router.post(
+  "/",
+  accessControl([userRoles.admin]),
+  validateRequest(saleSchema),
+  createSale
+);
 
-router.patch("/:id", (req, res) => {
-  updateUnit(req, res);
-});
+router.patch(
+  "/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  updateSale
+);
 
-router.delete("/:id", (req, res) => {
-  deleteUnit(req, res);
-});
+router.delete(
+  "/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
+  deleteSale
+);
 
 //
 export default router;

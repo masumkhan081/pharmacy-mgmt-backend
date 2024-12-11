@@ -1,13 +1,13 @@
 import { entities } from "../config/constants.js";
-import unitService from "../services/unit.service.js";
+import purchaseService from "../services/purchase.service.js";
 import { sendFetchResponse } from "../utils/responseHandler.js";
 import { TypeController } from "../types/requestResponse.js";
 //
 
-export const getUnits: TypeController = async (req, res) => {
+export const getPurchases: TypeController = async (req, res) => {
   try {
-    const result = await unitService.getUnits(req.query);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await purchaseService.getPurchases(req.query);
+    sendFetchResponse({ res, result, entity: entities.purchase });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -18,10 +18,10 @@ export const getUnits: TypeController = async (req, res) => {
   }
 };
 
-export const getSingleUnit: TypeController = async (req, res) => {
+export const getSinglePurchase: TypeController = async (req, res) => {
   try {
-    const result = await unitService.getSingleUnit(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await purchaseService.getSinglePurchase(req.params.id);
+    sendFetchResponse({ res, result, entity: entities.purchase });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -32,10 +32,10 @@ export const getSingleUnit: TypeController = async (req, res) => {
   }
 };
 
-export const createUnit: TypeController = async (req, res) => {
+export const createPurchase: TypeController = async (req, res) => {
   try {
-    const result = await unitService.createUnit(req.body);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await purchaseService.createPurchase(req.body);
+    sendFetchResponse({ res, result, entity: entities.purchase });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -46,13 +46,13 @@ export const createUnit: TypeController = async (req, res) => {
   }
 };
 
-export const updateUnit: TypeController = async (req, res) => {
+export const updatePurchase: TypeController = async (req, res) => {
   try {
-    const result = await unitService.updateUnit({
+    const result = await purchaseService.updatePurchase({
       id: req.params.id,
       data: req.body,
     });
-    sendFetchResponse({ res, result, entity: entities.unit });
+    sendFetchResponse({ res, result, entity: entities.purchase });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -63,10 +63,10 @@ export const updateUnit: TypeController = async (req, res) => {
   }
 };
 
-export const deleteUnit: TypeController = async (req, res) => {
+export const deletePurchase: TypeController = async (req, res) => {
   try {
-    const result = await unitService.deleteUnit(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await purchaseService.deletePurchase(req.params.id);
+    sendFetchResponse({ res, result, entity: entities.purchase });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -78,8 +78,8 @@ export const deleteUnit: TypeController = async (req, res) => {
 };
 
 export default {
-  getUnits,
-  createUnit,
-  updateUnit,
-  deleteUnit,
+  getPurchases,
+  createPurchase,
+  updatePurchase,
+  deletePurchase,
 };

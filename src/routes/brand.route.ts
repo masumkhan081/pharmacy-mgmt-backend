@@ -7,28 +7,37 @@ import {
   updateBrand,
   deleteBrand,
 } from "../controllers/brand.controller.js"; // controller functions
-import validateRequest from "../middlewares/validateRequest.js"; 
+import validateRequest from "../middlewares/validateRequest.js";
 import { brandSchema } from "../schemas/brand.schema.js";
+import { validateObjectId } from "../middlewares/validateId.js";
+import accessControl from "../middlewares/aceessControl.js";
+import { userRoles } from "../config/constants.js";
+//
+router.get("/", getBrands);
 
-router.get("/", (req, res) => {
-  getBrands(req, res);
-});
+router.get("/:id", validateObjectId, getSingleBrand);
 
-router.get("/:id", (req, res) => {
-  getSingleBrand(req, res);
-});
+router.post(
+  "/",
+  validateRequest(brandSchema),
+  accessControl([userRoles.admin]),
+  createBrand
+);
 
-router.post("/", validateRequest(brandSchema), (req, res) => {
-  createBrand(req, res);
-});
+router.patch(
+  "/:id",
+  validateObjectId,
+  validateRequest(brandSchema),
+  accessControl([userRoles.admin]),
+  updateBrand
+);
 
-router.patch("/:id", (req, res) => {
-  updateBrand(req, res);
-});
-
-router.delete("/:id", (req, res) => {
-  deleteBrand(req, res);
-});
+router.delete(
+  "/:id",
+  validateObjectId,
+  accessControl([userRoles.admin]),
+  deleteBrand
+);
 
 //
 export default router;

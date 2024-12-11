@@ -1,13 +1,13 @@
 import { entities } from "../config/constants.js";
-import unitService from "../services/unit.service.js";
+import salaryService from "../services/salary.service.js";
 import { sendFetchResponse } from "../utils/responseHandler.js";
 import { TypeController } from "../types/requestResponse.js";
 //
 
-export const getUnits: TypeController = async (req, res) => {
+export const getSalaries: TypeController = async (req, res) => {
   try {
-    const result = await unitService.getUnits(req.query);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await salaryService.getSalaries(req.query);
+    sendFetchResponse({ res, result, entity: entities.salary });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -18,10 +18,10 @@ export const getUnits: TypeController = async (req, res) => {
   }
 };
 
-export const getSingleUnit: TypeController = async (req, res) => {
+export const getSingleSalary: TypeController = async (req, res) => {
   try {
-    const result = await unitService.getSingleUnit(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await salaryService.getSingleSalary(req.params.id);
+    sendFetchResponse({ res, result, entity: entities.salary });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -32,10 +32,10 @@ export const getSingleUnit: TypeController = async (req, res) => {
   }
 };
 
-export const createUnit: TypeController = async (req, res) => {
+export const createSalary: TypeController = async (req, res) => {
   try {
-    const result = await unitService.createUnit(req.body);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await salaryService.createSalary(req.body);
+    sendFetchResponse({ res, result, entity: entities.salary });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -46,13 +46,13 @@ export const createUnit: TypeController = async (req, res) => {
   }
 };
 
-export const updateUnit: TypeController = async (req, res) => {
+export const updateSalary: TypeController = async (req, res) => {
   try {
-    const result = await unitService.updateUnit({
+    const result = await salaryService.updateSalary({
       id: req.params.id,
       data: req.body,
     });
-    sendFetchResponse({ res, result, entity: entities.unit });
+    sendFetchResponse({ res, result, entity: entities.salary });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -63,10 +63,10 @@ export const updateUnit: TypeController = async (req, res) => {
   }
 };
 
-export const deleteUnit: TypeController = async (req, res) => {
+export const deleteSalary: TypeController = async (req, res) => {
   try {
-    const result = await unitService.deleteUnit(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await salaryService.deleteSalary(req.params.id);
+    sendFetchResponse({ res, result, entity: entities.salary });
   } catch (error) {
     console.error(error);
     // sendErrorResponse({
@@ -78,8 +78,8 @@ export const deleteUnit: TypeController = async (req, res) => {
 };
 
 export default {
-  getUnits,
-  createUnit,
-  updateUnit,
-  deleteUnit,
+  getSalaries,
+  createSalary,
+  updateSalary,
+  deleteSalary,
 };
