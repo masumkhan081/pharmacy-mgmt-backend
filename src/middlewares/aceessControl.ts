@@ -1,9 +1,8 @@
 import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
 // import config from "../config/index";
-import utilsToken from "../utils/tokenisation";
-
-const { verifyToken } = utilsToken;
+import { verifyToken } from "../utils/tokenisation";
+ 
 
 interface RequestWithUser extends Request {
   userId?: string;

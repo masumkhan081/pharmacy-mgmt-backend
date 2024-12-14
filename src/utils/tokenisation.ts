@@ -6,10 +6,12 @@ interface TokenPayload {
   // Define the structure of your token payload here
   userId?: string;
   role?: string;
+  email?: string;
+  expireAt?: number;
   // ... other properties
 }
 
-const createToken = ({
+export const createToken = ({
   payload,
   expireTime,
 }: {
@@ -29,8 +31,8 @@ const createToken = ({
   }
 };
 
-const verifyToken = (
-  token: string,
+export const verifyToken = (
+  token: string
 ): { success: boolean; payload: TokenPayload | null } => {
   try {
     const payload = jwt.verify(token, config.tokenSecret) as TokenPayload;
@@ -43,7 +45,7 @@ const verifyToken = (
   }
 };
 
-async function getHashedPassword(password: string): Promise<string> {
+export async function getHashedPassword(password: string): Promise<string> {
   try {
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
@@ -54,5 +56,3 @@ async function getHashedPassword(password: string): Promise<string> {
     throw new Error("Failed to hash password");
   }
 }
-
-export default { createToken, verifyToken, getHashedPassword };
