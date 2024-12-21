@@ -1,7 +1,7 @@
 {
   "name": "a",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "index.ts",
   "scripts": {
     "start": "tsc && node dist/index.js",
     "dev": "concurrently \"tsc --watch\" \"npx nodemon --watch dist dist/index.js\"",

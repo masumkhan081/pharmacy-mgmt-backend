@@ -15,9 +15,9 @@ export const entities = {
   staff: "Staff",
   supplier: "Supplier",
   purchase: "Purchase",
-  sale:"Sale",
+  sale: "Sale",
   salary: "Salary",
-  attendance:"Attendance"
+  attendance: "Attendance",
 };
 
 export const paginationFields = ["page", "limit", "sortBy", "sortOrder"];
