@@ -18,6 +18,16 @@ const userSchema = new mongoose.Schema(
       required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters long"],
     },
+    fullName: {
+      type: String,
+      required: [true, "Full name is required"],
+      minlength: [3, "Full name must be at least 3 characters long"],
+    },
+    phone: {
+      type: String,
+      required: [true, "Phone is required"],
+      minlength: [3, "Phone must be at least 3 characters long"],
+    },
     role: {
       type: String,
       required: [true, "Role is required"],
@@ -33,11 +43,6 @@ const userSchema = new mongoose.Schema(
     isActive: {
       type: Boolean,
       default: true, // Used to "soft-delete" the user
-    },
-    profile: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "profiles", // Assuming there's a 'Profile' model
-      required: [true, "Profile ID is required"],
     },
   },
   {

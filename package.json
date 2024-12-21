@@ -5,6 +5,7 @@
   "scripts": {
     "start": "tsc && node dist/index.js",
     "dev": "concurrently \"tsc --watch\" \"npx nodemon --watch dist dist/index.js\"",
+    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
     "test": "echo \"Error: no test specified\" && exit 1",
     "prepare": "husky install",
     "eslint": "eslint . --fix",

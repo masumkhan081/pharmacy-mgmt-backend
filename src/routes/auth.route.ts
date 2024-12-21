@@ -10,13 +10,9 @@ import {
   otpVerSchema,
   resetPassSchema,
 } from "../schemas/auth.schema";
-import config from "../config/index.js";
-import { getHashedPassword } from "../utils/tokenisation";
 import User from "../models/user.model";
-import jwt from "jsonwebtoken";
-import { userRoles, entities } from "../config/constants";
-import Profile from "../models/user.model";
-import { sendErrorResponse } from "../utils/responseHandler";
+import { userRoles, testUsers } from "../config/constants";
+import { createToken, getHashedPassword } from "../utils/tokenisation";
 //
 router.post(
   "/register-as-bidder",
@@ -60,82 +56,54 @@ router.post(
 //
 // test user generation to get token to check accessControl middlewre
 //
+// Route handler for creating users, hashing passwords, and generating JWT tokens
 router.post(
-  "/test-auth-token",
+  "/get-role-wise-test-account-credentials-and-token",
   async (req: Request, res: Response): Promise<void> => {
-    const {
-      email,
-      role,
-      password,
-      confirmPassword,
-      fullName,
-      gender,
-      phone,
-      address,
-    } = req.body;
-    let user;
-    let profile;
-
     try {
-      if (!["ADMIN", "SELLER", "BIDDER"].includes(role)) {
-        res.status(400).json({
-          success: false,
-          message: "Invalid role. Only 'ADMIN', 'SELLER', 'BIDDER' allowed",
-        });
-      }
-      if (password !== confirmPassword) {
-        res.status(400).json({
-          success: false,
-          message: "password & confirm password doesn't match",
-        });
-      }
-      if (!email || !phone || !fullName) {
-        res.status(400).json({
-          success: false,
-          message: "Email, phone, and full name are required",
-        });
-      }
+      // Step 1: Hash passwords and prepare user data
+      const userData = await Promise.all(
+        testUsers.map(async (user) => {
+          const hashedPw = await getHashedPassword(user.password);
+          return { ...user, password: hashedPw }; // Replace password with hashed password
+        })
+      );
 
-      profile = await Profile.findOne({ phone });
-      user = await User.findOne({ email });
+      // Step 2: Insert users into the database
+      const insertedUsers = await User.insertMany(userData);
 
-      if (!profile) {
-        profile = await Profile.create({
-          fullName,
-          gender,
-          phone,
-          address,
+      // Step 3: Create JWT tokens for each inserted user
+      const response = insertedUsers.map((user) => {
+        const payload = {
+          email: user.email,
+          role: user.role,
+          fullName: user.fullName,
+        };
+
+        // Generate token for each user
+        const token = createToken({
+          payload,
+          expireTime: "750h", // Set expiration time for the token
         });
-      }
 
-      const hashedPw = await getHashedPassword(password);
-      if (!user) {
-        user = await User.create({
-          email,
-          password: hashedPw,
-          role,
-          profile: profile.id,
-          isVerified: true, // test purpose
-        });
-      }
-
-      res.status(200).json({
-        success: true,
-        token: jwt.sign(
-          { userId: user.id, role: user.role, email },
-          config.tokenSecret,
-          config.jwtOptions
-        ),
-        message: "set it in postman environment var",
+        return {
+          user: {
+            email: user.email,
+            password: user.password,
+            fullName: user.fullName,
+            role: user.role,
+            phone: user.phone,
+            address: user.address,
+          },
+          token,
+        };
       });
+
+      // Step 4: Send the response with user data and tokens
+      res.status(201).json(response);
     } catch (error) {
-      if (profile) {
-        await Profile.findByIdAndDelete(profile.id);
-      }
-      if (user) {
-        await User.findByIdAndDelete(user.id);
-      }
-      return sendErrorResponse({ res, error, entity: entities.drug });
+      console.error("Error creating test accounts:", error);
+      res.status(500).json({ message: "Internal server error" });
     }
   }
 );

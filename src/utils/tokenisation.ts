@@ -44,13 +44,11 @@ export const verifyToken = (
     return { success: false, payload: null };
   }
 };
-
+//
 export async function getHashedPassword(password: string): Promise<string> {
   try {
-    const saltRounds = 10;
-    const salt = await bcrypt.genSalt(saltRounds);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    return hashedPassword;
+    const salt = await bcrypt.genSalt(10);
+    return bcrypt.hash(password, salt);
   } catch (error) {
     console.error("Error generating hash from password:", error);
     throw new Error("Failed to hash password");
