@@ -55,9 +55,7 @@ router.post(
 );
 //
 // test user generation to get token to check accessControl middlewre
-//
-// Route handler for creating users, hashing passwords, and generating JWT tokens
-router.post(
+router.get(
   "/get-role-wise-test-account-credentials-and-token",
   async (req: Request, res: Response): Promise<void> => {
     try {
@@ -69,11 +67,16 @@ router.post(
         })
       );
 
-      // Step 2: Insert users into the database
-      const insertedUsers = await User.insertMany(userData);
-
+      for (const user of userData) {
+        const existingUser = await User.findOne({ email: user.email });
+        if (!existingUser) {
+          await User.create(user);
+        } else {
+          console.log(`User with email ${user.email} already exists`);
+        }
+      }
       // Step 3: Create JWT tokens for each inserted user
-      const response = insertedUsers.map((user) => {
+      const response = testUsers.map((user) => {
         const payload = {
           email: user.email,
           role: user.role,
@@ -87,25 +90,32 @@ router.post(
         });
 
         return {
-          user: {
-            email: user.email,
-            password: user.password,
-            fullName: user.fullName,
-            role: user.role,
-            phone: user.phone,
-            address: user.address,
-          },
+          email: user.email,
+          password: user.password,
+          fullName: user.fullName,
+          role: user.role,
+          phone: user.phone,
+          address: user.address,
           token,
         };
       });
 
       // Step 4: Send the response with user data and tokens
-      res.status(201).json(response);
+      res.status(201).json({
+        message:
+          "These are test accounts (salesman,admin,manager) for the sole purpose of testing." +
+          "Set a token in header naming authentication inside postman, and good to go !",
+        test_data: response,
+      });
     } catch (error) {
-      console.error("Error creating test accounts:", error);
-      res.status(500).json({ message: "Internal server error" });
+      if (error instanceof Error) {
+        console.error("Error creating test accounts:", error.message);
+        res
+          .status(500)
+          .json({ message: `Internal server error ${error.message}` });
+      }
     }
   }
 );
 
-module.exports = router;
+export default router;
