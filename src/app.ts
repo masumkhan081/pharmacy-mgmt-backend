@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import originControl from "./middlewares/corsMiddleware";
 // routes
+import authRoutes from "./routes/auth.route";
 import unitRoutes from "./routes/unit.route";
 import formulationRoutes from "./routes/formulation.route";
 import mfrRoutes from "./routes/mfr.route";
@@ -15,6 +16,7 @@ import staffRoutes from "./routes/staff.route";
 import salaryRoutes from "./routes/salary.route";
 import purchaseRoutes from "./routes/purchase.route";
 import saleRoutes from "./routes/sale.route";
+import attendanceRoutes from "./routes/attendance.route";
 
 //
 
@@ -33,6 +35,7 @@ app.get("/", (req: Request, res: Response) => {
   });
 });
 //
+app.use("/api/auth", authRoutes);
 app.use("/api/units", unitRoutes);
 app.use("/api/formulations", formulationRoutes);
 app.use("/api/mfrs", mfrRoutes);
@@ -44,6 +47,7 @@ app.use("/api/staff", staffRoutes);
 app.use("/api/salaries", salaryRoutes);
 app.use("/api/purchases", purchaseRoutes);
 app.use("/api/sales", saleRoutes);
+app.use("/api/attendances", attendanceRoutes);
 //
 app.use((req, res, next) => {
   res.status(404).json({
