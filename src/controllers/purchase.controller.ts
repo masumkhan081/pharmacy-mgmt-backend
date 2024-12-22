@@ -1,7 +1,7 @@
-import { entities } from "../config/constants.js";
-import purchaseService from "../services/purchase.service.js";
-import { sendFetchResponse } from "../utils/responseHandler.js";
-import { TypeController } from "../types/requestResponse.js";
+import { entities } from "../config/constants";
+import purchaseService from "../services/purchase.service";
+import { sendFetchResponse } from "../utils/responseHandler";
+import { TypeController } from "../types/requestResponse";
 //
 
 export const getPurchases: TypeController = async (req, res) => {

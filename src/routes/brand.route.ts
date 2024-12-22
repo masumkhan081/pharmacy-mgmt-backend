@@ -6,12 +6,12 @@ import {
   getSingleBrand,
   updateBrand,
   deleteBrand,
-} from "../controllers/brand.controller.js"; // controller functions
-import validateRequest from "../middlewares/validateRequest.js";
-import { brandSchema } from "../schemas/brand.schema.js";
-import { validateObjectId } from "../middlewares/validateId.js";
-import accessControl from "../middlewares/aceessControl.js";
-import { userRoles } from "../config/constants.js";
+} from "../controllers/brand.controller"; // controller functions
+import validateRequest from "../middlewares/validateRequest";
+import { brandSchema } from "../schemas/brand.schema";
+import { validateObjectId } from "../middlewares/validateId";
+import accessControl from "../middlewares/aceessControl";
+import { userRoles } from "../config/constants";
 //
 router.get("/", getBrands);
 

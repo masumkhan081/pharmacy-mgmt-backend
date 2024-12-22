@@ -6,12 +6,12 @@ import {
   getSingleUnit,
   updateUnit,
   deleteUnit,
-} from "../controllers/unit.controller.js"; // controller functions
-import validateRequest from "../middlewares/validateRequest.js";
-import { attendanceSchema } from "../schemas/attendance.schema.js";
-import { validateObjectId } from "../middlewares/validateId.js";
-import accessControl from "../middlewares/aceessControl.js";
-import { userRoles } from "../config/constants.js";
+} from "../controllers/unit.controller"; // controller functions
+import validateRequest from "../middlewares/validateRequest";
+import { attendanceSchema } from "../schemas/attendance.schema";
+import { validateObjectId } from "../middlewares/validateId";
+import accessControl from "../middlewares/aceessControl";
+import { userRoles } from "../config/constants";
 
 router.get("/", getUnits);
 

@@ -6,12 +6,12 @@ import {
   getSingleFormulation,
   updateFormulation,
   deleteFormulation,
-} from "../controllers/formulation.controller.js"; // controller functions
-import validateRequest from "../middlewares/validateRequest.js";
-import { formulationSchema } from "../schemas/formulation.schema.js";
-import { validateObjectId } from "../middlewares/validateId.js";
-import accessControl from "../middlewares/aceessControl.js";
-import { userRoles } from "../config/constants.js";
+} from "../controllers/formulation.controller"; // controller functions
+import validateRequest from "../middlewares/validateRequest";
+import { formulationSchema } from "../schemas/formulation.schema";
+import { validateObjectId } from "../middlewares/validateId";
+import accessControl from "../middlewares/aceessControl";
+import { userRoles } from "../config/constants";
 
  
 

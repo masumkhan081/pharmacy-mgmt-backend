@@ -6,12 +6,12 @@ import {
   getSingleGroup,
   updateGroup,
   deleteGroup,
-} from "../controllers/group.controller.js"; // controller functions
-import validateRequest from "../middlewares/validateRequest.js";
-import { groupSchema } from "../schemas/group.schema.js";
-import { userRoles } from "../config/constants.js";
-import accessControl from "../middlewares/aceessControl.js";
-import { validateObjectId } from "../middlewares/validateId.js";
+} from "../controllers/group.controller"; // controller functions
+import validateRequest from "../middlewares/validateRequest";
+import { groupSchema } from "../schemas/group.schema";
+import { userRoles } from "../config/constants";
+import accessControl from "../middlewares/aceessControl";
+import { validateObjectId } from "../middlewares/validateId";
 
 router.get("/", getGroups);
 

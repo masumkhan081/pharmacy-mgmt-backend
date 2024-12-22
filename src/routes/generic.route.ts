@@ -6,12 +6,12 @@ import {
   getSingleGeneric,
   updateGeneric,
   deleteGeneric,
-} from "../controllers/generic.controller.js"; // controller functions
-import validateRequest from "../middlewares/validateRequest.js";
-import { genericSchema } from "../schemas/generic.schema.js";
-import { validateObjectId } from "../middlewares/validateId.js";
-import accessControl from "../middlewares/aceessControl.js";
-import { userRoles } from "../config/constants.js";
+} from "../controllers/generic.controller"; // controller functions
+import validateRequest from "../middlewares/validateRequest";
+import { genericSchema } from "../schemas/generic.schema";
+import { validateObjectId } from "../middlewares/validateId";
+import accessControl from "../middlewares/aceessControl";
+import { userRoles } from "../config/constants";
 
 router.get("/", getGenerics);
 

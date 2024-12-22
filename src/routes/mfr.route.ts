@@ -6,12 +6,12 @@ import {
   getSingleManufacturer,
   updateManufacturer,
   deleteManufacturer,
-} from "../controllers/mfr.controller.js"; // controller functions
-import validateRequest from "../middlewares/validateRequest.js";
-import { manufacturerSchema } from "../schemas/mfr.schema.js";
-import { validateObjectId } from "../middlewares/validateId.js";
-import accessControl from "../middlewares/aceessControl.js";
-import { userRoles } from "../config/constants.js";
+} from "../controllers/mfr.controller"; // controller functions
+import validateRequest from "../middlewares/validateRequest";
+import { manufacturerSchema } from "../schemas/mfr.schema";
+import { validateObjectId } from "../middlewares/validateId";
+import accessControl from "../middlewares/aceessControl";
+import { userRoles } from "../config/constants";
 
 router.get("/", getManufacturers);
 

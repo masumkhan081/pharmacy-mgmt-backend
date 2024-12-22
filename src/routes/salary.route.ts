@@ -6,12 +6,12 @@ import {
   getSingleSalary,
   updateSalary,
   deleteSalary,
-} from "../controllers/salary.controller.js"; // controller functions
-import validateRequest from "../middlewares/validateRequest.js";
-import { salarySchema } from "../schemas/salary.schema.js";
-import { validateObjectId } from "../middlewares/validateId.js";
-import { userRoles } from "../config/constants.js";
-import accessControl from "../middlewares/aceessControl.js";
+} from "../controllers/salary.controller"; // controller functions
+import validateRequest from "../middlewares/validateRequest";
+import { salarySchema } from "../schemas/salary.schema";
+import { validateObjectId } from "../middlewares/validateId";
+import { userRoles } from "../config/constants";
+import accessControl from "../middlewares/aceessControl";
 
 router.get("/", getSalaries);
 

@@ -6,13 +6,13 @@ import {
   getSingleUnit,
   updateUnit,
   deleteUnit,
-} from "../controllers/unit.controller.js"; // controller functions
-import validateRequest from "../middlewares/validateRequest.js";
-import { unitSchema } from "../schemas/unit.schema.js";
-import { validateObjectId } from "../middlewares/validateId.js";
-// import { TypeController } from "../types/requestResponse.js";
-import { userRoles } from "../config/constants.js";
-import accessControl from "../middlewares/aceessControl.js";
+} from "../controllers/unit.controller"; // controller functions
+import validateRequest from "../middlewares/validateRequest";
+import { unitSchema } from "../schemas/unit.schema";
+import { validateObjectId } from "../middlewares/validateId";
+// import { TypeController } from "../types/requestResponse";
+import { userRoles } from "../config/constants";
+import accessControl from "../middlewares/aceessControl";
 
 router.get("/", getUnits);
 

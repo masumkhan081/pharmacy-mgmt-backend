@@ -6,12 +6,12 @@ import {
   getSingleSale,
   updateSale,
   deleteSale,
-} from "../controllers/sale.controller.js"; // controller functions
-import validateRequest from "../middlewares/validateRequest.js";
-import { saleSchema } from "../schemas/sale.schema.js";
-import { validateObjectId } from "../middlewares/validateId.js";
-import accessControl from "../middlewares/aceessControl.js";
-import { userRoles } from "../config/constants.js";
+} from "../controllers/sale.controller"; // controller functions
+import validateRequest from "../middlewares/validateRequest";
+import { saleSchema } from "../schemas/sale.schema";
+import { validateObjectId } from "../middlewares/validateId";
+import accessControl from "../middlewares/aceessControl";
+import { userRoles } from "../config/constants";
 
 router.get("/", getSales);
 

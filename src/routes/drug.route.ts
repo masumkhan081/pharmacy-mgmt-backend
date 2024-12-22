@@ -1,18 +1,18 @@
 import express from "express";
 const router = express.Router();
 
-import validateRequest from "../middlewares/validateRequest.js";
-import { drugSchema } from "../schemas/drug.schema.js";
-import { validateObjectId } from "../middlewares/validateId.js";
-import accessControl from "../middlewares/aceessControl.js";
-import { userRoles } from "../config/constants.js";
+import validateRequest from "../middlewares/validateRequest";
+import { drugSchema } from "../schemas/drug.schema";
+import { validateObjectId } from "../middlewares/validateId";
+import accessControl from "../middlewares/aceessControl";
+import { userRoles } from "../config/constants";
 import {
   getDrugs,
   getSingleDrug,
   updateDrug,
   deleteDrug,
   createDrug,
-} from "../controllers/drug.controller.js";
+} from "../controllers/drug.controller";
 //
 
 router.get("/", getDrugs);

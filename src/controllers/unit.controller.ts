@@ -1,11 +1,11 @@
-import { entities } from "../config/constants.js";
-import unitService from "../services/unit.service.js";
+import { entities } from "../config/constants";
+import unitService from "../services/unit.service";
 import {
   sendFetchResponse,
   sendSingleFetchResponse,
   sendErrorResponse,
-} from "../utils/responseHandler.js";
-import { TypeController } from "../types/requestResponse.js";
+} from "../utils/responseHandler";
+import { TypeController } from "../types/requestResponse";
 //
 
 export const getUnits: TypeController = async (req, res) => {

@@ -6,12 +6,12 @@ import {
   getSingleSupplier,
   updateSupplier,
   deleteSupplier,
-} from "../controllers/supplier.controller.js"; // controller functions
-import validateRequest from "../middlewares/validateRequest.js";
-import { supplierSchema } from "../schemas/supplier.schema.js";
-import { validateObjectId } from "../middlewares/validateId.js";
-import accessControl from "../middlewares/aceessControl.js";
-import { userRoles } from "../config/constants.js";
+} from "../controllers/supplier.controller"; // controller functions
+import validateRequest from "../middlewares/validateRequest";
+import { supplierSchema } from "../schemas/supplier.schema";
+import { validateObjectId } from "../middlewares/validateId";
+import accessControl from "../middlewares/aceessControl";
+import { userRoles } from "../config/constants";
 
 router.get("/", getSuppliers);
 

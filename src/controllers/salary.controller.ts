@@ -1,7 +1,7 @@
-import { entities } from "../config/constants.js";
-import salaryService from "../services/salary.service.js";
-import { sendFetchResponse } from "../utils/responseHandler.js";
-import { TypeController } from "../types/requestResponse.js";
+import { entities } from "../config/constants";
+import salaryService from "../services/salary.service";
+import { sendFetchResponse } from "../utils/responseHandler";
+import { TypeController } from "../types/requestResponse";
 //
 
 export const getSalaries: TypeController = async (req, res) => {

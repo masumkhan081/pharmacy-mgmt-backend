@@ -1,7 +1,7 @@
-import { entities } from "../config/constants.js";
-import mfrService from "../services/mfr.service.js";
-import { sendFetchResponse } from "../utils/responseHandler.js";
-import { TypeController } from "../types/requestResponse.js";
+import { entities } from "../config/constants";
+import mfrService from "../services/mfr.service";
+import { sendFetchResponse } from "../utils/responseHandler";
+import { TypeController } from "../types/requestResponse";
 //
 
 export const getManufacturers: TypeController = async (req, res) => {

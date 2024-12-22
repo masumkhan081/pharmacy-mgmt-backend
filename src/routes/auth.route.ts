@@ -2,7 +2,7 @@ import express, { Request, Response } from "express";
 const router = express.Router();
 
 import authController from "../controllers/auth.controller";
-import validateRequest from "../middlewares/validateRequest.js";
+import validateRequest from "../middlewares/validateRequest";
 import {
   loginSchema,
   registerSchema,
@@ -103,9 +103,9 @@ router.get(
       // Step 4: Send the response with user data and tokens
       res.status(201).json({
         message:
-          "These are test accounts (salesman,admin,manager) for the sole purpose of testing." +
+          "These are test accountsssss (salesman,admin,manager) for the sole purpose of testing." +
           "Set a token in header naming authentication inside postman, and good to go !",
-        test_data: response,
+        accounts: response,
       });
     } catch (error) {
       if (error instanceof Error) {

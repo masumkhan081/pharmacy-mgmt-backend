@@ -6,12 +6,12 @@ import {
   getSingleStaff,
   updateStaff,
   deleteStaff,
-} from "../controllers/staff.controller.js"; // controller functions
-import validateRequest from "../middlewares/validateRequest.js";
-import { staffSchema } from "../schemas/staff.schema.js";
-import { userRoles } from "../config/constants.js";
-import accessControl from "../middlewares/aceessControl.js";
-import { validateObjectId } from "../middlewares/validateId.js";
+} from "../controllers/staff.controller"; // controller functions
+import validateRequest from "../middlewares/validateRequest";
+import { staffSchema } from "../schemas/staff.schema";
+import { userRoles } from "../config/constants";
+import accessControl from "../middlewares/aceessControl";
+import { validateObjectId } from "../middlewares/validateId";
 
 router.get("/", getStaffs);
 

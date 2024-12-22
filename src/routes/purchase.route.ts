@@ -6,12 +6,12 @@ import {
   getSinglePurchase,
   updatePurchase,
   deletePurchase,
-} from "../controllers/purchase.controller.js"; // controller functions
-import validateRequest from "../middlewares/validateRequest.js";
-import { purchaseSchema } from "../schemas/purchase.schema.js";
-import { validateObjectId } from "../middlewares/validateId.js";
-import accessControl from "../middlewares/aceessControl.js";
-import { userRoles } from "../config/constants.js";
+} from "../controllers/purchase.controller"; // controller functions
+import validateRequest from "../middlewares/validateRequest";
+import { purchaseSchema } from "../schemas/purchase.schema";
+import { validateObjectId } from "../middlewares/validateId";
+import accessControl from "../middlewares/aceessControl";
+import { userRoles } from "../config/constants";
 
 router.get("/", getPurchases);
 
