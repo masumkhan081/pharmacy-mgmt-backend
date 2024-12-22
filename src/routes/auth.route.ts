@@ -103,7 +103,7 @@ router.get(
       // Step 4: Send the response with user data and tokens
       res.status(201).json({
         message:
-          "These are test accountsssss (salesman,admin,manager) for the sole purpose of testing." +
+          "These are test accounts--- (salesman,admin,manager) for the sole purpose of testing." +
           "Set a token in header naming authentication inside postman, and good to go !",
         accounts: response,
       });
