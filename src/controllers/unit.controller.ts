@@ -14,11 +14,11 @@ export const getUnits: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
@@ -39,11 +39,11 @@ export const createUnit: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
@@ -56,11 +56,11 @@ export const updateUnit: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
@@ -70,10 +70,10 @@ export const deleteUnit: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };

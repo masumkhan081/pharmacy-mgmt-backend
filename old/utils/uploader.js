@@ -17,7 +17,7 @@ const fieldsMap = {
     { name: "ad_thumbnail", maxCount: 1, required: true },
   ],
   //  category sub-category  -admin
-  [operableEntities.category]: [
+  [operableentities.unit]: [
     { name: "cat_thumbnail", maxCount: 1, required: true },
   ],
   [operableEntities.sub_category]: [
@@ -72,7 +72,7 @@ const uploadRiderProfile = upload.fields(fieldsMap[operableEntities.rider]);
 const uploadSubCatThumbnail = upload.fields(
   fieldsMap[operableEntities.sub_category]
 );
-const uploadCatThumbnail = upload.fields(fieldsMap[operableEntities.category]);
+const uploadCatThumbnail = upload.fields(fieldsMap[operableentities.unit]);
 //   promotion mgtmt  - seller
 const uploadShopBanner = upload.fields(fieldsMap[operableEntities.shop_banner]);
 //

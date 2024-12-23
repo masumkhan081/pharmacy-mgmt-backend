@@ -47,11 +47,7 @@ export const createSale = async (data: ISale) => {
     // sendFetchResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     return error;
   }
 };
 
@@ -61,11 +57,7 @@ export const getSingleSale = async (id: IDType) => {
     // sendFetchResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    return error;
   }
 };
 
@@ -75,11 +67,7 @@ export const updateSale = async ({ id, data }: ISaleUpdatePayload) => {
     // sendFetchResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    return error;
   }
 };
 

@@ -20,16 +20,16 @@ async function getSingleCategory(req, res) {
       return sendErrorResponse({
         res,
         error: result,
-        what: entities.category,
+        entity: entities.unit,
       });
     }
     sendSingleFetchResponse({
       res,
       data: result,
-      what: entities.category,
+      entity: entities.unit,
     });
   } catch (error) {
-    sendErrorResponse({ res, error, what: entities.category });
+    sendErrorResponse({ res, error, entity: entities.unit });
   }
 }
 
@@ -39,11 +39,11 @@ async function createProductCategory(req, res) {
 
     sendCreateResponse({
       res,
-      what: entities.category,
+      entity: entities.unit,
       data: addResult,
     });
   } catch (error) {
-    sendErrorResponse({ res, error, what: entities.category });
+    sendErrorResponse({ res, error, entity: entities.unit });
   }
 }
 //
@@ -57,22 +57,22 @@ async function updateCategory(req, res) {
     return sendUpdateResponse({
       res,
       data: result,
-      what: entities.category,
+      entity: entities.unit,
     });
   } catch (error) {
-    sendErrorResponse({ res, error, what: entities.category });
+    sendErrorResponse({ res, error, entity: entities.unit });
   }
 }
 //
 async function getCategories(req, res) {
   try {
     const result = await categoryService.getCategories(req.query);
-    sendFetchResponse({ res, data: result, what: entities.category });
+    sendFetchResponse({ res, data: result, entity: entities.unit });
   } catch (error) {
     sendErrorResponse({
       res,
       error,
-      what: entities.category,
+      entity: entities.unit,
     });
   }
 }
@@ -88,7 +88,7 @@ async function deleteCategory(req, res) {
       return sendErrorResponse({
         res,
         error: responseMap.alreadyUsed,
-        what: entities.category,
+        entity: entities.unit,
       });
     }
 
@@ -96,13 +96,13 @@ async function deleteCategory(req, res) {
     return sendDeletionResponse({
       res,
       data: result,
-      what: entities.category,
+      entity: entities.unit,
     });
   } catch (error) {
     sendErrorResponse({
       res,
       error,
-      what: entities.category,
+      entity: entities.unit,
     });
   }
 }

@@ -1,6 +1,6 @@
 import { entities } from "../config/constants";
 import staffService from "../services/staff.service";
-import { sendFetchResponse } from "../utils/responseHandler";
+import { sendFetchResponse,sendErrorResponse } from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
 //
 
@@ -10,11 +10,11 @@ export const getStaffs: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.staff });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     sendErrorResponse({
+       res,
+       error,
+       entity: entities.unit,
+     });
   }
 };
 
@@ -24,11 +24,11 @@ export const getSingleStaff: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.staff });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     sendErrorResponse({
+       res,
+       error,
+       entity: entities.unit,
+     });
   }
 };
 
@@ -38,11 +38,11 @@ export const createStaff: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.staff });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     sendErrorResponse({
+       res,
+       error,
+       entity: entities.unit,
+     });
   }
 };
 
@@ -55,11 +55,11 @@ export const updateStaff: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.staff });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     sendErrorResponse({
+       res,
+       error,
+       entity: entities.unit,
+     });
   }
 };
 
@@ -69,11 +69,11 @@ export const deleteStaff: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.staff });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     sendErrorResponse({
+       res,
+       error,
+       entity: entities.unit,
+     });
   }
 };
 

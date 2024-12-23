@@ -36,12 +36,12 @@ async function getBids(req, res) {
 
     const result = await bidService.getBids(req.query);
 
-    sendFetchResponse({ res, data: result, what: entities.bid });
+    sendFetchResponse({ res, data: result, entity: entities.bid });
   } catch (error) {
     sendErrorResponse({
       res,
       error,
-      what: entities.bid,
+      entity: entities.bid,
     });
   }
 }
@@ -49,9 +49,9 @@ async function getBids(req, res) {
 async function getSingleBid(req, res) {
   try {
     const result = await bidService.getSingleBid(req.params.id);
-    sendSingleFetchResponse({ res, data: result, what: entities.bid });
+    sendSingleFetchResponse({ res, data: result, entity: entities.bid });
   } catch (error) {
-    sendErrorResponse({ res, error, what: entities.bid });
+    sendErrorResponse({ res, error, entity: entities.bid });
   }
 }
 
@@ -100,14 +100,14 @@ async function createBid(req, res) {
     return sendCreateResponse({
       res,
       data: newBid,
-      what: entities.bid,
+      entity: entities.bid,
     });
   } catch (error) {
     console.error("Error in createBid:", error.message);
     return sendErrorResponse({
       res,
       error: "An error occurred while creating the bid.",
-      what: entities.bid,
+      entity: entities.bid,
     });
   }
 }
@@ -163,10 +163,10 @@ async function updateBid(req, res) {
     sendUpdateResponse({
       res,
       data: result,
-      what: entities.bid,
+      entity: entities.bid,
     });
   } catch (error) {
-    sendErrorResponse({ res, error, what: entities.bid });
+    sendErrorResponse({ res, error, entity: entities.bid });
   }
 }
 //
@@ -203,14 +203,14 @@ async function deleteBid(req, res) {
     sendDeletionResponse({
       res,
       data: result,
-      what: entities.bid,
+      entity: entities.bid,
     });
     //
   } catch (error) {
     sendErrorResponse({
       res,
       error,
-      what: entities.bid,
+      entity: entities.bid,
     });
   }
 }
@@ -236,12 +236,12 @@ async function getBidHistory(req, res) {
     }
     //
     const result = await bidService.getBids(appliedQuery);
-    sendFetchResponse({ res, data: result, what: entities.bid });
+    sendFetchResponse({ res, data: result, entity: entities.bid });
   } catch (error) {
     sendErrorResponse({
       res,
       error,
-      what: entities.bid,
+      entity: entities.bid,
     });
   }
 }

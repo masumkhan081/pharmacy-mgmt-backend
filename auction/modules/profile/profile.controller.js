@@ -29,14 +29,14 @@ async function getProfileDetail(req, res) {
     return sendSingleFetchResponse({
       res,
       data: result,
-      what: entities.profile,
+      entity: entities.profile,
     });
   } catch (error) {
     console.error("err: getProfileDetail:", error.message);
     sendErrorResponse({
       res,
       error,
-      what: entities.profile,
+      entity: entities.profile,
     });
   }
 }
@@ -55,13 +55,13 @@ async function updateProfile(req, res) {
       data: req.body,
     });
 
-    sendUpdateResponse({ res, data: result, what: entities.profile });
+    sendUpdateResponse({ res, data: result, entity: entities.profile });
   } catch (error) {
     console.log("controller : updateProfile: " + error.message);
     sendErrorResponse({
       res,
       error,
-      what: entities.profile,
+      entity: entities.profile,
     });
   }
 }
@@ -80,13 +80,13 @@ async function deleteProfile(req, res) {
       role: role,
     });
 
-    sendUpdateResponse({ res, data: result, what: entities.profile });
+    sendUpdateResponse({ res, data: result, entity: entities.profile });
   } catch (error) {
     console.log("controller : deleteProfile: " + error.message);
     sendErrorResponse({
       res,
       error,
-      what: entities.profile,
+      entity: entities.profile,
     });
   }
 }
@@ -98,12 +98,12 @@ async function getBidderList(req, res) {
       role: userRoles.bidder,
     });
 
-    sendFetchResponse({ res, data: result, what: entities.bidder });
+    sendFetchResponse({ res, data: result, entity: entities.bidder });
   } catch (error) {
     sendErrorResponse({
       res,
       error,
-      what: entities.bidder,
+      entity: entities.bidder,
     });
   }
 }
@@ -115,12 +115,12 @@ async function getSellerList(req, res) {
       role: userRoles.seller,
     });
 
-    sendFetchResponse({ res, data: result, what: entities.seller });
+    sendFetchResponse({ res, data: result, entity: entities.seller });
   } catch (error) {
     sendErrorResponse({
       res,
       error,
-      what: entities.seller,
+      entity: entities.seller,
     });
   }
 }

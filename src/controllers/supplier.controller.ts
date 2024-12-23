@@ -1,6 +1,6 @@
 import { entities } from "../config/constants";
 import supplierService from "../services/supplier.service";
-import { sendFetchResponse } from "../utils/responseHandler";
+import { sendErrorResponse, sendFetchResponse } from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
 //
 
@@ -10,11 +10,11 @@ export const getSuppliers: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.supplier });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     sendErrorResponse({
+       res,
+       error,
+       entity: entities.unit,
+     });
   }
 };
 
@@ -24,11 +24,11 @@ export const getSingleSupplier: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.supplier });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     sendErrorResponse({
+       res,
+       error,
+       entity: entities.unit,
+     });
   }
 };
 
@@ -38,11 +38,11 @@ export const createSupplier: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.supplier });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     sendErrorResponse({
+       res,
+       error,
+       entity: entities.unit,
+     });
   }
 };
 
@@ -55,11 +55,11 @@ export const updateSupplier: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.supplier });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     sendErrorResponse({
+       res,
+       error,
+       entity: entities.unit,
+     });
   }
 };
 
@@ -69,11 +69,11 @@ export const deleteSupplier: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.supplier });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     sendErrorResponse({
+       res,
+       error,
+       entity: entities.unit,
+     });
   }
 };
 

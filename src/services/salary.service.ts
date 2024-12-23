@@ -47,11 +47,7 @@ export const createSalary = async (data: ISalary) => {
     // sendFetchResponse({ res, result, entity: entities.salary });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    return error;
   }
 };
 
@@ -61,11 +57,7 @@ export const getSingleSalary = async (id: IDType) => {
     // sendFetchResponse({ res, result, entity: entities.salary });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    return error;
   }
 };
 
@@ -75,16 +67,12 @@ export const updateSalary = async ({ id, data }: ISalaryUpdatePayload) => {
     // sendFetchResponse({ res, result, entity: entities.salary });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    return error;
   }
 };
- 
+
 const deleteSalary = async (id: IDType) => await Salary.findByIdAndDelete(id);
- 
+
 
 export default {
   getSalaries,

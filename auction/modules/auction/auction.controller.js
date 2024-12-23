@@ -96,12 +96,12 @@ async function createAuction(req, res) {
     const addResult = await auctionService.createAuction(req.body);
     sendCreateResponse({
       res,
-      what: entities.auction,
+      entity: entities.auction,
       data: addResult,
     });
   } catch (error) {
     console.error("Controller: createAuction - Error:", error.message);
-    sendErrorResponse({ res, error, what: entities.auction });
+    sendErrorResponse({ res, error, entity: entities.auction });
   }
 }
 
@@ -117,11 +117,11 @@ async function getSingleAuction(req, res) {
     sendSingleFetchResponse({
       res,
       data: result,
-      what: entities.auction,
+      entity: entities.auction,
     });
   } catch (error) {
     console.error("Controller: getSingleAuction - Error:", error.message);
-    sendErrorResponse({ res, error, what: entities.auction });
+    sendErrorResponse({ res, error, entity: entities.auction });
   }
 }
 //
@@ -243,7 +243,7 @@ async function updateAuction(req, res) {
       return sendErrorResponse({
         res,
         error: result,
-        what: entities.auction,
+        entity: entities.auction,
       });
     }
 
@@ -251,11 +251,11 @@ async function updateAuction(req, res) {
     sendUpdateResponse({
       res,
       data: result,
-      what: entities.auction,
+      entity: entities.auction,
     });
   } catch (error) {
     console.error("Controller: updateAuction - Error:", error.message);
-    sendErrorResponse({ res, error, what: entities.auction });
+    sendErrorResponse({ res, error, entity: entities.auction });
   }
 }
 //
@@ -266,17 +266,17 @@ async function getAuctions(req, res) {
       sendErrorResponse({
         res,
         error: result,
-        what: entities.auction,
+        entity: entities.auction,
       });
     } else {
-      sendFetchResponse({ res, data: result, what: entities.auction });
+      sendFetchResponse({ res, data: result, entity: entities.auction });
     }
   } catch (error) {
     console.error("Controller: getAuctions - Error:", error.message);
     sendErrorResponse({
       res,
       error,
-      what: entities.auction,
+      entity: entities.auction,
     });
   }
 }
@@ -350,7 +350,7 @@ async function deleteAuction(req, res) {
     sendErrorResponse({
       res,
       error,
-      what: entities.auction,
+      entity: entities.auction,
     });
   }
 }
@@ -361,12 +361,12 @@ async function getAuctionHistory(req, res) {
       ...req.query,
       seller: req.userId,
     });
-    sendFetchResponse({ res, data: result, what: entities.auction });
+    sendFetchResponse({ res, data: result, entity: entities.auction });
   } catch (error) {
     sendErrorResponse({
       res,
       error,
-      what: entities.bid,
+      entity: entities.bid,
     });
   }
 }

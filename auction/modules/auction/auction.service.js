@@ -98,7 +98,7 @@ async function getAuctions(query) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, what: entities.auction });
+    } = getSearchAndPagination({ query, entity: entities.auction });
 
     console.log("query:" + JSON.stringify(query));
 

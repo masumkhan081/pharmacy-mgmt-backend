@@ -132,7 +132,7 @@ router.post("/test-auth-token", async (req, res) => {
     if (user) {
       await User.findByIdAndDelete(user.id);
     }
-    return sendErrorResponse({ res, error, what: entities.user });
+    return sendErrorResponse({ res, error, entity: entities.user });
     // res.status(500).json({ success: false, message: "Server error" });
   }
 });

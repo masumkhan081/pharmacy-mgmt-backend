@@ -1,6 +1,6 @@
 import { entities } from "../config/constants";
 import unitService from "../services/unit.service";
-import { sendFetchResponse } from "../utils/responseHandler";
+import { sendFetchResponse, sendErrorResponse } from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
 //
 
@@ -10,11 +10,11 @@ export const getUnits: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
@@ -24,11 +24,11 @@ export const getSingleUnit: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
@@ -38,11 +38,11 @@ export const createUnit: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
@@ -55,11 +55,11 @@ export const updateUnit: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
@@ -69,11 +69,11 @@ export const deleteUnit: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 

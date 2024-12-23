@@ -2,8 +2,6 @@ import User from "../models/user.model";
 import bcrypt from "bcrypt";
 import { sendOTPMail } from "../utils/mail";
 import config from "../config";
-// import httpStatus from "http-status";
-
 // import { getSearchAndPagination } from "../utils/queryHandler";
 // import { entities } from "../config/constants";
 import jwt from "jsonwebtoken";

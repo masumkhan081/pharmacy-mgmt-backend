@@ -21,7 +21,7 @@ async function getProducts(query) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, what: entities.product });
+    } = getSearchAndPagination({ query, entity: entities.product });
 
     const fetchResult = await Product.find(filterConditions)
       .sort(sortConditions)

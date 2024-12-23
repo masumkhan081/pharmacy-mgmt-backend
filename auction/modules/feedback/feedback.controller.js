@@ -21,10 +21,10 @@ async function getSingleFeedback(req, res) {
     sendSingleFetchResponse({
       res,
       data: result,
-      what: entities.feedback,
+      entity: entities.feedback,
     });
   } catch (error) {
-    sendErrorResponse({ res, error, what: entities.feedback });
+    sendErrorResponse({ res, error, entity: entities.feedback });
   }
 }
 
@@ -51,11 +51,11 @@ async function createFeedback(req, res) {
 
     sendCreateResponse({
       res,
-      what: entities.feedback,
+      entity: entities.feedback,
       data: addResult,
     });
   } catch (error) {
-    sendErrorResponse({ res, error, what: entities.feedback });
+    sendErrorResponse({ res, error, entity: entities.feedback });
   }
 }
 //
@@ -91,10 +91,10 @@ async function updateFeedback(req, res) {
     sendUpdateResponse({
       res,
       data: result,
-      what: entities.feedback,
+      entity: entities.feedback,
     });
   } catch (error) {
-    sendErrorResponse({ res, error, what: entities.feedback });
+    sendErrorResponse({ res, error, entity: entities.feedback });
   }
 }
 //
@@ -102,12 +102,12 @@ async function getFeedbacks(req, res) {
   try {
     const result = await feedbackService.getFeedbacks(req.query);
 
-    sendFetchResponse({ res, data: result, what: entities.feedback });
+    sendFetchResponse({ res, data: result, entity: entities.feedback });
   } catch (error) {
     sendErrorResponse({
       res,
       error,
-      what: entities.feedback,
+      entity: entities.feedback,
     });
   }
 }
@@ -124,14 +124,14 @@ async function deleteFeedback(req, res) {
       sendDeletionResponse({
         res,
         data: result,
-        what: entities.feedback,
+        entity: entities.feedback,
       });
     }
   } catch (error) {
     sendErrorResponse({
       res,
       error,
-      what: entities.feedback,
+      entity: entities.feedback,
     });
   }
 }

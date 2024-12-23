@@ -35,7 +35,7 @@ async function getBids(query) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, what: entities.bid });
+    } = getSearchAndPagination({ query, entity: entities.bid });
 
     console.log(
       currentPage,

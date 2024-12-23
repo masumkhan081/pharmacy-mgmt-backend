@@ -1,5 +1,5 @@
 import authService from "../services/auth.service";
-// import httpStatus from "http-status";
+
 // import config from "../../config/index";
 // import {
 //   sendCreateResponse,
@@ -18,29 +18,29 @@ import { Request, Response } from "express";
 // Register User Function
 const registerUser =
   (role: string) =>
-  async (req: Request, res: Response): Promise<void> => {
-    try {
-      const isExist = await User.findOne({ email: req.body.email });
-      if (isExist) {
-        res.status(409).json({
-          success: false,
-          message: "Email already registered.",
-        });
-      } else {
-        req.body.password = await getHashedPassword(req.body.password);
-        req.body.role = role;
-        await authService.register({
-          res,
-          data: req.body,
-        });
+    async (req: Request, res: Response): Promise<void> => {
+      try {
+        const isExist = await User.findOne({ email: req.body.email });
+        if (isExist) {
+          res.status(409).json({
+            success: false,
+            message: "Email already registered.",
+          });
+        } else {
+          req.body.password = await getHashedPassword(req.body.password);
+          req.body.role = role;
+          await authService.register({
+            res,
+            data: req.body,
+          });
+        }
+      } catch (error) {
+        console.log("controller: registerUser: " + error);
+        res
+          .status(500)
+          .json({ success: false, message: "Error processing request" });
       }
-    } catch (error) {
-      console.log("controller: registerUser: " + error);
-      res
-        .status(500)
-        .json({ success: false, message: "Error processing request" });
-    }
-  };
+    };
 
 // Resend OTP Function
 const requestEmailVerification = async (

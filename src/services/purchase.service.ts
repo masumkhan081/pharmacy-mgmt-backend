@@ -47,11 +47,7 @@ export const createPurchase = async (data: IPurchase) => {
     // sendFetchResponse({ res, result, entity: entities.purchase });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     return error;
   }
 };
 
@@ -61,11 +57,7 @@ export const getSinglePurchase = async (id: IDType) => {
     // sendFetchResponse({ res, result, entity: entities.purchase });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     return error;
   }
 };
 
@@ -75,11 +67,7 @@ export const updatePurchase = async ({ id, data }: IPurchaseUpdatePayload) => {
     // sendFetchResponse({ res, result, entity: entities.purchase });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+     return error;
   }
 };
 

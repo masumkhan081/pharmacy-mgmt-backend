@@ -19,7 +19,7 @@ async function getFeedbacks(query) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, what: entities.feedback });
+    } = getSearchAndPagination({ query, entity: entities.feedback });
 
     const fetchResult = await Feedback.find(filterConditions)
       .sort(sortConditions)

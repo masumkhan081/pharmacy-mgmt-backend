@@ -88,12 +88,12 @@ async function createProduct(req, res) {
 
     sendCreateResponse({
       res,
-      what: entities.product,
+      entity: entities.product,
       data: addResult,
     });
   } catch (error) {
     console.error("Error creating product:", error.message);
-    sendErrorResponse({ res, error, what: entities.product });
+    sendErrorResponse({ res, error, entity: entities.product });
   }
 }
 
@@ -219,24 +219,24 @@ async function updateProduct(req, res) {
 
     sendUpdateResponse({
       res,
-      what: entities.product,
+      entity: entities.product,
       data: editResult,
     });
   } catch (error) {
     console.error("Error updating product:", error.message);
-    sendErrorResponse({ res, error, what: entities.product });
+    sendErrorResponse({ res, error, entity: entities.product });
   }
 }
 
 async function getProducts(req, res) {
   try {
     const result = await productService.getProducts(req.query);
-    sendFetchResponse({ res, data: result, what: entities.product });
+    sendFetchResponse({ res, data: result, entity: entities.product });
   } catch (error) {
     sendErrorResponse({
       res,
       error,
-      what: entities.product,
+      entity: entities.product,
     });
   }
 }
@@ -247,11 +247,11 @@ async function getSingleProduct(req, res) {
     sendSingleFetchResponse({
       res,
       data: result,
-      what: entities.product,
+      entity: entities.product,
     });
   } catch (error) {
     console.log("err: getSingleProduct: " + error.message);
-    sendErrorResponse({ res, error: result, what: entities.product });
+    sendErrorResponse({ res, error: result, entity: entities.product });
   }
 }
 //
@@ -270,14 +270,14 @@ async function deleteProduct(req, res) {
     sendDeletionResponse({
       res,
       data: result,
-      what: entities.product,
+      entity: entities.product,
     });
   } catch (error) {
     console.error("Controller: deleteProduct:", error.message); // Log the error
     sendErrorResponse({
       res,
       error,
-      what: entities.product,
+      entity: entities.product,
     });
   }
 }
@@ -289,12 +289,12 @@ async function getProductList(req, res) {
       seller: req.userId,
     });
 
-    sendFetchResponse({ res, data: result, what: entities.product });
+    sendFetchResponse({ res, data: result, entity: entities.product });
   } catch (error) {
     sendErrorResponse({
       res,
       error,
-      what: entities.bid,
+      entity: entities.bid,
     });
   }
 }

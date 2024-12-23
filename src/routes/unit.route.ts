@@ -8,7 +8,7 @@ import {
   deleteUnit,
 } from "../controllers/unit.controller"; // controller functions
 import validateRequest from "../middlewares/validateRequest";
-import { unitSchema } from "../schemas/unit.schema";
+import { createUnitSchema, updateUnitSchema } from "../schemas/unit.schema";
 import { validateObjectId } from "../middlewares/validateId";
 // import { TypeController } from "../types/requestResponse";
 import { userRoles } from "../config/constants";
@@ -20,7 +20,7 @@ router.get("/:id", validateObjectId, getSingleUnit);
 
 router.post(
   "/",
-  validateRequest(unitSchema),
+  validateRequest(createUnitSchema),
   accessControl([userRoles.admin]),
   createUnit
 );
@@ -28,7 +28,7 @@ router.post(
 router.patch(
   "/:id",
   validateObjectId,
-  validateRequest(unitSchema),
+  validateRequest(updateUnitSchema),
   accessControl([userRoles.admin]),
   updateUnit
 );

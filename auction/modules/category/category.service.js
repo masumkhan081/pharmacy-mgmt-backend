@@ -39,7 +39,7 @@ async function getCategories(query) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, what: entities.category });
+    } = getSearchAndPagination({ query, entity: entities.unit });
 
     const fetchResult = await Category.find(filterConditions)
       .sort(sortConditions)

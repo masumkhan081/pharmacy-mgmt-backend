@@ -26,7 +26,7 @@ async function getList(query) {
       sortBy,
       sortOrder,
       filterConditions,
-    } = getSearchAndPagination({ query, what: entities.profile });
+    } = getSearchAndPagination({ query, entity: entities.profile });
 
     const fetchResult = await User.find(filterConditions)
       .skip(viewSkip)

@@ -1,6 +1,6 @@
 import { entities } from "../config/constants";
-import saleService from "../services/sale.service";
-import { sendFetchResponse } from "../utils/responseHandler";
+import saleService from "../services/sale.service"; 
+import { sendFetchResponse, sendErrorResponse } from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
 //
 
@@ -10,11 +10,11 @@ export const getSales: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
@@ -24,11 +24,11 @@ export const getSingleSale: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
@@ -38,11 +38,11 @@ export const createSale: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
@@ -55,11 +55,11 @@ export const updateSale: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
@@ -69,11 +69,11 @@ export const deleteSale: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
-    // sendErrorResponse({
-    //   res,
-    //   error,
-    //   what: entities.category,
-    // });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
