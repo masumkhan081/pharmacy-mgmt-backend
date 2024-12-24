@@ -2,7 +2,8 @@ import { Request, Response, NextFunction } from "express";
 import httpStatus from "http-status";
 // import config from "../config/index";
 import { verifyToken } from "../utils/tokenisation";
- 
+import userModel from "../models/user.model";
+
 
 interface RequestWithUser extends Request {
   userId?: string;
@@ -31,15 +32,38 @@ function accessControl(accessRoles: string[]) {
       if (!success) {
         res.status(httpStatus.FORBIDDEN).json({
           success: false,
-          message: "Access Forbidden!",
+          message: "Invalid token !",
         });
         return;
       }
 
-      req.userId = payload?.userId;
+      const email = payload?.email;
+
+      if (!email) {
+        res.status(httpStatus.FORBIDDEN).json({
+          success: false,
+          message: "Invalid token !",
+        });
+        return;
+      }
+
+      // Retrieve user by email
+      const user = await userModel.findOne({ email });
+
+      if (!user) {
+        res.status(httpStatus.FORBIDDEN).json({
+          success: false,
+          message: "Access Forbidden! User not found.",
+        });
+        return;
+      }
+
+      req.userId = user.id;
       req.role = payload?.role;
 
       if (accessRoles.includes(req.role as string)) {
+        console.log("success: \n\n\n")
+
         next();
       } else {
         res.status(httpStatus.FORBIDDEN).json({
