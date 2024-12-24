@@ -1,85 +1,92 @@
 import { entities } from "../config/constants";
-import unitService from "../services/unit.service";
-import { sendFetchResponse, sendErrorResponse } from "../utils/responseHandler";
+import attendanceService from "../services/attendance.service";
+import {
+  sendFetchResponse,
+  sendSingleFetchResponse,
+  sendErrorResponse,
+  sendCreateResponse,
+  sendUpdateResponse,
+  sendDeletionResponse
+} from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
 //
-
-export const getUnits: TypeController = async (req, res) => {
+export const getAttendances: TypeController = async (req, res) => {
   try {
-    const result = await unitService.getUnits(req.query);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await attendanceService.getAttendances(req.query);
+    sendFetchResponse({ res, result, entity: entities.attendance });
   } catch (error) {
     console.error(error);
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.attendance,
     });
   }
 };
 
-export const getSingleUnit: TypeController = async (req, res) => {
+export const getSingleAttendance: TypeController = async (req, res) => {
   try {
-    const result = await unitService.getSingleUnit(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await attendanceService.getSingleAttendance(req.params.id);
+    sendSingleFetchResponse({ res, result, entity: entities.attendance });
   } catch (error) {
     console.error(error);
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.attendance,
     });
   }
 };
 
-export const createUnit: TypeController = async (req, res) => {
+export const createAttendance: TypeController = async (req, res) => {
   try {
-    const result = await unitService.createUnit(req.body);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await attendanceService.createAttendance(req.body);
+    sendCreateResponse({ res, result, entity: entities.attendance });
   } catch (error) {
     console.error(error);
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.attendance,
     });
   }
 };
 
-export const updateUnit: TypeController = async (req, res) => {
+export const updateAttendance: TypeController = async (req, res) => {
   try {
-    const result = await unitService.updateUnit({
+    const result = await attendanceService.updateAttendance({
       id: req.params.id,
       data: req.body,
     });
-    sendFetchResponse({ res, result, entity: entities.unit });
+    sendUpdateResponse({ res, result, entity: entities.attendance });
   } catch (error) {
     console.error(error);
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.attendance,
     });
   }
 };
 
-export const deleteUnit: TypeController = async (req, res) => {
+export const deleteAttendance: TypeController = async (req, res) => {
   try {
-    const result = await unitService.deleteUnit(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    const result = await attendanceService.deleteAttendance(req.params.id);
+    sendDeletionResponse({ res, result, entity: entities.attendance });
   } catch (error) {
     console.error(error);
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.attendance,
     });
   }
 };
 
 export default {
-  getUnits,
-  createUnit,
-  updateUnit,
-  deleteUnit,
+  getAttendances,
+  getSingleAttendance,
+  createAttendance,
+  updateAttendance,
+  deleteAttendance,
 };

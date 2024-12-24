@@ -46,6 +46,41 @@ export const sendFetchResponse = ({
     data: result,
   });
 };
+// 
+export function sendCreateResponse({ res, result, entity }: TypeResponsePayload) {
+  const statusCode: number = responseMap.create.code;
+  res.status(statusCode).json({
+    statusCode,
+    success: true,
+    message: responseMap.create.message(entity),
+    result,
+  });
+}
+
+export function sendUpdateResponse({ res, result, entity }: TypeResponsePayload) {
+  const { update, notFound, idNotFound } = responseMap;
+  const isSuccess = Boolean(result);
+  const statusCode: number = isSuccess ? update.code : notFound.code;
+
+  res.status(statusCode).json({
+    statusCode,
+    success: isSuccess,
+    message: isSuccess ? update.message(entity) : idNotFound.message(entity),
+    result,
+  });
+}
+
+export function sendDeletionResponse({ res, result, entity }: TypeResponsePayload) {
+  const statusCode: number = result ? responseMap.delete.code : responseMap.notFound.code;
+  res.status(statusCode).json({
+    statusCode,
+    success: result ? true : false,
+    message: result
+      ? responseMap.delete.message(entity)
+      : responseMap.idNotFound.message(entity),
+    result,
+  });
+}
 
 export const sendErrorResponse = ({
   res,

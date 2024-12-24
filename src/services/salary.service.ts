@@ -4,9 +4,16 @@ import Salary from "../models/salary.model";
 import { IDType, QueryParams } from "../types/requestResponse";
 import { ISalary, ISalaryUpdatePayload } from "../types/salary.type";
 import getSearchAndPagination from "../utils/queryHandler";
-
 //
+const getSingleSalary = async (id: IDType) => Salary.findById(id);
 
+const deleteSalary = async (id: IDType) => await Salary.findByIdAndDelete(id);
+// 
+export const createSalary = async (data: ISalary) => await Salary.create(data);
+// 
+export const updateSalary = async ({ id, data }: ISalaryUpdatePayload) =>
+  await Salary.findByIdAndUpdate(id, data, { new: true });
+// 
 async function getSalaries(query: QueryParams) {
   try {
     const {
@@ -40,39 +47,6 @@ async function getSalaries(query: QueryParams) {
     return error;
   }
 }
-
-export const createSalary = async (data: ISalary) => {
-  try {
-    // const result = await salaryService.deleteSalary(req.query);
-    // sendFetchResponse({ res, result, entity: entities.salary });
-  } catch (error) {
-    console.error(error);
-    return error;
-  }
-};
-
-export const getSingleSalary = async (id: IDType) => {
-  try {
-    // const result = await salaryService.deleteSalary(req.query);
-    // sendFetchResponse({ res, result, entity: entities.salary });
-  } catch (error) {
-    console.error(error);
-    return error;
-  }
-};
-
-export const updateSalary = async ({ id, data }: ISalaryUpdatePayload) => {
-  try {
-    // const result = await salaryService.deleteSalary(req.query);
-    // sendFetchResponse({ res, result, entity: entities.salary });
-  } catch (error) {
-    console.error(error);
-    return error;
-  }
-};
-
-const deleteSalary = async (id: IDType) => await Salary.findByIdAndDelete(id);
-
 
 export default {
   getSalaries,

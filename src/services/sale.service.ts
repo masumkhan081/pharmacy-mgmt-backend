@@ -4,9 +4,16 @@ import Sale from "../models/sale.model";
 import { IDType, QueryParams } from "../types/requestResponse";
 import { ISale, ISaleUpdatePayload } from "../types/sale.type";
 import getSearchAndPagination from "../utils/queryHandler";
-
 //
-
+const getSingleSale = async (id: IDType) => Sale.findById(id);
+//
+const updateSale = async ({ id, data }: ISaleUpdatePayload) =>
+  await Sale.findByIdAndUpdate(id, data, { new: true });
+//
+const deleteSale = async (id: IDType) => await Sale.findByIdAndDelete(id);
+// 
+export const createSale = async (data: ISale) => await Sale.create(data);
+// 
 async function getSales(query: QueryParams) {
   try {
     const {
@@ -40,39 +47,6 @@ async function getSales(query: QueryParams) {
     return error;
   }
 }
-
-export const createSale = async (data: ISale) => {
-  try {
-    // const result = await saleService.deleteSale(req.query);
-    // sendFetchResponse({ res, result, entity: entities.sale });
-  } catch (error) {
-    console.error(error);
-     return error;
-  }
-};
-
-export const getSingleSale = async (id: IDType) => {
-  try {
-    // const result = await saleService.deleteSale(req.query);
-    // sendFetchResponse({ res, result, entity: entities.sale });
-  } catch (error) {
-    console.error(error);
-    return error;
-  }
-};
-
-export const updateSale = async ({ id, data }: ISaleUpdatePayload) => {
-  try {
-    // const result = await saleService.deleteSale(req.query);
-    // sendFetchResponse({ res, result, entity: entities.sale });
-  } catch (error) {
-    console.error(error);
-    return error;
-  }
-};
-
-const deleteSale = async (id: IDType) => await Sale.findByIdAndDelete(id);
-
 
 export default {
   getSales,

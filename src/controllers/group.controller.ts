@@ -1,6 +1,13 @@
 import { entities } from "../config/constants";
 import groupService from "../services/group.service";
-import { sendFetchResponse, sendErrorResponse } from "../utils/responseHandler";
+import {
+  sendFetchResponse,
+  sendSingleFetchResponse,
+  sendErrorResponse,
+  sendCreateResponse,
+  sendUpdateResponse,
+  sendDeletionResponse
+} from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
 //
 
@@ -10,39 +17,39 @@ export const getGroups: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.group });
   } catch (error) {
     console.error(error);
-     sendErrorResponse({
-       res,
-       error,
-       entity: entities.unit,
-     });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
 export const getSingleGroup: TypeController = async (req, res) => {
   try {
     const result = await groupService.getSingleGroup(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.group });
+    sendSingleFetchResponse({ res, result, entity: entities.group });
   } catch (error) {
     console.error(error);
-     sendErrorResponse({
-       res,
-       error,
-       entity: entities.unit,
-     });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
 export const createGroup: TypeController = async (req, res) => {
   try {
     const result = await groupService.createGroup(req.body);
-    sendFetchResponse({ res, result, entity: entities.group });
+    sendCreateResponse({ res, result, entity: entities.group });
   } catch (error) {
     console.error(error);
-     sendErrorResponse({
-       res,
-       error,
-       entity: entities.unit,
-     });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
@@ -52,33 +59,34 @@ export const updateGroup: TypeController = async (req, res) => {
       id: req.params.id,
       data: req.body,
     });
-    sendFetchResponse({ res, result, entity: entities.group });
+    sendUpdateResponse({ res, result, entity: entities.group });
   } catch (error) {
     console.error(error);
-     sendErrorResponse({
-       res,
-       error,
-       entity: entities.unit,
-     });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
 export const deleteGroup: TypeController = async (req, res) => {
   try {
     const result = await groupService.deleteGroup(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.group });
+    sendDeletionResponse({ res, result, entity: entities.group });
   } catch (error) {
     console.error(error);
-     sendErrorResponse({
-       res,
-       error,
-       entity: entities.unit,
-     });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
 export default {
   getGroups,
+  getSingleGroup,
   createGroup,
   updateGroup,
   deleteGroup,

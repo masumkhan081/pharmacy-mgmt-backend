@@ -1,4 +1,4 @@
- 
+
 import { entities } from "../config/constants";
 import Unit from "../models/unit.model";
 import { IDType, QueryParams } from "../types/requestResponse";

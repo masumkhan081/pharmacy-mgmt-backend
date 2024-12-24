@@ -4,6 +4,9 @@ import {
   sendFetchResponse,
   sendSingleFetchResponse,
   sendErrorResponse,
+  sendCreateResponse,
+  sendUpdateResponse,
+  sendDeletionResponse
 } from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
 //
@@ -36,10 +39,10 @@ export const getSingleUnit: TypeController = async (req, res) => {
 export const createUnit: TypeController = async (req, res) => {
   try {
     const result = await unitService.createUnit(req.body);
-    console.log(JSON.stringify(req.body)+"\n \n")
+    console.log(JSON.stringify(req.body) + "\n \n")
 
     console.log(JSON.stringify(result))
-    sendFetchResponse({ res, result, entity: entities.unit });
+    sendCreateResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error instanceof Error ? error.message : "Unknown error");
     sendErrorResponse({
@@ -56,7 +59,7 @@ export const updateUnit: TypeController = async (req, res) => {
       id: req.params.id,
       data: req.body,
     });
-    sendFetchResponse({ res, result, entity: entities.unit });
+    sendUpdateResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error);
     sendErrorResponse({
@@ -70,7 +73,7 @@ export const updateUnit: TypeController = async (req, res) => {
 export const deleteUnit: TypeController = async (req, res) => {
   try {
     const result = await unitService.deleteUnit(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.unit });
+    sendDeletionResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error);
     sendErrorResponse({

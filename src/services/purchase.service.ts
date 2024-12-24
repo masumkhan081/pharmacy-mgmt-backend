@@ -4,9 +4,16 @@ import Purchase from "../models/purchase.model";
 import { IDType, QueryParams } from "../types/requestResponse";
 import { IPurchase, IPurchaseUpdatePayload } from "../types/purchase.type";
 import getSearchAndPagination from "../utils/queryHandler";
-
 //
-
+const getSinglePurchase = async (id: IDType) => Purchase.findById(id);
+// 
+export const createPurchase = async (data: IPurchase) => await Purchase.create(data);
+// 
+export const updatePurchase = async ({ id, data }: IPurchaseUpdatePayload) =>
+  await Purchase.findByIdAndUpdate(id, data, { new: true });
+// 
+const deletePurchase = async (id: IDType) => await Purchase.findByIdAndDelete(id);
+// 
 async function getPurchases(query: QueryParams) {
   try {
     const {
@@ -41,37 +48,7 @@ async function getPurchases(query: QueryParams) {
   }
 }
 
-export const createPurchase = async (data: IPurchase) => {
-  try {
-    // const result = await purchaseService.deletePurchase(req.query);
-    // sendFetchResponse({ res, result, entity: entities.purchase });
-  } catch (error) {
-    console.error(error);
-     return error;
-  }
-};
 
-export const getSinglePurchase = async (id: IDType) => {
-  try {
-    // const result = await purchaseService.deletePurchase(req.query);
-    // sendFetchResponse({ res, result, entity: entities.purchase });
-  } catch (error) {
-    console.error(error);
-     return error;
-  }
-};
-
-export const updatePurchase = async ({ id, data }: IPurchaseUpdatePayload) => {
-  try {
-    // const result = await purchaseService.deletePurchase(req.query);
-    // sendFetchResponse({ res, result, entity: entities.purchase });
-  } catch (error) {
-    console.error(error);
-     return error;
-  }
-};
-
-const deletePurchase = async (id: IDType) => await Purchase.findByIdAndDelete(id);
 
 export default {
   getPurchases,

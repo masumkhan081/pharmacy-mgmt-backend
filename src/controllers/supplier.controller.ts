@@ -1,6 +1,13 @@
 import { entities } from "../config/constants";
 import supplierService from "../services/supplier.service";
-import { sendErrorResponse, sendFetchResponse } from "../utils/responseHandler";
+import {
+  sendFetchResponse,
+  sendSingleFetchResponse,
+  sendErrorResponse,
+  sendCreateResponse,
+  sendUpdateResponse,
+  sendDeletionResponse
+} from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
 //
 
@@ -10,39 +17,39 @@ export const getSuppliers: TypeController = async (req, res) => {
     sendFetchResponse({ res, result, entity: entities.supplier });
   } catch (error) {
     console.error(error);
-     sendErrorResponse({
-       res,
-       error,
-       entity: entities.unit,
-     });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
 export const getSingleSupplier: TypeController = async (req, res) => {
   try {
     const result = await supplierService.getSingleSupplier(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.supplier });
+    sendSingleFetchResponse({ res, result, entity: entities.supplier });
   } catch (error) {
     console.error(error);
-     sendErrorResponse({
-       res,
-       error,
-       entity: entities.unit,
-     });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
 export const createSupplier: TypeController = async (req, res) => {
   try {
     const result = await supplierService.createSupplier(req.body);
-    sendFetchResponse({ res, result, entity: entities.supplier });
+    sendCreateResponse({ res, result, entity: entities.supplier });
   } catch (error) {
     console.error(error);
-     sendErrorResponse({
-       res,
-       error,
-       entity: entities.unit,
-     });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
@@ -52,28 +59,28 @@ export const updateSupplier: TypeController = async (req, res) => {
       id: req.params.id,
       data: req.body,
     });
-    sendFetchResponse({ res, result, entity: entities.supplier });
+    sendUpdateResponse({ res, result, entity: entities.supplier });
   } catch (error) {
     console.error(error);
-     sendErrorResponse({
-       res,
-       error,
-       entity: entities.unit,
-     });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 
 export const deleteSupplier: TypeController = async (req, res) => {
   try {
     const result = await supplierService.deleteSupplier(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.supplier });
+    sendDeletionResponse({ res, result, entity: entities.supplier });
   } catch (error) {
     console.error(error);
-     sendErrorResponse({
-       res,
-       error,
-       entity: entities.unit,
-     });
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
   }
 };
 

@@ -5,7 +5,6 @@ import { IDType, QueryParams } from "../types/requestResponse";
 import { IDrug,IDrugUpdatePayload } from "../types/drug.type";
 import getSearchAndPagination from "../utils/queryHandler";
 //
-//
 const createDrug = async (data: IDrug) => await Drug.create(data);
 //
 const getSingleDrug = async (id: IDType) => Drug.findById(id);

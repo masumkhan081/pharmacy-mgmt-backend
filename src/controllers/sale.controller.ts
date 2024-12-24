@@ -1,9 +1,15 @@
 import { entities } from "../config/constants";
-import saleService from "../services/sale.service"; 
-import { sendFetchResponse, sendErrorResponse } from "../utils/responseHandler";
+import saleService from "../services/sale.service";
+import {
+  sendFetchResponse,
+  sendSingleFetchResponse,
+  sendErrorResponse,
+  sendCreateResponse,
+  sendUpdateResponse,
+  sendDeletionResponse
+} from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
 //
-
 export const getSales: TypeController = async (req, res) => {
   try {
     const result = await saleService.getSales(req.query);
@@ -21,7 +27,7 @@ export const getSales: TypeController = async (req, res) => {
 export const getSingleSale: TypeController = async (req, res) => {
   try {
     const result = await saleService.getSingleSale(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.sale });
+    sendSingleFetchResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
     sendErrorResponse({
@@ -31,11 +37,11 @@ export const getSingleSale: TypeController = async (req, res) => {
     });
   }
 };
-
+// 
 export const createSale: TypeController = async (req, res) => {
   try {
     const result = await saleService.createSale(req.body);
-    sendFetchResponse({ res, result, entity: entities.sale });
+    sendCreateResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
     sendErrorResponse({
@@ -45,14 +51,14 @@ export const createSale: TypeController = async (req, res) => {
     });
   }
 };
-
+// 
 export const updateSale: TypeController = async (req, res) => {
   try {
     const result = await saleService.updateSale({
       id: req.params.id,
       data: req.body,
     });
-    sendFetchResponse({ res, result, entity: entities.sale });
+    sendUpdateResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
     sendErrorResponse({
@@ -62,11 +68,11 @@ export const updateSale: TypeController = async (req, res) => {
     });
   }
 };
-
+// 
 export const deleteSale: TypeController = async (req, res) => {
   try {
     const result = await saleService.deleteSale(req.params.id);
-    sendFetchResponse({ res, result, entity: entities.sale });
+    sendDeletionResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
     sendErrorResponse({

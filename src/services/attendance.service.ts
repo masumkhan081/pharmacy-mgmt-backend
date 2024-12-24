@@ -1,4 +1,4 @@
- 
+
 import { entities } from "../config/constants";
 import Attendance from "../models/attendance.model";
 import { IDType, QueryParams } from "../types/requestResponse";
