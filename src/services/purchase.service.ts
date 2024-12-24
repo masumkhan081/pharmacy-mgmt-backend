@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 import { entities } from "../config/constants";
 import Purchase from "../models/purchase.model";
 import { IDType, QueryParams } from "../types/requestResponse";

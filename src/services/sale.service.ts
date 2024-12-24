@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
+ 
 import { entities } from "../config/constants";
 import Sale from "../models/sale.model";
 import { IDType, QueryParams } from "../types/requestResponse";
