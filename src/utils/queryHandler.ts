@@ -54,17 +54,18 @@ const getSearchAndPagination = ({
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const searchConditions: any[] = [];
   if (searchTerm) {
-    for (const searchableField of mapSearchable[entity] || []) {
-      if (searchField === "whole") {
-        searchConditions.push({
-          [searchableField]: { $regex: new RegExp(searchTerm, "i") },
-        });
-      } else {
+    if (searchField === "whole") {
+      for (const searchableField of mapSearchable[entity] || []) {
         searchConditions.push({
           [searchableField]: { $regex: new RegExp(searchTerm, "i") },
         });
       }
+    } else {
+      searchConditions.push({
+        [searchField]: { $regex: new RegExp(searchTerm, "i") },
+      });
     }
+    // console.log("searchConditions: " + JSON.stringify(searchConditions))
   }
 
   if (searchConditions.length > 0) {

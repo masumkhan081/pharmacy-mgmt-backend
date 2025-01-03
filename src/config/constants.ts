@@ -54,11 +54,15 @@ export const defaultSortOrder = "desc";
 export const mapSearchable = {
   [entities.drug]: ["name"],
   [entities.generic]: ["name"],
+  [entities.unit]: ["shortName", "longName"],
+
 };
 
 export const mapFilterables = {
   [entities.drug]: [],
   [entities.generic]: ["category", "status", "adminApproval", "seller"],
+  [entities.unit]: ["shortName", "longName"],
+
 };
 
 // may be changed based on the outcome expected
