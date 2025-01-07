@@ -1,0 +1,10 @@
+{
+    "Print JSON": {
+      "prefix": "lg",
+      "body": [
+        "console.log(JSON.stringify())",
+        "$0"
+      ],
+      "description": "Log object as JSON"
+    }
+  }

@@ -1,11 +1,8 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import app from "./app";
-import dotenv from "dotenv";
-dotenv.config();
 import initDB from "./config/mongodb";
 import config from "./config";
 //
-
 async function bootstrap() {
   let server: any;
 
@@ -23,7 +20,7 @@ async function bootstrap() {
         });
       }
       process.exit(1);
-    }; 
+    };
 
     const unexpectedErrorHandler = (error: Error) => {
       console.log(error);

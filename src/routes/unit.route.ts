@@ -14,16 +14,18 @@ import { validateObjectId } from "../middlewares/validateId";
 import { userRoles } from "../config/constants";
 import accessControl from "../middlewares/aceessControl";
 
-router.get("/", getUnits);
-
-router.get("/:id", validateObjectId, getSingleUnit);
-
 router.post(
   "/",
   validateRequest(createUnitSchema),
   accessControl([userRoles.admin]),
   createUnit
 );
+
+router.get("/", getUnits);
+
+router.get("/:id", validateObjectId, getSingleUnit);
+
+
 
 router.patch(
   "/:id",

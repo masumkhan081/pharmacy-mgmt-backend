@@ -9,7 +9,7 @@ const brandSchema = new mongoose.Schema(
       ref: "generics",
       required: [true, "Generic reference is required"],
     },
-    mfr: {
+    manufacturer: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "manufacturers",
       required: [true, "Manufacturer reference is required"],
@@ -35,7 +35,7 @@ brandSchema.pre("save", async function (next) {
       return next(new Error("Invalid generic reference"));
     }
 
-    const manufacturerExists = await Manufacturer.findById(this.mfr);
+    const manufacturerExists = await Manufacturer.findById(this.manufacturer);
     if (!manufacturerExists) {
       return next(new Error("Invalid manufacturer reference"));
     }
