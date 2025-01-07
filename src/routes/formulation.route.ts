@@ -13,8 +13,6 @@ import { validateObjectId } from "../middlewares/validateId";
 import accessControl from "../middlewares/aceessControl";
 import { userRoles } from "../config/constants";
 
- 
-
 router.get("/",
   getFormulations);
 
@@ -22,14 +20,20 @@ router.get("/:id",
   validateObjectId,
   getSingleFormulation);
 
-router.post("/",accessControl([userRoles.admin]), validateRequest(formulationSchema), createFormulation);
+router.post("/",
+  accessControl([userRoles.admin]),
+  validateRequest(formulationSchema),
+  createFormulation);
 
 router.patch("/:id",
   accessControl([userRoles.admin]),
   validateObjectId,
+  validateRequest(formulationSchema),
   updateFormulation);
 
-router.delete("/:id",accessControl([userRoles.admin]),validateObjectId,
+router.delete("/:id",
+  accessControl([userRoles.admin]),
+  validateObjectId,
   deleteFormulation);
 
 //

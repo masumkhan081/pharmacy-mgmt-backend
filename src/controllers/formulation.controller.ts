@@ -20,7 +20,7 @@ export const getFormulations: TypeController = async (req, res) => {
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.formulation,
     });
   }
 };
@@ -34,7 +34,7 @@ export const getSingleFormulation: TypeController = async (req, res) => {
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.formulation,
     });
   }
 };
@@ -48,7 +48,7 @@ export const createFormulation: TypeController = async (req, res) => {
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.formulation,
     });
   }
 };
@@ -65,7 +65,7 @@ export const updateFormulation: TypeController = async (req, res) => {
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.formulation,
     });
   }
 };
@@ -80,7 +80,7 @@ export const deleteFormulation: TypeController = async (req, res) => {
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.formulation,
     });
   }
 };

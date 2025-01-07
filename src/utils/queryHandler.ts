@@ -65,7 +65,7 @@ const getSearchAndPagination = ({
         [searchField]: { $regex: new RegExp(searchTerm, "i") },
       });
     }
-    // console.log("searchConditions: " + JSON.stringify(searchConditions))
+    console.log("searchConditions: " + JSON.stringify(searchConditions))
   }
 
   if (searchConditions.length > 0) {

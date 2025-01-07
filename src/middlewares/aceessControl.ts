@@ -62,7 +62,7 @@ function accessControl(accessRoles: string[]) {
       req.role = payload?.role;
 
       if (accessRoles.includes(req.role as string)) {
-        console.log("success: \n\n\n")
+        // console.log("success: \n")
 
         next();
       } else {

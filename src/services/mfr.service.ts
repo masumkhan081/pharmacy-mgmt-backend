@@ -24,7 +24,7 @@ async function getManufacturers(query: QueryParams) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, entity: entities.unit });
+    } = getSearchAndPagination({ query, entity: entities.manufacturer });
 
     const fetchResult = await Manufacturer.find(filterConditions)
       .sort(sortConditions)

@@ -8,7 +8,7 @@ import {
   deleteGeneric,
 } from "../controllers/generic.controller"; // controller functions
 import validateRequest from "../middlewares/validateRequest";
-import { genericSchema } from "../schemas/generic.schema";
+import { genericSchema, genericUpdateSchema } from "../schemas/generic.schema";
 import { validateObjectId } from "../middlewares/validateId";
 import accessControl from "../middlewares/aceessControl";
 import { userRoles } from "../config/constants";
@@ -28,6 +28,7 @@ router.patch(
   "/:id",
   accessControl([userRoles.admin]),
   validateObjectId,
+  validateRequest(genericUpdateSchema),
   updateGeneric
 );
 

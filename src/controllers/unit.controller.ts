@@ -38,9 +38,6 @@ export const getSingleUnit: TypeController = async (req, res) => {
 export const createUnit: TypeController = async (req, res) => {
   try {
     const result = await unitService.createUnit(req.body);
-    console.log(JSON.stringify(req.body) + "\n \n")
-
-    console.log(JSON.stringify(result))
     sendCreateResponse({ res, result, entity: entities.unit });
   } catch (error) {
     console.error(error instanceof Error ? error.message : "Unknown error");

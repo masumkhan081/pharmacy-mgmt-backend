@@ -6,8 +6,8 @@ import { Types } from "mongoose";
 // The reusable ID type
 export type IDType = Types.ObjectId | string;
 
+export type TypeController = (req: Request, res: Response) => Promise<void> | void;
 
-export type TypeController = (req: Request, res: Response) => Promise<void>;
 
 export type TypeReqResNext = (
   req: Request,

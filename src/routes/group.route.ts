@@ -19,13 +19,15 @@ router.get("/:id", validateObjectId, getSingleGroup);
 
 router.post(
   "/",
-
   accessControl([userRoles.admin]),
   validateRequest(groupSchema),
   createGroup
 );
 
-router.patch("/:id", validateObjectId, updateGroup);
+router.patch("/:id",
+  validateObjectId,
+  accessControl([userRoles.admin]),
+  validateRequest(groupSchema), updateGroup);
 
 router.delete(
   "/:id",

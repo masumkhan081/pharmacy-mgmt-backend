@@ -11,20 +11,20 @@ const genericSchema = new mongoose.Schema({
     type: String,
     required: [true, "Generic name is required"],
     minlength: [3, "Generic name must be at least 3 character long"],
-    maxlength: [35, "Generic name cannot exceed 35 characters"],
+    maxlength: [55, "Generic name cannot exceed 55 characters"],
     unique: true,
     index: true, // Create an index for faster querying
   },
 });
 
 // Pre-save middleware to validate group reference
-genericSchema.pre("save", async function (next) {
-  console.log("this.group " + JSON.stringify(this.group));
-  const group = await Group.findById(this.group);
-  if (!group) {
-    return next(new Error("Invalid group reference"));
-  }
-  next();
-});
+// genericSchema.pre("save", async function (next) {
+//   console.log("this.group " + JSON.stringify(this.group));
+//   const group = await Group.findById(this.group);
+//   if (!group) {
+//     return next(new Error("Invalid group reference"));
+//   }
+//   next();
+// });
 
 export default mongoose.model("generics", genericSchema);

@@ -38,7 +38,7 @@ app.get("/", (req: Request, res: Response) => {
 app.use("/api/auth", authRoutes);
 app.use("/api/units", unitRoutes);
 app.use("/api/formulations", formulationRoutes);
-app.use("/api/mfrs", mfrRoutes);
+app.use("/api/manufacturers", mfrRoutes);
 app.use("/api/generics", genericRoutes);
 app.use("/api/groups", groupRoutes);
 app.use("/api/brands", brandRoutes);

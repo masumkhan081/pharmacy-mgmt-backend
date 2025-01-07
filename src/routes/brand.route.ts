@@ -8,7 +8,7 @@ import {
   deleteBrand,
 } from "../controllers/brand.controller"; // controller functions
 import validateRequest from "../middlewares/validateRequest";
-import { brandSchema } from "../schemas/brand.schema";
+import { brandSchema, brandUpdateSchema } from "../schemas/brand.schema";
 import { validateObjectId } from "../middlewares/validateId";
 import accessControl from "../middlewares/aceessControl";
 import { userRoles } from "../config/constants";
@@ -19,16 +19,16 @@ router.get("/:id", validateObjectId, getSingleBrand);
 
 router.post(
   "/",
-  validateRequest(brandSchema),
   accessControl([userRoles.admin]),
+  validateRequest(brandSchema),
   createBrand
 );
 
 router.patch(
   "/:id",
   validateObjectId,
-  validateRequest(brandSchema),
   accessControl([userRoles.admin]),
+  validateRequest(brandUpdateSchema),
   updateBrand
 );
 

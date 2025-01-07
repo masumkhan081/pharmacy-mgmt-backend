@@ -9,19 +9,19 @@ import {
   sendDeletionResponse
 } from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
+import groupModel from "../models/group.model";
 //
-
 export const getGenerics: TypeController = async (req, res) => {
   try {
     const result = await genericService.getGenerics(req.query);
     sendFetchResponse({ res, result, entity: entities.generic });
   } catch (error) {
     console.error(error);
-    sendErrorResponse({
-      res,
-      error,
-      entity: entities.unit,
-    });
+    // sendErrorResponse({
+    //   res,
+    //   error,
+    //   entity: entities.unit,
+    // });
   }
 };
 
@@ -38,9 +38,18 @@ export const getSingleGeneric: TypeController = async (req, res) => {
     });
   }
 };
-
+// 
 export const createGeneric: TypeController = async (req, res) => {
   try {
+
+    const group = await groupModel.findById(req.body.group);
+    if (!group) {
+      res.status(400).json({
+        success: false,
+        message: "Group doesn't exist"
+      });
+      return;
+    }
     const result = await genericService.createGeneric(req.body);
     sendCreateResponse({ res, result, entity: entities.generic });
   } catch (error) {
@@ -52,16 +61,25 @@ export const createGeneric: TypeController = async (req, res) => {
     });
   }
 };
-
+// 
 export const updateGeneric: TypeController = async (req, res) => {
   try {
+
+    if (req.body.group && !(await groupModel.findById(req.body.group))) {
+      res.status(400).json({
+        success: false,
+        message: "Group doesn't exist",
+      }); return
+    }
+
     const result = await genericService.updateGeneric({
       id: req.params.id,
       data: req.body,
     });
     sendUpdateResponse({ res, result, entity: entities.generic });
   } catch (error) {
-    console.error(error);
+    console.log(`--log-- ` + JSON.stringify(error))
+
     sendErrorResponse({
       res,
       error,
@@ -69,7 +87,7 @@ export const updateGeneric: TypeController = async (req, res) => {
     });
   }
 };
-
+// 
 export const deleteGeneric: TypeController = async (req, res) => {
   try {
     const result = await genericService.deleteGeneric(req.params.id);
@@ -83,7 +101,7 @@ export const deleteGeneric: TypeController = async (req, res) => {
     });
   }
 };
-
+// 
 export default {
   getGenerics,
   getSingleGeneric,

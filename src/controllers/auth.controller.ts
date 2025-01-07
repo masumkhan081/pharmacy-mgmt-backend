@@ -14,6 +14,7 @@ import { verifyToken, getHashedPassword } from "../utils/tokenisation";
 import { sendOTPMail, sendResetMail } from "../utils/mail";
 import User from "../models/user.model";
 import { Request, Response } from "express";
+import { TypeController } from "../types/requestResponse";
 
 // Register User Function
 const registerUser =
@@ -43,10 +44,10 @@ const registerUser =
     };
 
 // Resend OTP Function
-const requestEmailVerification = async (
-  req: Request,
-  res: Response
-): Promise<void> => {
+const requestEmailVerification: TypeController = async (
+  req,
+  res
+) => {
   try {
     const user = await User.findOne({ email: req.body.email });
 

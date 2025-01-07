@@ -52,16 +52,24 @@ export const defaultViewLimit = 20;
 export const defaultSortOrder = "desc";
 
 export const mapSearchable = {
-  [entities.drug]: ["name"],
+  [entities.drug]: [],
   [entities.generic]: ["name"],
   [entities.unit]: ["shortName", "longName"],
+  [entities.formulation]: ["shortName", "longName"],
+  [entities.group]: ["name"],
+  [entities.manufacturer]: ["name"],
+  [entities.brand]: ["name"],
 
 };
 
 export const mapFilterables = {
-  [entities.drug]: [],
-  [entities.generic]: ["category", "status", "adminApproval", "seller"],
-  [entities.unit]: ["shortName", "longName"],
+  [entities.drug]: ["brand", "formulation", "unit"],
+  [entities.generic]: ["group"],
+  [entities.unit]: [],
+  [entities.formulation]: [],
+  [entities.group]: [],
+  [entities.manufacturer]: [],
+  [entities.brand]: ["manufacturer", "generic"],
 
 };
 

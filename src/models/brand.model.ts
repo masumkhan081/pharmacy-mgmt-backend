@@ -17,8 +17,8 @@ const brandSchema = new mongoose.Schema(
     name: {
       type: String,
       required: [true, "Brand name is required"],
-      minlength: [3, "Brand name must be at least 3 characters long"],
-      maxlength: [35, "Brand name cannot exceed 35 characters"],
+      minlength: [2, "Brand name must be at least 2 characters long"],
+      maxlength: [55, "Brand name cannot exceed 55 characters"],
       unique: true,
       index: true,
     },
@@ -28,23 +28,23 @@ const brandSchema = new mongoose.Schema(
   }
 );
 
-brandSchema.pre("save", async function (next) {
-  try {
-    const genericExists = await Generic.findById(this.generic);
-    if (!genericExists) {
-      return next(new Error("Invalid generic reference"));
-    }
+// brandSchema.pre("save", async function (next) {
+//   try {
+//     const genericExists = await Generic.findById(this.generic);
+//     if (!genericExists) {
+//       return next(new Error("Invalid generic reference"));
+//     }
 
-    const manufacturerExists = await Manufacturer.findById(this.manufacturer);
-    if (!manufacturerExists) {
-      return next(new Error("Invalid manufacturer reference"));
-    }
+//     const manufacturerExists = await Manufacturer.findById(this.manufacturer);
+//     if (!manufacturerExists) {
+//       return next(new Error("Invalid manufacturer reference"));
+//     }
 
-    next();
-  } catch (error) {
-    if (error instanceof Error)
-      return next(new Error("Error validating references: " + error.message));
-  }
-});
+//     next();
+//   } catch (error) {
+//     if (error instanceof Error)
+//       return next(new Error("Error validating references: " + error.message));
+//   }
+// });
 
 export default mongoose.model("brands", brandSchema);
