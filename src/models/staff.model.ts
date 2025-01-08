@@ -1,6 +1,25 @@
-import mongoose from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
-const staffSchema = new mongoose.Schema(
+interface IStaff extends Document {
+  fullName: string;
+  phone: string;
+  altPhone: string;
+  gender: 'MALE' | 'FEMALE' | 'OTHER';
+  email: string;
+  designation: 'admin' | 'manager' | 'pharmacist' | 'salesman';
+  address?: string;
+  shift: 'Morning' | 'Afternoon' | 'Night';
+  salaryType: 'Hourly' | 'Weekly' | 'Monthly';
+  hourlySalary?: number;
+  weeklySalary?: number;
+  monthlySalary?: number;
+  hoursPerDay: number;
+  daysPerWeek: number;
+  isUser: boolean;
+  user: mongoose.Types.ObjectId | null;
+}
+
+const staffSchema: Schema<IStaff> = new mongoose.Schema(
   {
     fullName: {
       type: String,
@@ -96,10 +115,22 @@ const staffSchema = new mongoose.Schema(
     isUser: {
       type: Boolean,
     },
-    isActive: {
-      type: Boolean,
-      default: false,
+    user: {
+      type: mongoose.Schema.Types.ObjectId, // Referencing an ObjectId
+      required: function (this: IStaff) {
+        // If isUser is true, newField is required
+        return this.isUser === true;
+      },
+      ref: 'users', // Reference to another collection if needed
+      validate: {
+        validator: function (this: IStaff, value: mongoose.Types.ObjectId | null) {
+          // If isUser is true, newField must be an ObjectId (not null)
+          return this.isUser ? value !== null : true;
+        },
+        message: "newField must be an ObjectId and cannot be null if isUser is true.",
+      }
     },
+
   },
   {
     timestamps: true,

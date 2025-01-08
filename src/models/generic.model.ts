@@ -1,5 +1,4 @@
-import mongoose from "mongoose";
-import Group from "./group.model";
+import mongoose from "mongoose"; 
 //
 const genericSchema = new mongoose.Schema({
   group: {

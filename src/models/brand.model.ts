@@ -1,6 +1,4 @@
-import mongoose from "mongoose";
-import Manufacturer from "./mfr.model";
-import Generic from "./generic.model";
+import mongoose from "mongoose"; 
 
 const brandSchema = new mongoose.Schema(
   {

@@ -53,7 +53,7 @@ async function register({ res, data }: { res: Response; data: RegisterData }) {
       profile: profile.id,
     }).save();
 
-    const { success, token } = await sendOTPMail(user.email);
+    const { success, token } = await sendOTPMail("user.email");
 
     if (success) {
       res.status(200).json({

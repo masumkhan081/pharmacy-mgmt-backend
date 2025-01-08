@@ -128,7 +128,7 @@ const requestAccountRecovery = async (
       return;
     }
 
-    const { success } = await sendResetMail(user.email);
+    const { success } = await sendResetMail("user.email");
 
     res.status(success ? 200 : 400).json({
       success,

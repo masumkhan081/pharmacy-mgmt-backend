@@ -4,29 +4,16 @@ import { userRoles } from "../config/constants";
 
 const userSchema = new mongoose.Schema(
   {
-    email: {
+    username: {
       type: String,
-      required: [true, "Email is required"],
+      required: [true, "Username is required"],
       unique: true,
-      match: [
-        /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
-        "Please fill a valid email address",
-      ],
+
     },
     password: {
       type: String,
       required: [true, "Password is required"],
       minlength: [6, "Password must be at least 6 characters long"],
-    },
-    fullName: {
-      type: String,
-      required: [true, "Full name is required"],
-      minlength: [3, "Full name must be at least 3 characters long"],
-    },
-    phone: {
-      type: String,
-      required: [true, "Phone is required"],
-      minlength: [3, "Phone must be at least 3 characters long"],
     },
     role: {
       type: String,
@@ -35,6 +22,11 @@ const userSchema = new mongoose.Schema(
         values: Object.values(userRoles),
         message: "Role must be either ADMIN, SELLER, or BIDDER",
       },
+    },
+    staff: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "staff",
+      required: [true, "Staff reference is missing"],
     },
     isVerified: {
       type: Boolean,
