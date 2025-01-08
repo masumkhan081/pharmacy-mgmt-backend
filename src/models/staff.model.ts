@@ -160,5 +160,5 @@ staffSchema.pre("save", function (next) {
 
   next();
 });
-
-export default mongoose.model("staff", staffSchema);
+// 
+export default mongoose.model<IStaff>("staff", staffSchema);

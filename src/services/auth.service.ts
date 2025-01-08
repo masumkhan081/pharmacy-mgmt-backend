@@ -152,7 +152,7 @@ async function login({
             {
               userId: user.id,
               role: user.role,
-              email: user.email,
+              email: "user.email",
               expire: 2628000000 + Date.now(),
             },
             config.tokenSecret,
@@ -168,7 +168,7 @@ async function login({
             token,
           });
         } else {
-          const { success, token } = await sendOTPMail(user.email);
+          const { success, token } = await sendOTPMail("user.email");
           return res.status(success ? 200 : 400).json({
             success,
             message: success
