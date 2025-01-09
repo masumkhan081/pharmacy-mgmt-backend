@@ -2,7 +2,7 @@ import express, { Express, Request, Response } from "express";
 const app: Express = express();
 import dotenv from "dotenv";
 dotenv.config();
-import originControl from "./middlewares/corsMiddleware";
+// import originControl from "./middlewares/corsMiddleware";
 // routes
 import authRoutes from "./routes/auth.route";
 import unitRoutes from "./routes/unit.route";
@@ -22,7 +22,7 @@ import attendanceRoutes from "./routes/attendance.route";
 
 // middlewares
 app.use(express.json());
-app.use(originControl);
+// app.use(originControl);
 app.use(express.urlencoded({ extended: false }));
 app.use("/public", express.static("public"));
 //
