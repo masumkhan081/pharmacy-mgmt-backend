@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import app from "./app";
-import initDB from "./config/mongodb";
-import config from "./config";
+import app from "./src/app";
+import initDB from "./src/config/mongodb";
+import config from "./src/config";
 //
 async function bootstrap() {
   let server: any;
