@@ -11,6 +11,20 @@ import {
 import { TypeController } from "../types/requestResponse";
 //
 
+export const createStaff: TypeController = async (req, res) => {
+  try {
+    const result = await staffService.createStaff(req.body);
+    sendCreateResponse({ res, result, entity: entities.staff });
+  } catch (error) {
+    console.error(error);
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.unit,
+    });
+  }
+};
+
 export const getStaffs: TypeController = async (req, res) => {
   try {
     const result = await staffService.getStaffs(req.query);
@@ -29,20 +43,6 @@ export const getSingleStaff: TypeController = async (req, res) => {
   try {
     const result = await staffService.getSingleStaff(req.params.id);
     sendSingleFetchResponse({ res, result, entity: entities.staff });
-  } catch (error) {
-    console.error(error);
-    sendErrorResponse({
-      res,
-      error,
-      entity: entities.unit,
-    });
-  }
-};
-
-export const createStaff: TypeController = async (req, res) => {
-  try {
-    const result = await staffService.createStaff(req.body);
-    sendCreateResponse({ res, result, entity: entities.staff });
   } catch (error) {
     console.error(error);
     sendErrorResponse({
