@@ -4,9 +4,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/no-explicit-any */
-const app_1 = __importDefault(require("./src/app"));
-const mongodb_1 = __importDefault(require("./src/config/mongodb"));
-const config_1 = __importDefault(require("./src/config"));
+const app_1 = __importDefault(require("./app"));
+const mongodb_1 = __importDefault(require("./config/mongodb"));
+const config_1 = __importDefault(require("./config"));
 //
 async function bootstrap() {
     let server;

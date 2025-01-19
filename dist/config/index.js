@@ -11,7 +11,7 @@ const config = {
     port: Number(process.env.PORT) || 3000,
     dbName: "pharmacy-management",
     dbUrl: process.env.DB_URL ||
-        "mongodb+srv://masumkhan:pddrgj3q@cluster0.48jxv.mongodb.net/",
+        "mongodb+srv://masumkhan:pddrgj3q@drugs.dvfzpkl.mongodb.net/",
     tokenSecret: process.env.JWT_ACCESS_TOKEN_SECRET || "i-act-as-token-secret",
     refreshTokenSecret: process.env.JWT_REFRESH_TOKEN_SECRET || "i-act-as-refresh-token-secret",
     tokenHeaderKey: process.env.tkn_header_key || "authorization",

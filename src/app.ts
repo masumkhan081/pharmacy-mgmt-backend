@@ -17,6 +17,7 @@ import salaryRoutes from "./routes/salary.route";
 import purchaseRoutes from "./routes/purchase.route";
 import saleRoutes from "./routes/sale.route";
 import attendanceRoutes from "./routes/attendance.route";
+import unitModel from "./models/unit.model";
 
 //
 
@@ -26,12 +27,15 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/public", express.static("public"));
 //
-app.get("/", (req: Request, res: Response) => {
+app.get("/", async (req: Request, res: Response) => {
+
+  const data = await unitModel.find({});
+
   res.status(200).json({
     statusCode: 200,
     success: true,
-    message: "I am functional !",
-    data: null,
+    message: `I am functional ! ${"localhost:3000/api/units"}`,
+    data,
   });
 });
 //
