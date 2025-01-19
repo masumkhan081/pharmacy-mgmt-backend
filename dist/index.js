@@ -7,7 +7,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const app_1 = __importDefault(require("./app"));
 const mongodb_1 = __importDefault(require("./config/mongodb"));
 const config_1 = __importDefault(require("./config"));
-//
+//np
 async function bootstrap() {
     let server;
     try {
