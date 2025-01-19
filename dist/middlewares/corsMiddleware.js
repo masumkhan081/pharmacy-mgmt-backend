@@ -8,7 +8,7 @@ const cors_1 = __importDefault(require("cors"));
 const allowedOrigins = [
     "http://localhost:3001",
     "http://localhost:5173",
-    "http://localhost:5000",
+    "https://pharmacy-mgmt.vercel.app"
 ];
 // Define CORS options type
 const corsOptions = {

@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const app = (0, express_1.default)();
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-// import originControl from "./middlewares/corsMiddleware";
+const corsMiddleware_1 = __importDefault(require("./middlewares/corsMiddleware"));
 // routes
 const auth_route_1 = __importDefault(require("./routes/auth.route"));
 const unit_route_1 = __importDefault(require("./routes/unit.route"));
@@ -23,10 +23,10 @@ const purchase_route_1 = __importDefault(require("./routes/purchase.route"));
 const sale_route_1 = __importDefault(require("./routes/sale.route"));
 const attendance_route_1 = __importDefault(require("./routes/attendance.route"));
 const unit_model_1 = __importDefault(require("./models/unit.model"));
-//
+// 
 // middlewares
+app.use(corsMiddleware_1.default);
 app.use(express_1.default.json());
-// app.use(originControl);
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use("/public", express_1.default.static("public"));
 //
@@ -35,7 +35,7 @@ app.get("/", async (req, res) => {
     res.status(200).json({
         statusCode: 200,
         success: true,
-        message: `I am running ${"localhost:3000/api/units"}`,
+        message: `I am functional ${req.headers.origin}`,
         data,
     });
 });

@@ -18,12 +18,10 @@ import purchaseRoutes from "./routes/purchase.route";
 import saleRoutes from "./routes/sale.route";
 import attendanceRoutes from "./routes/attendance.route";
 import unitModel from "./models/unit.model";
-
-//
-
+// 
 // middlewares
-app.use(express.json());
 app.use(originControl);
+app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/public", express.static("public"));
 //
@@ -34,7 +32,7 @@ app.get("/", async (req: Request, res: Response) => {
   res.status(200).json({
     statusCode: 200,
     success: true,
-    message: `I am running ${"localhost:3000/api/units"}`,
+    message: `I am functional ${req.headers.origin}`,
     data,
   });
 });
