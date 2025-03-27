@@ -11,7 +11,7 @@ const mongodbConnection = async (retries = 5, delay = 2000) => {
             await mongoose_1.default.connect(index_1.default.dbUrl, {
                 dbName: index_1.default.dbName || "pharmacy-management",
             });
-            console.log("Mongodb connected!");
+            console.log("Mongodb connected!!");
             return;
         }
         catch (error) {

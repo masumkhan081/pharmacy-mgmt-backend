@@ -7,7 +7,7 @@ const mongodbConnection = async (retries = 5, delay = 2000) => {
       await mongoose.connect(config.dbUrl, {
         dbName: config.dbName || "pharmacy-management",
       });
-      console.log("Mongodb connected!");
+      console.log("Mongodb connected!!");
       return;
     } catch (error) {
       console.error(`Attempt ${attempt} failed:`, error);
