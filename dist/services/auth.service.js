@@ -7,7 +7,7 @@ const user_model_1 = __importDefault(require("../models/user.model"));
 const bcrypt_1 = __importDefault(require("bcrypt"));
 const mail_1 = require("../utils/mail");
 const config_1 = __importDefault(require("../config"));
-// import { getSearchAndPagination } from "../utils/queryHandler";
+// import getSearchAndPagination from "../utils/queryHandler";
 // import { entities } from "../config/constants";
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 // import { sendErrorResponse } from "../../utils/responseHandler";

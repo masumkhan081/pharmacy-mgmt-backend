@@ -2,7 +2,7 @@ import User from "../models/user.model";
 import bcrypt from "bcrypt";
 import { sendOTPMail } from "../utils/mail";
 import config from "../config";
-// import { getSearchAndPagination } from "../utils/queryHandler";
+// import getSearchAndPagination from "../utils/queryHandler";
 // import { entities } from "../config/constants";
 import jwt from "jsonwebtoken";
 // import { sendErrorResponse } from "../../utils/responseHandler";

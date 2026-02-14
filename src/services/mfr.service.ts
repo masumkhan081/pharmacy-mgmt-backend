@@ -1,20 +1,30 @@
- 
-import { entities } from "../config/constants";
-import Manufacturer from "../models/mfr.model";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { IManufacturer, IManufacturerUpdatePayload } from "../types/mfr.type";
+import Manufacturer from "../models/mfr.model";
 import getSearchAndPagination from "../utils/queryHandler";
- //
-const createManufacturer = async (data: IManufacturer) => await Manufacturer.create(data);
-//
-const getSingleManufacturer = async (id: IDType) => Manufacturer.findById(id);
-//
-const updateManufacturer = async ({ id, data }: IManufacturerUpdatePayload) =>
-  await Manufacturer.findByIdAndUpdate(id, data, { new: true });
-//
-const deleteManufacturer = async (id: IDType) => await Manufacturer.findByIdAndDelete(id);
-//
-async function getManufacturers(query: QueryParams) {
+import { entities } from "../config/constants";
+
+// Create a new manufacturer
+const createManufacturer = async (data: any) => {
+  return await Manufacturer.create(data);
+};
+
+// Get a single manufacturer by ID
+const getSingleManufacturer = async (id: IDType) => {
+  return await Manufacturer.findById(id);
+};
+
+// Update a manufacturer
+const updateManufacturer = async ({ id, data }: { id: IDType; data: any }) => {
+  return await Manufacturer.findByIdAndUpdate(id, data, { new: true });
+};
+
+// Delete a manufacturer
+const deleteManufacturer = async (id: IDType) => {
+  return await Manufacturer.findByIdAndDelete(id);
+};
+
+// Get all manufacturers with pagination and filtering
+const getManufacturers = async (query: QueryParams) => {
   try {
     const {
       currentPage,
@@ -24,7 +34,10 @@ async function getManufacturers(query: QueryParams) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, entity: entities.manufacturer });
+    } = getSearchAndPagination({ 
+      query, 
+      entity: entities.manufacturer 
+    });
 
     const fetchResult = await Manufacturer.find(filterConditions)
       .sort(sortConditions)
@@ -32,6 +45,7 @@ async function getManufacturers(query: QueryParams) {
       .limit(viewLimit);
 
     const total = await Manufacturer.countDocuments(filterConditions);
+    
     return {
       meta: {
         total,
@@ -46,12 +60,12 @@ async function getManufacturers(query: QueryParams) {
   } catch (error) {
     return error;
   }
-}
+};
 
 export default {
   createManufacturer,
-  updateManufacturer,
   getSingleManufacturer,
+  updateManufacturer,
   deleteManufacturer,
   getManufacturers,
 };

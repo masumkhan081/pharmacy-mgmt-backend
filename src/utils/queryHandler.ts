@@ -8,6 +8,7 @@ import { QueryParams } from "../types/requestResponse";
 interface SearchAndPaginationOptions {
   query: QueryParams;
   entity: string;
+  additionalFilters?: Record<string, unknown>;
 }
 
 interface SearchAndPaginationResult {
