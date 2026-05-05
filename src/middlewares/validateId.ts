@@ -1,24 +1,20 @@
 import { Request, Response, NextFunction } from "express";
-import { Types } from "mongoose"; // Import mongoose's Types for ObjectId validation
+import { Types } from "mongoose";
+import { sendBadRequest } from "../utils/responseHandler";
 
-// Middleware to validate ObjectId
 export const validateObjectId = (
   req: Request,
   res: Response,
   next: NextFunction
 ): void => {
   const { id } = req.params;
-
-  // Check if the id is a valid MongoDB ObjectId
   if (!Types.ObjectId.isValid(id)) {
-    // Send a response if the ID is invalid, no need to call next()
-    res.status(400).json({
-      success: false,
+    sendBadRequest({
+      res,
       message: "Invalid ID format. Please provide a valid ObjectId.",
+      errors: [{ field: "id", message: id }],
     });
     return;
   }
-
-  // If the ID is valid, continue to the next middleware or route handler
   next();
 };

@@ -8,6 +8,7 @@ const app = (0, express_1.default)();
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const corsMiddleware_1 = __importDefault(require("./middlewares/corsMiddleware"));
+const responseHandler_1 = require("./utils/responseHandler");
 // routes
 const auth_route_1 = __importDefault(require("./routes/auth.route"));
 const unit_route_1 = __importDefault(require("./routes/unit.route"));
@@ -22,6 +23,7 @@ const salary_route_1 = __importDefault(require("./routes/salary.route"));
 const purchase_route_1 = __importDefault(require("./routes/purchase.route"));
 const sale_route_1 = __importDefault(require("./routes/sale.route"));
 const attendance_route_1 = __importDefault(require("./routes/attendance.route"));
+const supplier_route_1 = __importDefault(require("./routes/supplier.route"));
 const unit_model_1 = __importDefault(require("./models/unit.model"));
 // 
 // middlewares
@@ -53,18 +55,18 @@ app.use("/api/salaries", salary_route_1.default);
 app.use("/api/purchases", purchase_route_1.default);
 app.use("/api/sales", sale_route_1.default);
 app.use("/api/attendances", attendance_route_1.default);
+app.use("/api/suppliers", supplier_route_1.default);
 //
-app.use((req, res, next) => {
+app.use((req, res) => {
     res.status(404).json({
+        statusCode: 404,
         success: false,
-        message: "Not Found",
-        errorMessages: [
-            {
-                path: req.originalUrl,
-                message: "API Not Found",
-            },
-        ],
+        message: "API Not Found",
+        errors: [{ field: "path", message: req.originalUrl }],
     });
-    next();
+});
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err, req, res, _next) => {
+    (0, responseHandler_1.sendErrorResponse)({ res, error: err });
 });
 exports.default = app;

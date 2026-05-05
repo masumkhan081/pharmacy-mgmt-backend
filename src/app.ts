@@ -1,8 +1,9 @@
-import express, { Express, Request, Response } from "express";
+import express, { Express, NextFunction, Request, Response } from "express";
 const app: Express = express();
 import dotenv from "dotenv";
 dotenv.config();
 import originControl from "./middlewares/corsMiddleware";
+import { sendErrorResponse } from "./utils/responseHandler";
 // routes
 import authRoutes from "./routes/auth.route";
 import unitRoutes from "./routes/unit.route";
@@ -17,6 +18,7 @@ import salaryRoutes from "./routes/salary.route";
 import purchaseRoutes from "./routes/purchase.route";
 import saleRoutes from "./routes/sale.route";
 import attendanceRoutes from "./routes/attendance.route";
+import supplierRoutes from "./routes/supplier.route";
 import unitModel from "./models/unit.model";
 // 
 // middlewares
@@ -50,19 +52,20 @@ app.use("/api/salaries", salaryRoutes);
 app.use("/api/purchases", purchaseRoutes);
 app.use("/api/sales", saleRoutes);
 app.use("/api/attendances", attendanceRoutes);
+app.use("/api/suppliers", supplierRoutes);
 //
-app.use((req, res, next) => {
+app.use((req: Request, res: Response) => {
   res.status(404).json({
+    statusCode: 404,
     success: false,
-    message: "Not Found",
-    errorMessages: [
-      {
-        path: req.originalUrl,
-        message: "API Not Found",
-      },
-    ],
+    message: "API Not Found",
+    errors: [{ field: "path", message: req.originalUrl }],
   });
-  next();
+});
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+app.use((err: unknown, req: Request, res: Response, _next: NextFunction) => {
+  sendErrorResponse({ res, error: err });
 });
 
 export default app;

@@ -18,7 +18,7 @@ const getDrugs = async (req, res) => {
         (0, responseHandler_1.sendErrorResponse)({
             res,
             error,
-            entity: constants_1.entities.unit,
+            entity: constants_1.entities.drug,
         });
     }
 };
@@ -33,7 +33,7 @@ const getSingleDrug = async (req, res) => {
         (0, responseHandler_1.sendErrorResponse)({
             res,
             error,
-            entity: constants_1.entities.unit,
+            entity: constants_1.entities.drug,
         });
     }
 };
@@ -48,7 +48,7 @@ const createDrug = async (req, res) => {
         (0, responseHandler_1.sendErrorResponse)({
             res,
             error,
-            entity: constants_1.entities.unit,
+            entity: constants_1.entities.drug,
         });
     }
 };
@@ -66,7 +66,7 @@ const updateDrug = async (req, res) => {
         (0, responseHandler_1.sendErrorResponse)({
             res,
             error,
-            entity: constants_1.entities.unit,
+            entity: constants_1.entities.drug,
         });
     }
 };
@@ -81,7 +81,7 @@ const deleteDrug = async (req, res) => {
         (0, responseHandler_1.sendErrorResponse)({
             res,
             error,
-            entity: constants_1.entities.unit,
+            entity: constants_1.entities.drug,
         });
     }
 };

@@ -1,39 +1,49 @@
 {
-  "name": "a",
+  "name": "pharmacy-mgmt-backend",
   "version": "1.0.0",
-  "main": "./src/index.ts",
-  "scripts": {
-    "build": "npx tsc",
-    "dev": "concurrently \"npx tsc --watch\" \"nodemon -q dist/index.js\"",
-    "start": "tsc && node dist/index.js",
-    "start2": "node dist/index.js",
-    "dev2": "concurrently \"tsc --watch\" \"nodemon dist/index.js\"",
-    "d1": "tsc --watch",
-    "d2": "node dist/index.js",
-    "git": "git add . && git commit -m `commited` && git push",
-    "format": "prettier --write \"src/**/*.ts\" \"test/**/*.ts\"",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "prepare": "husky install",
-    "eslint": "eslint . --fix",
-    "check-types": "tsc --noEmit",
-    "lint": "npm run eslint && npm run check-types"
+  "description": "Pharmacy management system backend (Express + TypeScript + MongoDB).",
+  "main": "dist/index.js",
+  "engines": {
+    "node": ">=18.0.0"
   },
-  "husky": {
-    "hooks": {
-      "pre-commit": "npm run lint"
-    }
+  "scripts": {
+    "build": "tsc",
+    "dev": "concurrently -k -n tsc,api -c blue,green \"tsc --watch\" \"nodemon -q dist/index.js\"",
+    "start": "node dist/index.js",
+    "format": "prettier --write \"src/**/*.ts\"",
+    "lint": "eslint . --fix",
+    "check-types": "tsc --noEmit",
+    "check": "npm run lint && npm run check-types",
+    "prepare": "husky install",
+    "seed": "node seeders/seed.all.js",
+    "seed:units": "node seeders/seed.units.js",
+    "seed:formulations": "node seeders/seed.formulations.js",
+    "seed:groups": "node seeders/seed.groups.js",
+    "seed:manufacturers": "node seeders/seed.manufacturers.js",
+    "seed:generics": "node seeders/seed.generics.js",
+    "seed:brands": "node seeders/seed.brands.js",
+    "seed:drugs": "node seeders/seed.drugs.js",
+    "seed:staff": "node seeders/seed.staff.js",
+    "seed:users": "node seeders/seed.users.js",
+    "seed:suppliers": "node seeders/seed.suppliers.js",
+    "seed:purchases": "node seeders/seed.purchases.js",
+    "seed:sales": "node seeders/seed.sales.js",
+    "seed:salaries": "node seeders/seed.salaries.js",
+    "seed:attendances": "node seeders/seed.attendances.js"
   },
   "lint-staged": {
-    "**/*.ts": "eslint --fix",
-    "**/*.js": "eslint --fix"
+    "**/*.{ts,js}": "eslint --fix"
   },
-  "keywords": [],
+  "keywords": [
+    "pharmacy",
+    "express",
+    "typescript",
+    "mongodb"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "bcrypt": "^5.1.1",
-    "concurrently": "^9.1.2",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
@@ -42,7 +52,6 @@
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.8.2",
     "nodemailer": "^6.9.16",
-    "nodemon": "^3.1.9",
     "zod": "^3.23.8"
   },
   "devDependencies": {
@@ -51,14 +60,16 @@
     "@types/cors": "^2.8.17",
     "@types/crypto-js": "^4.2.2",
     "@types/express": "^5.0.0",
-    "@types/http-status": "^0.2.30",
     "@types/jsonwebtoken": "^9.0.7",
-    "@types/mongoose": "^5.11.96",
     "@types/node": "^22.10.0",
     "@types/nodemailer": "^6.4.17",
+    "concurrently": "^9.1.2",
     "eslint": "^9.15.0",
     "globals": "^15.12.0",
     "husky": "^8.0.0",
+    "lint-staged": "^15.2.10",
+    "nodemon": "^3.1.9",
+    "prettier": "^3.3.3",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.16.0"
   }

@@ -2,14 +2,15 @@ import User from "../models/user.model";
 import bcrypt from "bcrypt";
 import { sendOTPMail } from "../utils/mail";
 import config from "../config";
-// import getSearchAndPagination from "../utils/queryHandler";
-// import { entities } from "../config/constants";
 import jwt from "jsonwebtoken";
-// import { sendErrorResponse } from "../../utils/responseHandler";
 import crypto from "crypto-js";
-// import { verifyToken, getHashedPassword } from "../utils/tokenisation";
 import Profile from "../models/user.model";
 import { Response } from "express";
+import {
+  sendBadRequest,
+  sendErrorResponse,
+  sendNotFound,
+} from "../utils/responseHandler";
 
 // Define interfaces for expected inputs
 interface RegisterData {
@@ -57,27 +58,20 @@ async function register({ res, data }: { res: Response; data: RegisterData }) {
 
     if (success) {
       res.status(200).json({
-        success,
+        statusCode: 200,
+        success: true,
         message: "An OTP has been sent to your email for verification",
-        token,
+        data: { token },
       });
     } else {
-      if (profile) {
-        await Profile.findByIdAndDelete(profile.id);
-      }
-      if (user) {
-        await User.findByIdAndDelete(user.id);
-      }
+      if (profile) await Profile.findByIdAndDelete(profile.id);
+      if (user) await User.findByIdAndDelete(user.id);
+      sendBadRequest({ res, message: "Failed to send verification OTP" });
     }
   } catch (error) {
-    if (profile) {
-      await Profile.findByIdAndDelete(profile.id);
-    }
-    if (user) {
-      await User.findByIdAndDelete(user.id);
-    }
-    if (error instanceof Error) console.log("err: register: " + error.message);
-    res.status(500).json({ message: "Error creating user profile" });
+    if (profile) await Profile.findByIdAndDelete(profile.id);
+    if (user) await User.findByIdAndDelete(user.id);
+    sendErrorResponse({ res, error, entity: "user" });
   }
 }
 
@@ -96,36 +90,29 @@ async function verifyEmail({
       )
     );
 
-    // Check if OTP has expired
     if (new Date().getTime() > expireAt) {
-      return res.status(400).json({ success: false, message: "OTP expired" });
+      return sendBadRequest({ res, message: "OTP expired" });
     }
 
-    // Validate OTP and email
-    if (data.otp === otp && data.email === email) {
-      const user = await User.findOneAndUpdate({ email }, { isVerified: true });
-
-      if (user) {
-        return res.status(200).json({
-          success: true,
-          message: "Account verified. You may login",
-        });
-      } else {
-        return res.status(404).json({
-          success: false,
-          message: "No user associated with that email",
-        });
-      }
-    } else {
-      return res
-        .status(400)
-        .json({ success: false, message: "Invalid OTP or email" });
+    if (data.otp !== otp || data.email !== email) {
+      return sendBadRequest({ res, message: "Invalid OTP or email" });
     }
+
+    const user = await User.findOneAndUpdate({ email }, { isVerified: true });
+    if (!user) {
+      return sendNotFound({
+        res,
+        message: "No user associated with that email",
+      });
+    }
+
+    res.status(200).json({
+      statusCode: 200,
+      success: true,
+      message: "Account verified. You may login",
+    });
   } catch (error) {
-    console.error("Error verifying email:", error);
-    return res
-      .status(500)
-      .json({ success: false, message: "Internal Server Error" });
+    sendErrorResponse({ res, error, entity: "user" });
   }
 }
 
@@ -143,49 +130,54 @@ async function login({
     const user = await User.findOne({ email });
     let token: string | undefined;
 
-    if (user) {
-      const isPasswordValid = await bcrypt.compare(password, user.password);
-
-      if (isPasswordValid) {
-        if (user.isVerified) {
-          token = jwt.sign(
-            {
-              userId: user.id,
-              role: user.role,
-              email: "user.email",
-              expire: 2628000000 + Date.now(),
-            },
-            config.tokenSecret,
-            config.jwtOptions
-          );
-
-          user.isActive = true;
-          await user.save();
-
-          res.status(200).json({
-            success: true,
-            message: "You are successfully logged in",
-            token,
-          });
-        } else {
-          const { success, token } = await sendOTPMail("user.email");
-          return res.status(success ? 200 : 400).json({
-            success,
-            message: success
-              ? "Your account is not yet verified. We sent an OTP to your mail."
-              : "Your account is not verified yet",
-            token,
-          });
-        }
-      } else {
-        res.status(400).json({ success: false, message: "Wrong Credentials" });
-      }
-    } else {
-      res.status(400).json({ success: false, message: "Wrong Credentials" });
+    if (!user) {
+      return sendBadRequest({ res, message: "Wrong Credentials" });
     }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+      return sendBadRequest({ res, message: "Wrong Credentials" });
+    }
+
+    if (!user.isVerified) {
+      const { success, token: otpToken } = await sendOTPMail("user.email");
+      if (!success) {
+        return sendBadRequest({
+          res,
+          message: "Your account is not verified yet",
+        });
+      }
+      res.status(200).json({
+        statusCode: 200,
+        success: true,
+        message: "Your account is not yet verified. We sent an OTP to your mail.",
+        data: { token: otpToken },
+      });
+      return;
+    }
+
+    token = jwt.sign(
+      {
+        userId: user.id,
+        role: user.role,
+        email: "user.email",
+        expire: 2628000000 + Date.now(),
+      },
+      config.tokenSecret,
+      config.jwtOptions
+    );
+
+    user.isActive = true;
+    await user.save();
+
+    res.status(200).json({
+      statusCode: 200,
+      success: true,
+      message: "You are successfully logged in",
+      data: { token, user: { id: user.id, role: user.role } },
+    });
   } catch (error) {
-    console.error("Inside service func:", error);
-    res.status(500).json({ message: "Internal server error" });
+    sendErrorResponse({ res, error, entity: "user" });
   }
 }
 

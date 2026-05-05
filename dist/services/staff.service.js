@@ -17,7 +17,7 @@ const deleteStaff = async (id) => await staff_model_1.default.findByIdAndDelete(
 //
 async function getStaffs(query) {
     try {
-        const { currentPage, viewLimit, viewSkip, sortBy, sortOrder, filterConditions, sortConditions, } = (0, queryHandler_1.default)({ query, entity: constants_1.entities.unit });
+        const { currentPage, viewLimit, viewSkip, sortBy, sortOrder, filterConditions, sortConditions, } = (0, queryHandler_1.default)({ query, entity: constants_1.entities.staff });
         const fetchResult = await staff_model_1.default.find(filterConditions)
             .sort(sortConditions)
             .skip(viewSkip)

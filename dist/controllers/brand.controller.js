@@ -44,19 +44,11 @@ const createBrand = async (req, res) => {
     try {
         const genericExists = await generic_model_1.default.findById(req.body.generic);
         if (!genericExists) {
-            res.status(400).json({
-                success: false,
-                message: "Invalid generic reference"
-            });
-            return;
+            return (0, responseHandler_1.sendBadRequest)({ res, message: "Invalid generic reference" });
         }
         const manufacturerExists = await mfr_model_1.default.findById(req.body.manufacturer);
         if (!manufacturerExists) {
-            res.status(400).json({
-                success: false,
-                message: "Invalid manufacturer reference"
-            });
-            return;
+            return (0, responseHandler_1.sendBadRequest)({ res, message: "Invalid manufacturer reference" });
         }
         const result = await brand_service_1.default.createBrand(req.body);
         (0, responseHandler_1.sendCreateResponse)({ res, result, entity: constants_1.entities.brand });
@@ -75,18 +67,10 @@ exports.createBrand = createBrand;
 const updateBrand = async (req, res) => {
     try {
         if (req.body.generic && !(await generic_model_1.default.findById(req.body.generic))) {
-            res.status(400).json({
-                success: false,
-                message: "Invalid generic reference",
-            });
-            return;
+            return (0, responseHandler_1.sendBadRequest)({ res, message: "Invalid generic reference" });
         }
-        if (req.body.manufacturer && !(await generic_model_1.default.findById(req.body.manufacturer))) {
-            res.status(400).json({
-                success: false,
-                message: "Invalid manufacturer reference",
-            });
-            return;
+        if (req.body.manufacturer && !(await mfr_model_1.default.findById(req.body.manufacturer))) {
+            return (0, responseHandler_1.sendBadRequest)({ res, message: "Invalid manufacturer reference" });
         }
         const result = await brand_service_1.default.updateBrand({
             id: req.params.id,

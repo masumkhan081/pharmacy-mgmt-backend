@@ -6,7 +6,8 @@ import {
   sendErrorResponse,
   sendCreateResponse,
   sendUpdateResponse,
-  sendDeletionResponse
+  sendDeletionResponse,
+  sendBadRequest,
 } from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
 import Manufacturer from "../models/mfr.model";
@@ -45,19 +46,12 @@ export const createBrand: TypeController = async (req, res) => {
   try {
     const genericExists = await Generic.findById(req.body.generic);
     if (!genericExists) {
-      res.status(400).json({
-        success: false,
-        message: "Invalid generic reference"
-      }); return;
+      return sendBadRequest({ res, message: "Invalid generic reference" });
     }
 
     const manufacturerExists = await Manufacturer.findById(req.body.manufacturer);
     if (!manufacturerExists) {
-      res.status(400).json({
-        success: false,
-        message: "Invalid manufacturer reference"
-      }); return;
-
+      return sendBadRequest({ res, message: "Invalid manufacturer reference" });
     }
 
     const result = await brandService.createBrand(req.body);
@@ -76,17 +70,11 @@ export const updateBrand: TypeController = async (req, res) => {
   try {
 
     if (req.body.generic && !(await Generic.findById(req.body.generic))) {
-      res.status(400).json({
-        success: false,
-        message: "Invalid generic reference",
-      }); return
+      return sendBadRequest({ res, message: "Invalid generic reference" });
     }
 
-    if (req.body.manufacturer && !(await Generic.findById(req.body.manufacturer))) {
-      res.status(400).json({
-        success: false,
-        message: "Invalid manufacturer reference",
-      }); return
+    if (req.body.manufacturer && !(await Manufacturer.findById(req.body.manufacturer))) {
+      return sendBadRequest({ res, message: "Invalid manufacturer reference" });
     }
 
     const result = await brandService.updateBrand({

@@ -17,7 +17,7 @@ const deleteSupplier = async (id) => await supplier_model_1.default.findByIdAndD
 //
 async function getSuppliers(query) {
     try {
-        const { currentPage, viewLimit, viewSkip, sortBy, sortOrder, filterConditions, sortConditions, } = (0, queryHandler_1.default)({ query, entity: constants_1.entities.unit });
+        const { currentPage, viewLimit, viewSkip, sortBy, sortOrder, filterConditions, sortConditions, } = (0, queryHandler_1.default)({ query, entity: constants_1.entities.supplier });
         const fetchResult = await supplier_model_1.default.find(filterConditions)
             .sort(sortConditions)
             .skip(viewSkip)

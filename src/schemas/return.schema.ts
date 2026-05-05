@@ -25,11 +25,10 @@ const returnItemSchema = z.object({
   notes: z.string().optional(),
 });
 
-// Create schema - for creating new returns
-export const createReturnSchema = z.object({
+const returnBase = z.object({
   returnType: z.enum([
     'CUSTOMER_RETURN', 'SUPPLIER_RETURN', 'DAMAGED_GOODS', 'EXPIRED_DRUGS'
-  ], { 
+  ], {
     errorMap: () => ({ message: 'Return type must be one of the predefined values' }),
   }),
   returnDate: z.date().default(() => new Date()),
@@ -42,30 +41,25 @@ export const createReturnSchema = z.object({
   refundAmount: z.number().min(0, 'Refund amount cannot be negative').optional(),
   refundMethod: z.enum([
     'CASH', 'CREDIT_CARD_REVERSAL', 'STORE_CREDIT', 'REPLACEMENT', 'NONE'
-  ], { 
+  ], {
     errorMap: () => ({ message: 'Refund method must be one of the predefined values' }),
   }).optional(),
   refundDate: z.date().optional(),
   status: z.enum([
     'PENDING', 'APPROVED', 'REJECTED', 'COMPLETED', 'CANCELLED'
-  ], { 
+  ], {
     errorMap: () => ({ message: 'Status must be one of the predefined values' }),
   }).default('PENDING'),
   processedBy: z.string().refine(objectIdValidator, { message: 'Invalid staff ID format' }),
   approvedBy: z.string().refine(objectIdValidator, { message: 'Invalid staff ID format' }).optional(),
   notes: z.string().optional(),
-}).refine(
+});
+
+// Create schema - for creating new returns
+export const createReturnSchema = returnBase.refine(
   data => {
-    // If return type is CUSTOMER_RETURN, customer should be provided
-    if (data.returnType === 'CUSTOMER_RETURN' && !data.customer) {
-      return false;
-    }
-    
-    // If return type is SUPPLIER_RETURN, supplier should be provided
-    if (data.returnType === 'SUPPLIER_RETURN' && !data.supplier) {
-      return false;
-    }
-    
+    if (data.returnType === 'CUSTOMER_RETURN' && !data.customer) return false;
+    if (data.returnType === 'SUPPLIER_RETURN' && !data.supplier) return false;
     return true;
   },
   {
@@ -75,10 +69,9 @@ export const createReturnSchema = z.object({
 );
 
 // Update schema - for updating existing returns
-export const updateReturnSchema = createReturnSchema
+export const updateReturnSchema = returnBase
   .partial()
   .extend({
-    // Fields that cannot be updated
     returnNumber: z.string().optional(),
   });
 

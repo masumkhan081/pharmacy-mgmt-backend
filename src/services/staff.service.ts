@@ -24,7 +24,7 @@ async function getStaffs(query: QueryParams) {
       sortOrder,
       filterConditions,
       sortConditions,
-    } = getSearchAndPagination({ query, entity: entities.unit });
+    } = getSearchAndPagination({ query, entity: entities.staff });
 
     const fetchResult = await Staff.find(filterConditions)
       .sort(sortConditions)

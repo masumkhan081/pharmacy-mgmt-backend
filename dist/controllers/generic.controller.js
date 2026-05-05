@@ -8,19 +8,13 @@ const constants_1 = require("../config/constants");
 const generic_service_1 = __importDefault(require("../services/generic.service"));
 const responseHandler_1 = require("../utils/responseHandler");
 const group_model_1 = __importDefault(require("../models/group.model"));
-//
 const getGenerics = async (req, res) => {
     try {
         const result = await generic_service_1.default.getGenerics(req.query);
         (0, responseHandler_1.sendFetchResponse)({ res, result, entity: constants_1.entities.generic });
     }
     catch (error) {
-        console.error(error);
-        // sendErrorResponse({
-        //   res,
-        //   error,
-        //   entity: entities.unit,
-        // });
+        (0, responseHandler_1.sendErrorResponse)({ res, error, entity: constants_1.entities.generic });
     }
 };
 exports.getGenerics = getGenerics;
@@ -30,48 +24,28 @@ const getSingleGeneric = async (req, res) => {
         (0, responseHandler_1.sendSingleFetchResponse)({ res, result, entity: constants_1.entities.generic });
     }
     catch (error) {
-        console.error(error);
-        (0, responseHandler_1.sendErrorResponse)({
-            res,
-            error,
-            entity: constants_1.entities.unit,
-        });
+        (0, responseHandler_1.sendErrorResponse)({ res, error, entity: constants_1.entities.generic });
     }
 };
 exports.getSingleGeneric = getSingleGeneric;
-// 
 const createGeneric = async (req, res) => {
     try {
         const group = await group_model_1.default.findById(req.body.group);
         if (!group) {
-            res.status(400).json({
-                success: false,
-                message: "Group doesn't exist"
-            });
-            return;
+            return (0, responseHandler_1.sendBadRequest)({ res, message: "Group doesn't exist" });
         }
         const result = await generic_service_1.default.createGeneric(req.body);
         (0, responseHandler_1.sendCreateResponse)({ res, result, entity: constants_1.entities.generic });
     }
     catch (error) {
-        console.error(error);
-        (0, responseHandler_1.sendErrorResponse)({
-            res,
-            error,
-            entity: constants_1.entities.unit,
-        });
+        (0, responseHandler_1.sendErrorResponse)({ res, error, entity: constants_1.entities.generic });
     }
 };
 exports.createGeneric = createGeneric;
-// 
 const updateGeneric = async (req, res) => {
     try {
         if (req.body.group && !(await group_model_1.default.findById(req.body.group))) {
-            res.status(400).json({
-                success: false,
-                message: "Group doesn't exist",
-            });
-            return;
+            return (0, responseHandler_1.sendBadRequest)({ res, message: "Group doesn't exist" });
         }
         const result = await generic_service_1.default.updateGeneric({
             id: req.params.id,
@@ -80,32 +54,20 @@ const updateGeneric = async (req, res) => {
         (0, responseHandler_1.sendUpdateResponse)({ res, result, entity: constants_1.entities.generic });
     }
     catch (error) {
-        console.log(`--log-- ` + JSON.stringify(error));
-        (0, responseHandler_1.sendErrorResponse)({
-            res,
-            error,
-            entity: constants_1.entities.unit,
-        });
+        (0, responseHandler_1.sendErrorResponse)({ res, error, entity: constants_1.entities.generic });
     }
 };
 exports.updateGeneric = updateGeneric;
-// 
 const deleteGeneric = async (req, res) => {
     try {
         const result = await generic_service_1.default.deleteGeneric(req.params.id);
         (0, responseHandler_1.sendDeletionResponse)({ res, result, entity: constants_1.entities.generic });
     }
     catch (error) {
-        console.error(error);
-        (0, responseHandler_1.sendErrorResponse)({
-            res,
-            error,
-            entity: constants_1.entities.unit,
-        });
+        (0, responseHandler_1.sendErrorResponse)({ res, error, entity: constants_1.entities.generic });
     }
 };
 exports.deleteGeneric = deleteGeneric;
-// 
 exports.default = {
     getGenerics: exports.getGenerics,
     getSingleGeneric: exports.getSingleGeneric,

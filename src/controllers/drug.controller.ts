@@ -20,7 +20,7 @@ export const getDrugs: TypeController = async (req, res) => {
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.drug,
     });
   }
 };
@@ -34,7 +34,7 @@ export const getSingleDrug: TypeController = async (req, res) => {
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.drug,
     });
   }
 };
@@ -48,7 +48,7 @@ export const createDrug: TypeController = async (req, res) => {
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.drug,
     });
   }
 };
@@ -65,7 +65,7 @@ export const updateDrug: TypeController = async (req, res) => {
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.drug,
     });
   }
 };
@@ -79,7 +79,7 @@ export const deleteDrug: TypeController = async (req, res) => {
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.drug,
     });
   }
 };

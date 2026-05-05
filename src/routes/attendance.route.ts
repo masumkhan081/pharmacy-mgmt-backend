@@ -1,34 +1,42 @@
 import express from "express";
 const router = express.Router();
 import {
-  createUnit,
-  getUnits,
-  getSingleUnit,
-  updateUnit,
-  deleteUnit,
-} from "../controllers/unit.controller"; // controller functions
+  createAttendance,
+  getAttendances,
+  getSingleAttendance,
+  updateAttendance,
+  deleteAttendance,
+} from "../controllers/attendance.controller";
 import validateRequest from "../middlewares/validateRequest";
 import { attendanceSchema } from "../schemas/attendance.schema";
 import { validateObjectId } from "../middlewares/validateId";
 import accessControl from "../middlewares/aceessControl";
 import { userRoles } from "../config/constants";
 
-router.get("/", getUnits);
+router.get("/", getAttendances);
 
-router.get("/:id", getSingleUnit);
+router.get("/:id", validateObjectId, getSingleAttendance);
 
-router.post("/", validateRequest(attendanceSchema), accessControl([userRoles.admin]), createUnit);
+router.post(
+  "/",
+  validateRequest(attendanceSchema),
+  accessControl([userRoles.admin]),
+  createAttendance
+);
 
 router.patch(
   "/:id",
   validateObjectId,
   validateRequest(attendanceSchema),
   accessControl([userRoles.admin]),
-  updateUnit
+  updateAttendance
 );
 
-router.delete("/:id",  validateObjectId, 
-  accessControl([userRoles.admin]), deleteUnit);
+router.delete(
+  "/:id",
+  validateObjectId,
+  accessControl([userRoles.admin]),
+  deleteAttendance
+);
 
-//
 export default router;

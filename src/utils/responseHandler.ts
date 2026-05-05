@@ -1,86 +1,209 @@
 import { Response } from "express";
 import { TypeResponsePayload } from "../types/requestResponse";
-//
+
 interface ErrorPayload {
   res: Response;
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   error: any;
-  entity?: string; // Optional entity for specific error messages
+  entity?: string;
 }
-//
-export const sendSingleFetchResponse = ({
-  res,
-  result,
-  entity,
-}: TypeResponsePayload) => {
-  const statusCode: number = result
-    ? responseMap.fetch.code
-    : responseMap.notFound.code;
-  res.status(statusCode).json({
-    statusCode,
-    success: result ? true : false,
-    message: result
-      ? responseMap.fetch.message(entity)
-      : responseMap.idNotFound.message(entity),
-    data: result,
-  });
+
+interface FieldError {
+  field: string;
+  message: string;
+}
+
+interface PaginationMeta {
+  total: number;
+  page: number;
+  limit: number;
+}
+
+interface ListPayload extends TypeResponsePayload {
+  pagination?: PaginationMeta;
+}
+
+interface AdHocPayload {
+  res: Response;
+  message: string;
+  errors?: FieldError[];
+}
+
+const send = (
+  res: Response,
+  statusCode: number,
+  body: Record<string, unknown>
+): void => {
+  res.status(statusCode).json({ statusCode, ...body });
 };
-//
+
+const isPaginatedListShape = (
+  value: unknown
+): value is { meta: Record<string, unknown>; data: unknown } => {
+  return (
+    typeof value === "object" &&
+    value !== null &&
+    "meta" in value &&
+    "data" in value
+  );
+};
+
 export const sendFetchResponse = ({
   res,
   result,
   entity,
-}: TypeResponsePayload) => {
+}: TypeResponsePayload): void => {
   if (result instanceof Error) {
-    return sendErrorResponse({
-      res,
-      error: result,
-      entity,
+    return sendErrorResponse({ res, error: result, entity });
+  }
+
+  if (isPaginatedListShape(result)) {
+    return send(res, responseMap.fetch.code, {
+      success: true,
+      message: responseMap.fetch.message(entity),
+      data: result.data,
+      meta: { pagination: result.meta },
     });
   }
-  const statusCode: number = responseMap.fetch.code;
-  res.status(statusCode).json({
-    statusCode,
+
+  send(res, responseMap.fetch.code, {
     success: true,
     message: responseMap.fetch.message(entity),
     data: result,
   });
 };
-// 
-export function sendCreateResponse({ res, result, entity }: TypeResponsePayload) {
-  const statusCode: number = responseMap.create.code;
-  res.status(statusCode).json({
-    statusCode,
+
+export const sendSingleFetchResponse = ({
+  res,
+  result,
+  entity,
+}: TypeResponsePayload): void => {
+  if (!result) {
+    return sendNotFound({
+      res,
+      message: responseMap.idNotFound.message(entity),
+    });
+  }
+  send(res, responseMap.fetch.code, {
+    success: true,
+    message: responseMap.fetch.message(entity),
+    data: result,
+  });
+};
+
+export const sendListResponse = ({
+  res,
+  result,
+  entity,
+  pagination,
+}: ListPayload): void => {
+  send(res, responseMap.fetch.code, {
+    success: true,
+    message: responseMap.fetch.message(entity),
+    data: result,
+    ...(pagination ? { meta: { pagination } } : {}),
+  });
+};
+
+export const sendCreateResponse = ({
+  res,
+  result,
+  entity,
+}: TypeResponsePayload): void => {
+  send(res, responseMap.create.code, {
     success: true,
     message: responseMap.create.message(entity),
-    result,
+    data: result,
   });
-}
+};
 
-export function sendUpdateResponse({ res, result, entity }: TypeResponsePayload) {
-  const { update, notFound, idNotFound } = responseMap;
-  const isSuccess = Boolean(result);
-  const statusCode: number = isSuccess ? update.code : notFound.code;
-
-  res.status(statusCode).json({
-    statusCode,
-    success: isSuccess,
-    message: isSuccess ? update.message(entity) : idNotFound.message(entity),
-    result,
+export const sendUpdateResponse = ({
+  res,
+  result,
+  entity,
+}: TypeResponsePayload): void => {
+  if (!result) {
+    return sendNotFound({
+      res,
+      message: responseMap.idNotFound.message(entity),
+    });
+  }
+  send(res, responseMap.update.code, {
+    success: true,
+    message: responseMap.update.message(entity),
+    data: result,
   });
-}
+};
 
-export function sendDeletionResponse({ res, result, entity }: TypeResponsePayload) {
-  const statusCode: number = result ? responseMap.delete.code : responseMap.notFound.code;
-  res.status(statusCode).json({
-    statusCode,
-    success: result ? true : false,
-    message: result
-      ? responseMap.delete.message(entity)
-      : responseMap.idNotFound.message(entity),
-    result,
+export const sendDeletionResponse = ({
+  res,
+  result,
+  entity,
+}: TypeResponsePayload): void => {
+  if (!result) {
+    return sendNotFound({
+      res,
+      message: responseMap.idNotFound.message(entity),
+    });
+  }
+  send(res, responseMap.delete.code, {
+    success: true,
+    message: responseMap.delete.message(entity),
+    data: result,
   });
-}
+};
+
+export const sendBadRequest = ({
+  res,
+  message,
+  errors,
+}: AdHocPayload): void => {
+  send(res, 400, {
+    success: false,
+    message,
+    ...(errors ? { errors } : {}),
+  });
+};
+
+export const sendNotFound = ({ res, message, errors }: AdHocPayload): void => {
+  send(res, 404, {
+    success: false,
+    message,
+    ...(errors ? { errors } : {}),
+  });
+};
+
+export const sendConflict = ({ res, message, errors }: AdHocPayload): void => {
+  send(res, 409, {
+    success: false,
+    message,
+    ...(errors ? { errors } : {}),
+  });
+};
+
+export const sendUnauthorized = ({
+  res,
+  message,
+  errors,
+}: AdHocPayload): void => {
+  send(res, 401, {
+    success: false,
+    message,
+    ...(errors ? { errors } : {}),
+  });
+};
+
+export const sendForbidden = ({
+  res,
+  message,
+  errors,
+}: AdHocPayload): void => {
+  send(res, 403, {
+    success: false,
+    message,
+    ...(errors ? { errors } : {}),
+  });
+};
 
 export const sendErrorResponse = ({
   res,
@@ -89,51 +212,39 @@ export const sendErrorResponse = ({
 }: ErrorPayload): void => {
   let statusCode = 500;
   let message = "An unexpected error occurred";
-  const messages: Record<string, string> = {};
-  let type = "unknown-error";
+  let errors: FieldError[] | undefined;
 
-  console.error("sendErrorResponse:", error.message);
+  console.error("sendErrorResponse:", error?.message ?? error);
 
-  if (error?.name == "ValidationError") {
+  if (error?.name === "ValidationError") {
     statusCode = 400;
     message = "Invalid data";
-    type = "validation-error";
-    for (const [field, errorDetail] of Object.entries(error.errors)) {
-      messages[field] = (errorDetail as { message: string }).message;
-    }
+    errors = Object.entries(
+      error.errors as Record<string, { message: string }>
+    ).map(([field, detail]) => ({ field, message: detail.message }));
   } else if (error?.code === 11000) {
     statusCode = 409;
-    message = "Duplicate key error";
-    type = "duplicate-key-error";
-  } else if (error?.code === 404) {
-    statusCode = 404;
-    message = `Resource not found: ${entity}`;
-    type = "not-found-error";
-  } else if (error?.code === 409) {
-    statusCode = 409;
-    message = "Conflict error";
-    type = "conflict-error";
+    message = entity
+      ? `Resource (${entity}) already exists`
+      : "Duplicate key error";
+  } else if (error?.statusCode && error?.message) {
+    statusCode = error.statusCode;
+    message = error.message;
   } else {
-    statusCode = 500;
     message = "Server error";
-    type = "server-error";
   }
 
-  const errorResponse = {
-    statusCode,
+  send(res, statusCode, {
     success: false,
     message,
-    messages,
-    type,
-  };
-
-  res.status(statusCode).json(errorResponse);
+    ...(errors ? { errors } : {}),
+  });
 };
 
 export const responseMap = {
   create: {
     code: 201,
-    message: (entity: string) => `${entity}  created successfully`,
+    message: (entity: string) => `${entity} created successfully`,
   },
   delete: {
     code: 200,
@@ -147,35 +258,21 @@ export const responseMap = {
     code: 200,
     message: (entity: string) => `${entity} fetched successfully`,
   },
-
   idNotFound: {
     code: 404,
-    message: (entity: string) => `No resource (${entity}) with this ID.`,
+    message: (entity: string) => `No ${entity} with this id`,
   },
   alreadyExist: {
-    code: 409, // Error code for "conflict" or "Already Exists" as mongodb return
+    code: 409,
     message: (entity: string) => `Resource (${entity}) already exists`,
   },
   alreadyUsed: {
-    code: 409, // HTTP status code for "Conflict"
+    code: 409,
     message: (entity: string) =>
-      `Cannot delete ${entity}: Resource is already used by other entities`,
+      `Cannot delete ${entity}: still referenced by other entities`,
   },
-  //
-  invalid: { code: 500, message: "Invalid Request" },
-  badRequest: { code: 500, message: "Bad Request" },
-  notFound: { code: 404, message: (entity: string) => `${entity} not found` },
-  serverError: { code: 500, message: "Internal Server Error" },
-  somethingWentWrong: { code: 500, message: "Something went wrong" },
-  unauthorized: { code: 500, message: "Unauthorized Access" },
-  forbidden: { code: 500, message: "Forbidden Access" },
-
-  noData: { code: 204, message: `No Data` },
-  failInUpdate: {
-    code: 1000,
-    message: (entity: string) => `${entity} failed to update`,
+  notFound: {
+    code: 404,
+    message: (entity: string) => `${entity} not found`,
   },
-  //
-
-  creationFailed: { code: 400, message: "Creation failed" },
 };
