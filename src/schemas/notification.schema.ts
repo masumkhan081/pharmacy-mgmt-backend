@@ -24,8 +24,8 @@ const recipientSchema = z.object({
   ], {
     errorMap: () => ({ message: 'Delivery status must be one of the predefined values' }),
   }).default('PENDING'),
-  sentAt: z.date().optional(),
-  readAt: z.date().optional(),
+  sentAt: z.coerce.date().optional(),
+  readAt: z.coerce.date().optional(),
 });
 
 // Schema for notification action
@@ -48,7 +48,7 @@ const recurringPatternSchema = z.object({
   }),
   interval: z.number().int().min(1, 'Interval must be at least 1'),
   endAfter: z.number().int().optional(), // Number of occurrences, null for indefinite
-  endDate: z.date().optional(),
+  endDate: z.coerce.date().optional(),
 }).optional();
 
 // Create schema - for creating new notifications
@@ -82,8 +82,8 @@ export const createNotificationSchema = z.object({
   }).optional(),
   relatedEntityId: z.string().refine(objectIdValidator, { message: 'Invalid entity ID format' }).optional(),
   action: actionSchema,
-  scheduledFor: z.date().default(() => new Date()),
-  expiresAt: z.date().optional(),
+  scheduledFor: z.coerce.date().default(() => new Date()),
+  expiresAt: z.coerce.date().optional(),
   isRecurring: z.boolean().default(false),
   recurringPattern: recurringPatternSchema,
   createdBy: z.string().refine(objectIdValidator, { message: 'Invalid user ID format' }).optional(),
@@ -107,8 +107,8 @@ export const updateNotificationSchema = z.object({
   }).optional(),
   recipients: z.array(recipientSchema).min(1, 'At least one recipient is required').optional(),
   action: actionSchema,
-  scheduledFor: z.date().optional(),
-  expiresAt: z.date().optional(),
+  scheduledFor: z.coerce.date().optional(),
+  expiresAt: z.coerce.date().optional(),
   isRecurring: z.boolean().optional(),
   recurringPattern: recurringPatternSchema,
   metadata: z.record(z.any()).optional(),
@@ -119,7 +119,7 @@ export const createRefillReminderSchema = z.object({
   customer: z.string().refine(objectIdValidator, { message: 'Invalid customer ID format' }),
   prescription: z.string().refine(objectIdValidator, { message: 'Invalid prescription ID format' }).optional(),
   drug: z.string().refine(objectIdValidator, { message: 'Invalid drug ID format' }),
-  dueDate: z.date(),
+  dueDate: z.coerce.date(),
   daysSupply: z.number().int().min(1, 'Days supply must be at least 1'),
   reminderDays: z.number().int().min(1, 'Reminder days must be at least 1').default(3),
   status: z.enum([

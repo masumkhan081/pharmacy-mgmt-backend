@@ -32,7 +32,7 @@ const bankTransferDetailsSchema = z.object({
 export const createPaymentSchema = z.object({
   invoice: z.string().refine(objectIdValidator, { message: 'Invalid invoice ID format' }).optional(),
   amount: z.number().min(0.01, 'Payment amount must be at least 0.01'),
-  paymentDate: z.date().default(() => new Date()),
+  paymentDate: z.coerce.date().default(() => new Date()),
   paymentMethod: z.enum([
     'CASH', 'CREDIT_CARD', 'DEBIT_CARD', 'MOBILE_BANKING', 'BANK_TRANSFER', 'INSURANCE', 'OTHER'
   ], {
@@ -75,7 +75,7 @@ export const updatePaymentSchema = z.object({
   
   // Updatable fields
   amount: z.number().min(0.01, 'Payment amount must be at least 0.01').optional(),
-  paymentDate: z.date().optional(),
+  paymentDate: z.coerce.date().optional(),
   paymentMethod: z.enum([
     'CASH', 'CREDIT_CARD', 'DEBIT_CARD', 'MOBILE_BANKING', 'BANK_TRANSFER', 'INSURANCE', 'OTHER'
   ], {

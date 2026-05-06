@@ -12,7 +12,7 @@ export const validateObjectId = (
     sendBadRequest({
       res,
       message: "Invalid ID format. Please provide a valid ObjectId.",
-      errors: [{ field: "id", message: id }],
+      errors: [{ field: "id", message: String(id) }],
     });
     return;
   }

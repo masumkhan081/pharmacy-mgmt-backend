@@ -19,6 +19,15 @@ import purchaseRoutes from "./routes/purchase.route";
 import saleRoutes from "./routes/sale.route";
 import attendanceRoutes from "./routes/attendance.route";
 import supplierRoutes from "./routes/supplier.route";
+import customerRoutes from "./routes/customer.route";
+import doctorRoutes from "./routes/doctor.route";
+import prescriptionRoutes from "./routes/prescription.route";
+import inventoryAlertRoutes from "./routes/inventoryAlert.route";
+import inventoryBatchRoutes from "./routes/inventoryBatch.route";
+import invoiceRoutes from "./routes/invoice.route";
+import notificationRoutes from "./routes/notification.route";
+import paymentRoutes from "./routes/payment.route";
+import returnRoutes from "./routes/return.route";
 import unitModel from "./models/unit.model";
 // 
 // middlewares
@@ -53,6 +62,15 @@ app.use("/api/purchases", purchaseRoutes);
 app.use("/api/sales", saleRoutes);
 app.use("/api/attendances", attendanceRoutes);
 app.use("/api/suppliers", supplierRoutes);
+app.use("/api/customers", customerRoutes);
+app.use("/api/doctors", doctorRoutes);
+app.use("/api/prescriptions", prescriptionRoutes);
+app.use("/api/inventory-alerts", inventoryAlertRoutes);
+app.use("/api/inventory-batches", inventoryBatchRoutes);
+app.use("/api/invoices", invoiceRoutes);
+app.use("/api/notifications", notificationRoutes);
+app.use("/api/payments", paymentRoutes);
+app.use("/api/returns", returnRoutes);
 //
 app.use((req: Request, res: Response) => {
   res.status(404).json({

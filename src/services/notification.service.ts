@@ -42,6 +42,11 @@ const updateNotification = async ({ id, data }: { id: IDType; data: any }) => {
     .populate('recipients.recipientId', 'name email');
 };
 
+// Delete a notification
+const deleteNotification = async (id: IDType) => {
+  return await Notification.findByIdAndDelete(id);
+};
+
 // Mark notification as read
 const markAsRead = async ({ id, userId }: { id: IDType; userId: IDType }) => {
   return await Notification.findOneAndUpdate(
@@ -278,6 +283,7 @@ export default {
   createNotification,
   getSingleNotification,
   updateNotification,
+  deleteNotification,
   markAsRead,
   markAllAsRead,
   getUnreadCount,

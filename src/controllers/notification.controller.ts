@@ -87,6 +87,21 @@ export const updateNotification: TypeController = async (req, res) => {
   }
 };
 
+// Delete a notification
+export const deleteNotification: TypeController = async (req, res) => {
+  try {
+    const result = await notificationService.deleteNotification(req.params.id);
+    sendDeletionResponse({ res, result, entity: entities.notification });
+  } catch (error) {
+    console.error(error);
+    sendErrorResponse({
+      res,
+      error,
+      entity: entities.notification,
+    });
+  }
+};
+
 // Mark notification as read
 export const markAsRead: TypeController = async (req, res) => {
   try {

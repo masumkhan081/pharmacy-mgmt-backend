@@ -24,6 +24,15 @@ const purchase_route_1 = __importDefault(require("./routes/purchase.route"));
 const sale_route_1 = __importDefault(require("./routes/sale.route"));
 const attendance_route_1 = __importDefault(require("./routes/attendance.route"));
 const supplier_route_1 = __importDefault(require("./routes/supplier.route"));
+const customer_route_1 = __importDefault(require("./routes/customer.route"));
+const doctor_route_1 = __importDefault(require("./routes/doctor.route"));
+const prescription_route_1 = __importDefault(require("./routes/prescription.route"));
+const inventoryAlert_route_1 = __importDefault(require("./routes/inventoryAlert.route"));
+const inventoryBatch_route_1 = __importDefault(require("./routes/inventoryBatch.route"));
+const invoice_route_1 = __importDefault(require("./routes/invoice.route"));
+const notification_route_1 = __importDefault(require("./routes/notification.route"));
+const payment_route_1 = __importDefault(require("./routes/payment.route"));
+const return_route_1 = __importDefault(require("./routes/return.route"));
 const unit_model_1 = __importDefault(require("./models/unit.model"));
 // 
 // middlewares
@@ -56,6 +65,15 @@ app.use("/api/purchases", purchase_route_1.default);
 app.use("/api/sales", sale_route_1.default);
 app.use("/api/attendances", attendance_route_1.default);
 app.use("/api/suppliers", supplier_route_1.default);
+app.use("/api/customers", customer_route_1.default);
+app.use("/api/doctors", doctor_route_1.default);
+app.use("/api/prescriptions", prescription_route_1.default);
+app.use("/api/inventory-alerts", inventoryAlert_route_1.default);
+app.use("/api/inventory-batches", inventoryBatch_route_1.default);
+app.use("/api/invoices", invoice_route_1.default);
+app.use("/api/notifications", notification_route_1.default);
+app.use("/api/payments", payment_route_1.default);
+app.use("/api/returns", return_route_1.default);
 //
 app.use((req, res) => {
     res.status(404).json({

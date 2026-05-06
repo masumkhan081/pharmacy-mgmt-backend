@@ -1,5 +1,5 @@
-import jwt from "jsonwebtoken";
-import bcrypt from "bcrypt";
+import jwt, { SignOptions } from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 import config from "../config";
 
 interface TokenPayload {
@@ -21,7 +21,7 @@ export const createToken = ({
   try {
     return jwt.sign(payload, config.tokenSecret, {
       expiresIn: expireTime,
-    });
+    } as SignOptions);
   } catch (error) {
     if (error instanceof Error) {
       console.error("Error creating token:", error.message);

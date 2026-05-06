@@ -6,7 +6,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.verifyToken = exports.createToken = void 0;
 exports.getHashedPassword = getHashedPassword;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const config_1 = __importDefault(require("../config"));
 const createToken = ({ payload, expireTime, }) => {
     try {
@@ -40,8 +40,8 @@ exports.verifyToken = verifyToken;
 //
 async function getHashedPassword(password) {
     try {
-        const salt = await bcrypt_1.default.genSalt(10);
-        return bcrypt_1.default.hash(password, salt);
+        const salt = await bcryptjs_1.default.genSalt(10);
+        return bcryptjs_1.default.hash(password, salt);
     }
     catch (error) {
         console.error("Error generating hash from password:", error);

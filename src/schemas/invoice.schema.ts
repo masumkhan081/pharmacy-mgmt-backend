@@ -23,8 +23,8 @@ export const createInvoiceSchema = z.object({
   customer: z.string().refine(objectIdValidator, { message: 'Invalid customer ID format' }),
   sale: z.string().refine(objectIdValidator, { message: 'Invalid sale ID format' }).optional(),
   prescription: z.string().refine(objectIdValidator, { message: 'Invalid prescription ID format' }).optional(),
-  issueDate: z.date().default(() => new Date()),
-  dueDate: z.date(),
+  issueDate: z.coerce.date().default(() => new Date()),
+  dueDate: z.coerce.date(),
   items: z.array(invoiceItemSchema).min(1, 'At least one item is required'),
   subtotal: z.number().min(0, 'Subtotal cannot be negative'),
   taxTotal: z.number().min(0, 'Tax total cannot be negative'),
@@ -55,8 +55,8 @@ export const updateInvoiceSchema = z.object({
   prescription: z.string().refine(objectIdValidator, { message: 'Invalid prescription ID format' }).optional(),
   
   // Updatable fields
-  issueDate: z.date().optional(),
-  dueDate: z.date().optional(),
+  issueDate: z.coerce.date().optional(),
+  dueDate: z.coerce.date().optional(),
   items: z.array(invoiceItemSchema).min(1, 'At least one item is required').optional(),
   subtotal: z.number().min(0, 'Subtotal cannot be negative').optional(),
   taxTotal: z.number().min(0, 'Tax total cannot be negative').optional(),

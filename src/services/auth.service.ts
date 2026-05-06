@@ -1,5 +1,5 @@
 import User from "../models/user.model";
-import bcrypt from "bcrypt";
+import bcrypt from "bcryptjs";
 import { sendOTPMail } from "../utils/mail";
 import config from "../config";
 import jwt from "jsonwebtoken";
@@ -164,7 +164,7 @@ async function login({
         expire: 2628000000 + Date.now(),
       },
       config.tokenSecret,
-      config.jwtOptions
+      config.jwtOptions as jwt.SignOptions
     );
 
     user.isActive = true;

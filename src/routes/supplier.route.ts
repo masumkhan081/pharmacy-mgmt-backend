@@ -6,9 +6,12 @@ import {
   getSingleSupplier,
   updateSupplier,
   deleteSupplier,
-} from "../controllers/supplier.controller"; // controller functions
+} from "../controllers/supplier.controller";
 import validateRequest from "../middlewares/validateRequest";
-import { supplierSchema } from "../schemas/supplier.schema";
+import {
+  supplierSchema,
+  updateSupplierSchema,
+} from "../schemas/supplier.schema";
 import { validateObjectId } from "../middlewares/validateId";
 import accessControl from "../middlewares/aceessControl";
 import { userRoles } from "../config/constants";
@@ -19,24 +22,24 @@ router.get("/:id", validateObjectId, getSingleSupplier);
 
 router.post(
   "/",
-  accessControl([userRoles.admin]),
   validateRequest(supplierSchema),
+  accessControl([userRoles.admin]),
   createSupplier
 );
 
 router.patch(
   "/:id",
-  accessControl([userRoles.admin]),
   validateObjectId,
+  validateRequest(updateSupplierSchema),
+  accessControl([userRoles.admin]),
   updateSupplier
 );
 
 router.delete(
   "/:id",
-  accessControl([userRoles.admin]),
   validateObjectId,
+  accessControl([userRoles.admin]),
   deleteSupplier
 );
 
-//
 export default router;

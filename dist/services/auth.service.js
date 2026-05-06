@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const user_model_1 = __importDefault(require("../models/user.model"));
-const bcrypt_1 = __importDefault(require("bcrypt"));
+const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const mail_1 = require("../utils/mail");
 const config_1 = __importDefault(require("../config"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
@@ -84,7 +84,7 @@ async function login({ res, email, password, }) {
         if (!user) {
             return (0, responseHandler_1.sendBadRequest)({ res, message: "Wrong Credentials" });
         }
-        const isPasswordValid = await bcrypt_1.default.compare(password, user.password);
+        const isPasswordValid = await bcryptjs_1.default.compare(password, user.password);
         if (!isPasswordValid) {
             return (0, responseHandler_1.sendBadRequest)({ res, message: "Wrong Credentials" });
         }

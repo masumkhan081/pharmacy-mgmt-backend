@@ -31,7 +31,7 @@ const returnBase = z.object({
   ], {
     errorMap: () => ({ message: 'Return type must be one of the predefined values' }),
   }),
-  returnDate: z.date().default(() => new Date()),
+  returnDate: z.coerce.date().default(() => new Date()),
   customer: z.string().refine(objectIdValidator, { message: 'Invalid customer ID format' }).optional(),
   supplier: z.string().refine(objectIdValidator, { message: 'Invalid supplier ID format' }).optional(),
   originalInvoice: z.string().refine(objectIdValidator, { message: 'Invalid invoice ID format' }).optional(),
@@ -44,7 +44,7 @@ const returnBase = z.object({
   ], {
     errorMap: () => ({ message: 'Refund method must be one of the predefined values' }),
   }).optional(),
-  refundDate: z.date().optional(),
+  refundDate: z.coerce.date().optional(),
   status: z.enum([
     'PENDING', 'APPROVED', 'REJECTED', 'COMPLETED', 'CANCELLED'
   ], {
