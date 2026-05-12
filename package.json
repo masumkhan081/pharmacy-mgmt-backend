@@ -14,6 +14,7 @@
     "lint": "eslint . --fix",
     "check-types": "tsc --noEmit",
     "check": "npm run lint && npm run check-types",
+    "prismaa": "npx prisma generate; npx prisma migrate dev",
     "prepare": "husky install",
     "seed": "node seeders/seed.all.js",
     "seed:units": "node seeders/seed.units.js",
@@ -31,6 +32,9 @@
     "seed:salaries": "node seeders/seed.salaries.js",
     "seed:attendances": "node seeders/seed.attendances.js"
   },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  },
   "lint-staged": {
     "src/**/*.ts": "eslint --fix",
     "seeders/**/*.js": "eslint --fix"
@@ -44,14 +48,15 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@prisma/client": "^7.8.0",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "crypto-js": "^4.2.0",
     "dotenv": "^16.4.5",
     "express": "^4.21.1",
+    "express-rate-limit": "^8.5.1",
     "http-status": "^2.0.0",
     "jsonwebtoken": "^9.0.2",
-    "mongoose": "^8.8.2",
     "nodemailer": "^6.9.16",
     "zod": "^3.23.8"
   },
@@ -71,6 +76,8 @@
     "lint-staged": "^15.2.10",
     "nodemon": "^3.1.9",
     "prettier": "^3.3.3",
+    "prisma": "^7.8.0",
+    "ts-node": "^10.9.2",
     "typescript": "^5.7.2",
     "typescript-eslint": "^8.16.0"
   }

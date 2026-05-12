@@ -19,7 +19,7 @@ export const getSales: TypeController = async (req, res) => {
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.sale,
     });
   }
 };
@@ -33,59 +33,48 @@ export const getSingleSale: TypeController = async (req, res) => {
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.sale,
     });
   }
 };
 // 
 export const createSale: TypeController = async (req, res) => {
   try {
-    const result = await saleService.createSale(req.body);
+    const result = await saleService.createSale({
+      ...req.body,
+      actor: req.user?.id,
+    });
     sendCreateResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
-    });
-  }
-};
-// 
-export const updateSale: TypeController = async (req, res) => {
-  try {
-    const result = await saleService.updateSale({
-      id: req.params.id,
-      data: req.body,
-    });
-    sendUpdateResponse({ res, result, entity: entities.sale });
-  } catch (error) {
-    console.error(error);
-    sendErrorResponse({
-      res,
-      error,
-      entity: entities.unit,
+      entity: entities.sale,
     });
   }
 };
 // 
 export const deleteSale: TypeController = async (req, res) => {
   try {
-    const result = await saleService.deleteSale(req.params.id);
+    const result = await saleService.deleteSale({
+      id: req.params.id,
+      actor: req.user?.id,
+    });
     sendDeletionResponse({ res, result, entity: entities.sale });
   } catch (error) {
     console.error(error);
     sendErrorResponse({
       res,
       error,
-      entity: entities.unit,
+      entity: entities.sale,
     });
   }
 };
 
 export default {
   getSales,
+  getSingleSale,
   createSale,
-  updateSale,
   deleteSale,
 };

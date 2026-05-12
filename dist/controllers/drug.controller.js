@@ -40,16 +40,12 @@ const getSingleDrug = async (req, res) => {
 exports.getSingleDrug = getSingleDrug;
 const createDrug = async (req, res) => {
     try {
-        const result = await drug_service_1.default.createDrug(req.body);
+        const result = await drug_service_1.default.createDrug({ ...req.body, actor: req.user?.id });
         (0, responseHandler_1.sendCreateResponse)({ res, result, entity: constants_1.entities.drug });
     }
     catch (error) {
         console.error(error);
-        (0, responseHandler_1.sendErrorResponse)({
-            res,
-            error,
-            entity: constants_1.entities.drug,
-        });
+        (0, responseHandler_1.sendErrorResponse)({ res, error, entity: constants_1.entities.drug });
     }
 };
 exports.createDrug = createDrug;
@@ -58,31 +54,24 @@ const updateDrug = async (req, res) => {
         const result = await drug_service_1.default.updateDrug({
             id: req.params.id,
             data: req.body,
+            actor: req.user?.id,
         });
         (0, responseHandler_1.sendUpdateResponse)({ res, result, entity: constants_1.entities.drug });
     }
     catch (error) {
         console.error(error);
-        (0, responseHandler_1.sendErrorResponse)({
-            res,
-            error,
-            entity: constants_1.entities.drug,
-        });
+        (0, responseHandler_1.sendErrorResponse)({ res, error, entity: constants_1.entities.drug });
     }
 };
 exports.updateDrug = updateDrug;
 const deleteDrug = async (req, res) => {
     try {
-        const result = await drug_service_1.default.deleteDrug(req.params.id);
+        const result = await drug_service_1.default.deleteDrug({ id: req.params.id, actor: req.user?.id });
         (0, responseHandler_1.sendDeletionResponse)({ res, result, entity: constants_1.entities.drug });
     }
     catch (error) {
         console.error(error);
-        (0, responseHandler_1.sendErrorResponse)({
-            res,
-            error,
-            entity: constants_1.entities.drug,
-        });
+        (0, responseHandler_1.sendErrorResponse)({ res, error, entity: constants_1.entities.drug });
     }
 };
 exports.deleteDrug = deleteDrug;

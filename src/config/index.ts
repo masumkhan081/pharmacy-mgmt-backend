@@ -1,5 +1,4 @@
-import dotenv from "dotenv";
-dotenv.config();
+import { env } from "./env";
 
 interface Config {
   baseUrl: string;
@@ -17,28 +16,26 @@ interface Config {
   };
   senderMail: string;
   senderMailPassword: string;
+  brevoApiKey?: string;
 }
 
 const config: Config = {
-  baseUrl: process.env.BASE_URL || "http://localhost:3000/",
+  baseUrl: process.env.BASE_URL || `http://localhost:${env.PORT}/`,
   appName: "pharmacy-mgmt",
-  port: Number(process.env.PORT) || 3000,
+  port: env.PORT,
   dbName: "pharmacy-management",
-  dbUrl:
-    process.env.DB_URL ||
-    "mongodb+srv://masumkhan:pddrgj3q@drugs.dvfzpkl.mongodb.net/",
-  tokenSecret: process.env.JWT_ACCESS_TOKEN_SECRET || "i-act-as-token-secret",
-  refreshTokenSecret:
-    process.env.JWT_REFRESH_TOKEN_SECRET || "i-act-as-refresh-token-secret",
-  tokenHeaderKey: process.env.tkn_header_key || "authorization",
-  mailHost: process.env.MAIL_HOST || "smtp.gmail.com",
+  dbUrl: env.DB_URL,
+  tokenSecret: env.JWT_ACCESS_TOKEN_SECRET,
+  refreshTokenSecret: env.JWT_REFRESH_TOKEN_SECRET,
+  tokenHeaderKey: env.tkn_header_key,
+  mailHost: env.MAIL_HOST,
   saltRounds: 12,
   jwtOptions: {
-    expiresIn: "730h", // Token will expire after 30 days
+    expiresIn: "730h", // 30 days
   },
-  // Removed duplicate mailHost property
-  senderMail: process.env.SENDER_MAIL || "masumkhan081.3s@gmail.com",
-  senderMailPassword: process.env.SENDER_MAIL_PASSWORD || "uigctmtbjzdyfxoa",
+  senderMail: env.SENDER_MAIL || "",
+  senderMailPassword: env.SENDER_MAIL_PASSWORD || "",
+  brevoApiKey: env.BREVO_API_KEY,
 };
 
 export default config;

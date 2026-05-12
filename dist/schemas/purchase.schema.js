@@ -9,10 +9,19 @@ const purchaseItemSchema = zod_1.z.object({
         .string()
         .refine(objectIdValidator, { message: "Invalid drug ID format" }),
     quantity: zod_1.z.number().int().min(1, "Quantity must be at least 1"),
-    unitPrice: zod_1.z.number().min(0.01, "Unit price must be at least 0.01"),
+    purchasePrice: zod_1.z.number().min(0.01, "Purchase price must be at least 0.01"),
+    mrp: zod_1.z.number().min(0.01, "MRP must be at least 0.01"),
+    batchNumber: zod_1.z.string().min(1, "Batch number is required"),
+    expirationDate: zod_1.z.coerce.date().refine((date) => date > new Date(), {
+        message: "Expiration date must be in the future",
+    }),
 });
 exports.purchaseSchema = zod_1.z.object({
     purchaseAt: zod_1.z.coerce.date(),
+    supplier: zod_1.z
+        .string()
+        .refine(objectIdValidator, { message: "Invalid supplier ID format" })
+        .optional(),
     drugs: zod_1.z.array(purchaseItemSchema).min(1, "At least one item is required"),
     bill: zod_1.z.number().min(0.01, "Bill amount must be at least 0.01"),
 });

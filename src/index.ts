@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import app from "./app";
-import initDB from "./config/mongodb";
 import config from "./config";
 //np
 async function bootstrap() {
@@ -9,8 +8,6 @@ async function bootstrap() {
   try {
     server = app.listen(config.port, async () => {
       console.log(`Server running on port ${config.port}`);
-      // Initialize the database
-      await initDB();
     });
 
     const exitHandler = () => {

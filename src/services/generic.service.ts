@@ -1,18 +1,18 @@
 import { entities } from "../config/constants";
-import Generic from "../models/generic.model";
+import genericRepository from "../repositories/generic.repository";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { IGeneric, IGenericUpdatePayload } from "../types/generic.type";
 import getSearchAndPagination from "../utils/queryHandler";
-//
-const createGeneric = async (data: IGeneric) => await Generic.create(data);
-//
-const getSingleGeneric = async (id: IDType) => Generic.findById(id);
-//
-const updateGeneric = async ({ id, data }: IGenericUpdatePayload) =>
-  await Generic.findByIdAndUpdate(id, data, { new: true });
-//
-const deleteGeneric = async (id: IDType) => await Generic.findByIdAndDelete(id);
-//
+import prisma from "../lib/prisma";
+
+const createGeneric = async (data: any) => await genericRepository.create(data);
+
+const getSingleGeneric = async (id: IDType) => await genericRepository.findById(id as string);
+
+const updateGeneric = async ({ id, data }: { id: IDType; data: any }) =>
+  await genericRepository.update(id as string, data);
+
+const deleteGeneric = async (id: IDType) => await genericRepository.deleteById(id as string);
+
 async function getGenerics(query: QueryParams) {
   try {
     const {
@@ -21,16 +21,22 @@ async function getGenerics(query: QueryParams) {
       viewSkip,
       sortBy,
       sortOrder,
-      filterConditions,
-      sortConditions,
+      searchTerm,
     } = getSearchAndPagination({ query, entity: entities.generic });
 
-    const fetchResult = await Generic.find(filterConditions)
-      .sort(sortConditions)
-      .skip(viewSkip)
-      .limit(viewLimit);
+    const where = searchTerm ? {
+      name: { contains: searchTerm, mode: "insensitive" } as any
+    } : {};
 
-    const total = await Generic.countDocuments(filterConditions);
+    const fetchResult = await prisma.generic.findMany({
+      where,
+      skip: viewSkip,
+      take: viewLimit,
+      orderBy: sortBy ? { [sortBy]: sortOrder ?? "desc" } : { createdAt: "desc" },
+    });
+
+    const total = await prisma.generic.count({ where });
+    
     return {
       meta: {
         total,

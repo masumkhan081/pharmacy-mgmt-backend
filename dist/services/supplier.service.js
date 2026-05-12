@@ -4,25 +4,28 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const constants_1 = require("../config/constants");
-const supplier_model_1 = __importDefault(require("../models/supplier.model"));
+const prisma_1 = __importDefault(require("../lib/prisma"));
 const queryHandler_1 = __importDefault(require("../utils/queryHandler"));
-//
-const createSupplier = async (data) => await supplier_model_1.default.create(data);
-//
-const getSingleSupplier = async (id) => supplier_model_1.default.findById(id);
-//
-const updateSupplier = async ({ id, data }) => await supplier_model_1.default.findByIdAndUpdate(id, data, { new: true });
-//
-const deleteSupplier = async (id) => await supplier_model_1.default.findByIdAndDelete(id);
-//
+const createSupplier = async (data) => await prisma_1.default.supplier.create({ data });
+const getSingleSupplier = async (id) => await prisma_1.default.supplier.findUnique({ where: { id: id } });
+const updateSupplier = async ({ id, data }) => await prisma_1.default.supplier.update({ where: { id: id }, data });
+const deleteSupplier = async (id) => await prisma_1.default.supplier.delete({ where: { id: id } });
 async function getSuppliers(query) {
     try {
-        const { currentPage, viewLimit, viewSkip, sortBy, sortOrder, filterConditions, sortConditions, } = (0, queryHandler_1.default)({ query, entity: constants_1.entities.supplier });
-        const fetchResult = await supplier_model_1.default.find(filterConditions)
-            .sort(sortConditions)
-            .skip(viewSkip)
-            .limit(viewLimit);
-        const total = await supplier_model_1.default.countDocuments(filterConditions);
+        const { currentPage, viewLimit, viewSkip, sortBy, sortOrder, searchTerm, } = (0, queryHandler_1.default)({ query, entity: constants_1.entities.supplier });
+        const where = searchTerm ? {
+            OR: [
+                { name: { contains: searchTerm, mode: "insensitive" } },
+                { email: { contains: searchTerm, mode: "insensitive" } },
+            ]
+        } : {};
+        const fetchResult = await prisma_1.default.supplier.findMany({
+            where,
+            skip: viewSkip,
+            take: viewLimit,
+            orderBy: sortBy ? { [sortBy]: sortOrder ?? "desc" } : { createdAt: "desc" },
+        });
+        const total = await prisma_1.default.supplier.count({ where });
         return {
             meta: {
                 total,

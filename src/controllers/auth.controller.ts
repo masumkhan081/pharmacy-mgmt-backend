@@ -1,7 +1,7 @@
 import authService from "../services/auth.service";
 import { verifyToken, getHashedPassword } from "../utils/tokenisation";
 import { sendOTPMail, sendResetMail } from "../utils/mail";
-import User from "../models/user.model";
+import userRepository from "../repositories/user.repository";
 import { Request, Response } from "express";
 import { TypeController } from "../types/requestResponse";
 import {
@@ -16,7 +16,7 @@ const registerUser =
   (role: string) =>
     async (req: Request, res: Response): Promise<void> => {
       try {
-        const isExist = await User.findOne({ email: req.body.email });
+        const isExist = await userRepository.findByEmail(req.body.email);
         if (isExist) {
           return sendConflict({ res, message: "Email already registered." });
         }
@@ -30,7 +30,7 @@ const registerUser =
 
 const requestEmailVerification: TypeController = async (req, res) => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await userRepository.findByEmail(req.body.email);
 
     if (!user) {
       return sendNotFound({
@@ -87,7 +87,7 @@ const requestAccountRecovery = async (
   res: Response
 ): Promise<void> => {
   try {
-    const user = await User.findOne({ email: req.body.email });
+    const user = await userRepository.findByEmail(req.body.email);
 
     if (!user) {
       return sendBadRequest({
@@ -143,7 +143,11 @@ const verifyAccountRecovery = async (
       return sendBadRequest({ res, message: "Password reset link expired." });
     }
 
-    const user = await User.findOne({ email });
+    if (!email) {
+      return sendBadRequest({ res, message: "Invalid token payload." });
+    }
+
+    const user = await userRepository.findByEmail(email);
     if (!user) {
       return sendNotFound({ res, message: "User not found." });
     }
@@ -163,7 +167,7 @@ const updatePassword = async (req: Request, res: Response): Promise<void> => {
   try {
     const { token, email, password, confirmPassword } = req.body;
 
-    const user = await User.findOne({ email });
+    const user = await userRepository.findByEmail(email);
     if (!user) {
       return sendNotFound({
         res,

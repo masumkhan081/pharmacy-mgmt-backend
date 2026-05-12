@@ -41,15 +41,11 @@ export const getSingleDrug: TypeController = async (req, res) => {
 
 export const createDrug: TypeController = async (req, res) => {
   try {
-    const result = await drugService.createDrug(req.body);
+    const result = await drugService.createDrug({ ...req.body, actor: req.user?.id });
     sendCreateResponse({ res, result, entity: entities.drug });
   } catch (error) {
     console.error(error);
-    sendErrorResponse({
-      res,
-      error,
-      entity: entities.drug,
-    });
+    sendErrorResponse({ res, error, entity: entities.drug });
   }
 };
 
@@ -58,29 +54,22 @@ export const updateDrug: TypeController = async (req, res) => {
     const result = await drugService.updateDrug({
       id: req.params.id,
       data: req.body,
+      actor: req.user?.id,
     });
     sendUpdateResponse({ res, result, entity: entities.drug });
   } catch (error) {
     console.error(error);
-    sendErrorResponse({
-      res,
-      error,
-      entity: entities.drug,
-    });
+    sendErrorResponse({ res, error, entity: entities.drug });
   }
 };
 
 export const deleteDrug: TypeController = async (req, res) => {
   try {
-    const result = await drugService.deleteDrug(req.params.id);
+    const result = await drugService.deleteDrug({ id: req.params.id, actor: req.user?.id });
     sendDeletionResponse({ res, result, entity: entities.drug });
   } catch (error) {
     console.error(error);
-    sendErrorResponse({
-      res,
-      error,
-      entity: entities.drug,
-    });
+    sendErrorResponse({ res, error, entity: entities.drug });
   }
 };
 

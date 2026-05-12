@@ -1,23 +1,17 @@
 import { entities } from "../config/constants";
-import Formulation from "../models/formulation.model";
+import prisma from "../lib/prisma";
 import { IDType, QueryParams } from "../types/requestResponse";
-import {
-  IFormulation,
-  IFormulationUpdatePayload,
-} from "../types/formulation.type";
 import getSearchAndPagination from "../utils/queryHandler";
-//
-const createFormulation = async (data: IFormulation) =>
-  await Formulation.create(data);
-//
-const getSingleFormulation = async (id: IDType) => Formulation.findById(id);
-//
-const updateFormulation = async ({ id, data }: IFormulationUpdatePayload) =>
-  await Formulation.findByIdAndUpdate(id, data, { new: true });
-//
-const deleteFormulation = async (id: IDType) =>
-  await Formulation.findByIdAndDelete(id);
-//
+
+const createFormulation = async (data: any) => await prisma.formulation.create({ data });
+
+const getSingleFormulation = async (id: IDType) => await prisma.formulation.findUnique({ where: { id: id as string } });
+
+const updateFormulation = async ({ id, data }: { id: IDType; data: any }) =>
+  await prisma.formulation.update({ where: { id: id as string }, data });
+
+const deleteFormulation = async (id: IDType) => await prisma.formulation.delete({ where: { id: id as string } });
+
 async function getFormulations(query: QueryParams) {
   try {
     const {
@@ -26,16 +20,22 @@ async function getFormulations(query: QueryParams) {
       viewSkip,
       sortBy,
       sortOrder,
-      filterConditions,
-      sortConditions,
+      searchTerm,
     } = getSearchAndPagination({ query, entity: entities.formulation });
 
-    const fetchResult = await Formulation.find(filterConditions)
-      .sort(sortConditions)
-      .skip(viewSkip)
-      .limit(viewLimit);
+    const where = searchTerm ? {
+      name: { contains: searchTerm, mode: "insensitive" } as any
+    } : {};
 
-    const total = await Formulation.countDocuments(filterConditions);
+    const fetchResult = await prisma.formulation.findMany({
+      where,
+      skip: viewSkip,
+      take: viewLimit,
+      orderBy: sortBy ? { [sortBy]: sortOrder ?? "desc" } : { createdAt: "desc" },
+    });
+
+    const total = await prisma.formulation.count({ where });
+    
     return {
       meta: {
         total,

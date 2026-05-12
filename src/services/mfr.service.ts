@@ -1,30 +1,18 @@
-import { IDType, QueryParams } from "../types/requestResponse";
-import Manufacturer from "../models/mfr.model";
-import getSearchAndPagination from "../utils/queryHandler";
 import { entities } from "../config/constants";
+import prisma from "../lib/prisma";
+import { IDType, QueryParams } from "../types/requestResponse";
+import getSearchAndPagination from "../utils/queryHandler";
 
-// Create a new manufacturer
-const createManufacturer = async (data: any) => {
-  return await Manufacturer.create(data);
-};
+const createManufacturer = async (data: any) => await prisma.manufacturer.create({ data });
 
-// Get a single manufacturer by ID
-const getSingleManufacturer = async (id: IDType) => {
-  return await Manufacturer.findById(id);
-};
+const getSingleManufacturer = async (id: IDType) => await prisma.manufacturer.findUnique({ where: { id: id as string } });
 
-// Update a manufacturer
-const updateManufacturer = async ({ id, data }: { id: IDType; data: any }) => {
-  return await Manufacturer.findByIdAndUpdate(id, data, { new: true });
-};
+const updateManufacturer = async ({ id, data }: { id: IDType; data: any }) =>
+  await prisma.manufacturer.update({ where: { id: id as string }, data });
 
-// Delete a manufacturer
-const deleteManufacturer = async (id: IDType) => {
-  return await Manufacturer.findByIdAndDelete(id);
-};
+const deleteManufacturer = async (id: IDType) => await prisma.manufacturer.delete({ where: { id: id as string } });
 
-// Get all manufacturers with pagination and filtering
-const getManufacturers = async (query: QueryParams) => {
+async function getManufacturers(query: QueryParams) {
   try {
     const {
       currentPage,
@@ -32,19 +20,21 @@ const getManufacturers = async (query: QueryParams) => {
       viewSkip,
       sortBy,
       sortOrder,
-      filterConditions,
-      sortConditions,
-    } = getSearchAndPagination({ 
-      query, 
-      entity: entities.manufacturer 
+      searchTerm,
+    } = getSearchAndPagination({ query, entity: entities.manufacturer });
+
+    const where = searchTerm ? {
+      name: { contains: searchTerm, mode: "insensitive" } as any
+    } : {};
+
+    const fetchResult = await prisma.manufacturer.findMany({
+      where,
+      skip: viewSkip,
+      take: viewLimit,
+      orderBy: sortBy ? { [sortBy]: sortOrder ?? "desc" } : { createdAt: "desc" },
     });
 
-    const fetchResult = await Manufacturer.find(filterConditions)
-      .sort(sortConditions)
-      .skip(viewSkip)
-      .limit(viewLimit);
-
-    const total = await Manufacturer.countDocuments(filterConditions);
+    const total = await prisma.manufacturer.count({ where });
     
     return {
       meta: {
@@ -60,7 +50,7 @@ const getManufacturers = async (query: QueryParams) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 export default {
   createManufacturer,

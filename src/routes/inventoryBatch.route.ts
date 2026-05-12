@@ -6,6 +6,8 @@ import {
   getSingleInventoryBatch,
   updateInventoryBatch,
   deleteInventoryBatch,
+  getExpiringSoon,
+  getLowStock,
 } from "../controllers/inventoryBatch.controller";
 import validateRequest from "../middlewares/validateRequest";
 import {
@@ -15,6 +17,9 @@ import {
 import { validateObjectId } from "../middlewares/validateId";
 import { userRoles } from "../config/constants";
 import accessControl from "../middlewares/aceessControl";
+
+router.get("/alerts/expiring", getExpiringSoon);
+router.get("/alerts/low-stock", getLowStock);
 
 router.get("/", getInventoryBatches);
 

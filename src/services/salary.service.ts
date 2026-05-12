@@ -1,19 +1,34 @@
- 
 import { entities } from "../config/constants";
-import Salary from "../models/salary.model";
+import prisma from "../lib/prisma";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { ISalary, ISalaryUpdatePayload } from "../types/salary.type";
 import getSearchAndPagination from "../utils/queryHandler";
-//
-const getSingleSalary = async (id: IDType) => Salary.findById(id);
 
-const deleteSalary = async (id: IDType) => await Salary.findByIdAndDelete(id);
-// 
-export const createSalary = async (data: ISalary) => await Salary.create(data);
-// 
-export const updateSalary = async ({ id, data }: ISalaryUpdatePayload) =>
-  await Salary.findByIdAndUpdate(id, data, { new: true });
-// 
+const getSingleSalary = async (id: IDType) => 
+  prisma.salary.findUnique({
+    where: { id: id as string },
+    include: { staff: true }
+  });
+
+const deleteSalary = async (id: IDType) => 
+  await prisma.salary.delete({ where: { id: id as string } });
+
+const createSalary = async (data: any) => 
+  await prisma.salary.create({
+    data: {
+      staffId: data.staff,
+      amount: data.amount,
+      month: data.month,
+      year: data.year,
+      paidAt: data.paidAt || new Date(),
+    }
+  });
+
+const updateSalary = async ({ id, data }: any) =>
+  await prisma.salary.update({
+    where: { id: id as string },
+    data
+  });
+
 async function getSalaries(query: QueryParams) {
   try {
     const {
@@ -22,16 +37,25 @@ async function getSalaries(query: QueryParams) {
       viewSkip,
       sortBy,
       sortOrder,
-      filterConditions,
-      sortConditions,
+      searchTerm,
     } = getSearchAndPagination({ query, entity: entities.salary });
 
-    const fetchResult = await Salary.find(filterConditions)
-      .sort(sortConditions)
-      .skip(viewSkip)
-      .limit(viewLimit);
+    const where = searchTerm ? {
+      staff: {
+        name: { contains: searchTerm, mode: "insensitive" } as any
+      }
+    } : {};
 
-    const total = await Salary.countDocuments(filterConditions);
+    const fetchResult = await prisma.salary.findMany({
+      where,
+      skip: viewSkip,
+      take: viewLimit,
+      orderBy: sortBy ? { [sortBy]: sortOrder ?? "desc" } : { createdAt: "desc" },
+      include: { staff: true }
+    });
+
+    const total = await prisma.salary.count({ where });
+    
     return {
       meta: {
         total,

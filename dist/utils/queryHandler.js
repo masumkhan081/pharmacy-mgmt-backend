@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const constants_1 = require("../config/constants");
-const getSearchAndPagination = ({ query, entity, }) => {
+const getSearchAndPagination = (options) => {
+    const { query, entity, additionalFilters } = options;
     const { search, page, limit, searchBy, sortBy, sortOrder } = query;
     const sortField = sortBy ?? "createdAt";
     const sortDirection = sortOrder ?? "desc";
@@ -40,6 +41,14 @@ const getSearchAndPagination = ({ query, entity, }) => {
     }
     if (searchConditions.length > 0) {
         filterConditions["$or"] = searchConditions;
+    }
+    // Default query safety: exclude deleted records unless explicitly requested
+    if (query.includeDeleted !== "true") {
+        filterConditions.isDeleted = { $ne: true };
+    }
+    // Apply additional filters if passed
+    if (additionalFilters) {
+        Object.assign(filterConditions, additionalFilters);
     }
     return {
         currentPage,

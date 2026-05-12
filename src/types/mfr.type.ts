@@ -1,11 +1,15 @@
-import { Document } from "mongoose";
 import { IDType } from "./requestResponse";
 
-export interface IManufacturer extends Document {
+export interface IManufacturer {
+  id?: string;
   name: string;
+  address?: string;
+  email?: string;
+  phone?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-// Update the interface to use IDType
 export interface IManufacturerUpdatePayload {
   id: IDType;
   data: Partial<IManufacturer>;

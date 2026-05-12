@@ -1,20 +1,17 @@
- 
 import { entities } from "../config/constants";
-import Supplier from "../models/supplier.model";
+import prisma from "../lib/prisma";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { ISupplierUpdatePayload, ISupplier } from "../types/supplier.type";
 import getSearchAndPagination from "../utils/queryHandler";
-//
-const createSupplier = async (data: ISupplier) => await Supplier.create(data);
-//
-const getSingleSupplier = async (id: IDType) => Supplier.findById(id);
-//
-const updateSupplier = async ({ id, data }: ISupplierUpdatePayload) =>
-  await Supplier.findByIdAndUpdate(id, data, { new: true });
-//
+
+const createSupplier = async (data: any) => await prisma.supplier.create({ data });
+
+const getSingleSupplier = async (id: IDType) => await prisma.supplier.findUnique({ where: { id: id as string } });
+
+const updateSupplier = async ({ id, data }: { id: IDType; data: any }) =>
+  await prisma.supplier.update({ where: { id: id as string }, data });
+
 const deleteSupplier = async (id: IDType) =>
-  await Supplier.findByIdAndDelete(id);
-//
+  await prisma.supplier.delete({ where: { id: id as string } });
 
 async function getSuppliers(query: QueryParams) {
   try {
@@ -24,16 +21,25 @@ async function getSuppliers(query: QueryParams) {
       viewSkip,
       sortBy,
       sortOrder,
-      filterConditions,
-      sortConditions,
+      searchTerm,
     } = getSearchAndPagination({ query, entity: entities.supplier });
 
-    const fetchResult = await Supplier.find(filterConditions)
-      .sort(sortConditions)
-      .skip(viewSkip)
-      .limit(viewLimit);
+    const where = searchTerm ? {
+      OR: [
+        { name: { contains: searchTerm, mode: "insensitive" } as any },
+        { email: { contains: searchTerm, mode: "insensitive" } as any },
+      ]
+    } : {};
 
-    const total = await Supplier.countDocuments(filterConditions);
+    const fetchResult = await prisma.supplier.findMany({
+      where,
+      skip: viewSkip,
+      take: viewLimit,
+      orderBy: sortBy ? { [sortBy]: sortOrder ?? "desc" } : { createdAt: "desc" },
+    });
+
+    const total = await prisma.supplier.count({ where });
+
     return {
       meta: {
         total,

@@ -4,7 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const tokenisation_1 = require("../utils/tokenisation");
-const user_model_1 = __importDefault(require("../models/user.model"));
+const user_repository_1 = __importDefault(require("../repositories/user.repository"));
 const responseHandler_1 = require("../utils/responseHandler");
 const extractBearerToken = (header) => {
     if (!header)
@@ -33,7 +33,7 @@ function accessControl(accessRoles) {
                 role = payload.role;
                 userId = payload.userId;
                 if (payload.email) {
-                    const user = await user_model_1.default.findOne({ email: payload.email });
+                    const user = await user_repository_1.default.findByEmail(payload.email);
                     if (!user) {
                         (0, responseHandler_1.sendForbidden)({ res, message: "User not found" });
                         return;

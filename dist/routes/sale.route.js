@@ -14,7 +14,6 @@ const constants_1 = require("../config/constants");
 router.get("/", sale_controller_1.getSales);
 router.get("/:id", validateId_1.validateObjectId, sale_controller_1.getSingleSale);
 router.post("/", (0, aceessControl_1.default)([constants_1.userRoles.admin]), (0, validateRequest_1.default)(sale_schema_1.saleSchema), sale_controller_1.createSale);
-router.patch("/:id", (0, aceessControl_1.default)([constants_1.userRoles.admin]), validateId_1.validateObjectId, sale_controller_1.updateSale);
 router.delete("/:id", (0, aceessControl_1.default)([constants_1.userRoles.admin]), validateId_1.validateObjectId, sale_controller_1.deleteSale);
 //
 exports.default = router;

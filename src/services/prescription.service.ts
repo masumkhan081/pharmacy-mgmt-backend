@@ -1,15 +1,22 @@
 import { entities } from "../config/constants";
-import Prescription from "../models/prescription.model";
+import prisma from "../lib/prisma";
 import { IDType, QueryParams } from "../types/requestResponse";
 import getSearchAndPagination from "../utils/queryHandler";
 
-const createPrescription = async (data: any) => await Prescription.create(data);
+const createPrescription = async (data: any) => 
+  await prisma.prescription.create({
+    data: {
+      patientName: data.patientName || data.customerName,
+      doctorName: data.doctorName,
+      details: data.details || JSON.stringify(data.medications),
+      image: data.image,
+    }
+  });
 
 const getSinglePrescription = async (id: IDType) =>
-  await Prescription.findById(id)
-    .populate("customer", "fullName phone")
-    .populate("doctor", "fullName specialty")
-    .populate("medications.drug", "name");
+  await prisma.prescription.findUnique({
+    where: { id: id as string }
+  });
 
 const updatePrescription = async ({
   id,
@@ -17,10 +24,15 @@ const updatePrescription = async ({
 }: {
   id: IDType;
   data: any;
-}) => await Prescription.findByIdAndUpdate(id, data, { new: true });
+}) => await prisma.prescription.update({
+  where: { id: id as string },
+  data
+});
 
 const deletePrescription = async (id: IDType) =>
-  await Prescription.findByIdAndDelete(id);
+  await prisma.prescription.delete({
+    where: { id: id as string }
+  });
 
 async function getPrescriptions(query: QueryParams) {
   try {
@@ -30,18 +42,25 @@ async function getPrescriptions(query: QueryParams) {
       viewSkip,
       sortBy,
       sortOrder,
-      filterConditions,
-      sortConditions,
+      searchTerm,
     } = getSearchAndPagination({ query, entity: entities.prescription });
 
-    const fetchResult = await Prescription.find(filterConditions)
-      .populate("customer", "fullName")
-      .populate("doctor", "fullName")
-      .sort(sortConditions)
-      .skip(viewSkip)
-      .limit(viewLimit);
+    const where = searchTerm ? {
+      OR: [
+        { patientName: { contains: searchTerm, mode: "insensitive" } as any },
+        { doctorName: { contains: searchTerm, mode: "insensitive" } as any },
+      ]
+    } : {};
 
-    const total = await Prescription.countDocuments(filterConditions);
+    const fetchResult = await prisma.prescription.findMany({
+      where,
+      skip: viewSkip,
+      take: viewLimit,
+      orderBy: sortBy ? { [sortBy]: sortOrder ?? "desc" } : { createdAt: "desc" },
+    });
+
+    const total = await prisma.prescription.count({ where });
+
     return {
       meta: {
         total,

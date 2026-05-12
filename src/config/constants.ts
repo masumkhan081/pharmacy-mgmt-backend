@@ -57,7 +57,8 @@ export const entities = {
   prescription: "Prescription",
   expense: "Expense",
   auditTrail: "AuditTrail",
-  report: "Report"
+  report: "Report",
+  inventoryAdjustment: "InventoryAdjustment",
 };
 
 export const paginationFields = ["page", "limit", "sortBy", "sortOrder"];
@@ -84,7 +85,8 @@ export const mapSearchable = {
   [entities.prescription]: ["prescriptionNumber", "status"],
   [entities.expense]: ["description", "category"],
   [entities.auditTrail]: ["action", "entityType"],
-  [entities.report]: ["name", "type"]
+  [entities.report]: ["name", "type"],
+  [entities.inventoryAdjustment]: ["reason", "adjustmentType"],
 };
 
 export const mapFilterables = {
@@ -107,7 +109,8 @@ export const mapFilterables = {
   [entities.prescription]: ["status", "customer", "doctor"],
   [entities.expense]: ["category", "status", "paymentMethod"],
   [entities.auditTrail]: ["action", "entityType", "createdBy"],
-  [entities.report]: ["type", "status"]
+  [entities.report]: ["type", "status"],
+  [entities.inventoryAdjustment]: ["adjustmentType", "drug", "batch", "actor"],
 };
 
 // may be changed based on the outcome expected
@@ -125,5 +128,6 @@ export const mapDefaultSortBy = {
   [entities.prescription]: "-prescriptionDate",
   [entities.expense]: "-date",
   [entities.auditTrail]: "-timestamp",
-  [entities.report]: "-createdAt"
+  [entities.report]: "-createdAt",
+  [entities.inventoryAdjustment]: "-timestamp",
 };

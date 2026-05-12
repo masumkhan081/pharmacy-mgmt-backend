@@ -1,4 +1,5 @@
 // Export all services for easy importing
+export { default as inventoryMovementService } from './inventoryMovement.service';
 export { default as returnService } from './return.service';
 export { default as inventoryAlertService } from './inventoryAlert.service';
 export { default as inventoryBatchService } from './inventoryBatch.service';

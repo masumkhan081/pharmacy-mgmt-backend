@@ -1,5 +1,4 @@
 import { Request, Response, NextFunction } from "express";
-import { Types } from "mongoose";
 import { sendBadRequest } from "../utils/responseHandler";
 
 export const validateObjectId = (
@@ -8,10 +7,14 @@ export const validateObjectId = (
   next: NextFunction
 ): void => {
   const { id } = req.params;
-  if (!Types.ObjectId.isValid(id)) {
+  
+  // Standard UUID validation
+  const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(id);
+
+  if (!isUuid) {
     sendBadRequest({
       res,
-      message: "Invalid ID format. Please provide a valid ObjectId.",
+      message: "Invalid ID format. Please provide a valid UUID.",
       errors: [{ field: "id", message: String(id) }],
     });
     return;

@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import { verifyToken } from "../utils/tokenisation";
-import userModel from "../models/user.model";
+import userRepository from "../repositories/user.repository";
 import {
   sendForbidden,
   sendUnauthorized,
@@ -39,7 +39,7 @@ function accessControl(accessRoles: string[]) {
         userId = payload.userId;
 
         if (payload.email) {
-          const user = await userModel.findOne({ email: payload.email });
+          const user = await userRepository.findByEmail(payload.email);
           if (!user) {
             sendForbidden({ res, message: "User not found" });
             return;

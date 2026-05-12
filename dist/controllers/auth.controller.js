@@ -6,11 +6,11 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const auth_service_1 = __importDefault(require("../services/auth.service"));
 const tokenisation_1 = require("../utils/tokenisation");
 const mail_1 = require("../utils/mail");
-const user_model_1 = __importDefault(require("../models/user.model"));
+const user_repository_1 = __importDefault(require("../repositories/user.repository"));
 const responseHandler_1 = require("../utils/responseHandler");
 const registerUser = (role) => async (req, res) => {
     try {
-        const isExist = await user_model_1.default.findOne({ email: req.body.email });
+        const isExist = await user_repository_1.default.findByEmail(req.body.email);
         if (isExist) {
             return (0, responseHandler_1.sendConflict)({ res, message: "Email already registered." });
         }
@@ -24,7 +24,7 @@ const registerUser = (role) => async (req, res) => {
 };
 const requestEmailVerification = async (req, res) => {
     try {
-        const user = await user_model_1.default.findOne({ email: req.body.email });
+        const user = await user_repository_1.default.findByEmail(req.body.email);
         if (!user) {
             return (0, responseHandler_1.sendNotFound)({
                 res,
@@ -73,7 +73,7 @@ const login = async (req, res) => {
 };
 const requestAccountRecovery = async (req, res) => {
     try {
-        const user = await user_model_1.default.findOne({ email: req.body.email });
+        const user = await user_repository_1.default.findByEmail(req.body.email);
         if (!user) {
             return (0, responseHandler_1.sendBadRequest)({
                 res,
@@ -117,7 +117,10 @@ const verifyAccountRecovery = async (req, res) => {
         if (expireAt && new Date().getTime() >= expireAt) {
             return (0, responseHandler_1.sendBadRequest)({ res, message: "Password reset link expired." });
         }
-        const user = await user_model_1.default.findOne({ email });
+        if (!email) {
+            return (0, responseHandler_1.sendBadRequest)({ res, message: "Invalid token payload." });
+        }
+        const user = await user_repository_1.default.findByEmail(email);
         if (!user) {
             return (0, responseHandler_1.sendNotFound)({ res, message: "User not found." });
         }
@@ -135,7 +138,7 @@ const verifyAccountRecovery = async (req, res) => {
 const updatePassword = async (req, res) => {
     try {
         const { token, email, password, confirmPassword } = req.body;
-        const user = await user_model_1.default.findOne({ email });
+        const user = await user_repository_1.default.findByEmail(email);
         if (!user) {
             return (0, responseHandler_1.sendNotFound)({
                 res,

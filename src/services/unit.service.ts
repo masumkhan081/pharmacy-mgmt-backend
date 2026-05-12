@@ -1,19 +1,17 @@
-
 import { entities } from "../config/constants";
-import Unit from "../models/unit.model";
+import prisma from "../lib/prisma";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { IUnit, IUnitUpdatePayload } from "../types/unit.type";
 import getSearchAndPagination from "../utils/queryHandler";
-//
-const createUnit = async (data: IUnit) => await Unit.create(data);
-//
-const getSingleUnit = async (id: IDType) => Unit.findById(id);
-//
-const updateUnit = async ({ id, data }: IUnitUpdatePayload) =>
-  await Unit.findByIdAndUpdate(id, data, { new: true });
-//
-const deleteUnit = async (id: IDType) => await Unit.findByIdAndDelete(id);
-//
+
+const createUnit = async (data: any) => await prisma.unit.create({ data });
+
+const getSingleUnit = async (id: IDType) => await prisma.unit.findUnique({ where: { id: id as string } });
+
+const updateUnit = async ({ id, data }: any) =>
+  await prisma.unit.update({ where: { id: id as string }, data });
+
+const deleteUnit = async (id: IDType) => await prisma.unit.delete({ where: { id: id as string } });
+
 async function getUnits(query: QueryParams) {
   try {
     const {
@@ -22,16 +20,22 @@ async function getUnits(query: QueryParams) {
       viewSkip,
       sortBy,
       sortOrder,
-      filterConditions,
-      sortConditions,
+      searchTerm,
     } = getSearchAndPagination({ query, entity: entities.unit });
 
-    const fetchResult = await Unit.find(filterConditions)
-      .sort(sortConditions)
-      .skip(viewSkip)
-      .limit(viewLimit);
+    const where = searchTerm ? {
+      name: { contains: searchTerm, mode: "insensitive" } as any
+    } : {};
 
-    const total = await Unit.countDocuments(filterConditions);
+    const fetchResult = await prisma.unit.findMany({
+      where,
+      skip: viewSkip,
+      take: viewLimit,
+      orderBy: sortBy ? { [sortBy]: sortOrder ?? "desc" } : { createdAt: "desc" },
+    });
+
+    const total = await prisma.unit.count({ where });
+    
     return {
       meta: {
         total,

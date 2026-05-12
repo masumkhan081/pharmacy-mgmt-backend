@@ -1,27 +1,22 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-const dotenv_1 = __importDefault(require("dotenv"));
-dotenv_1.default.config();
+const env_1 = require("./env");
 const config = {
-    baseUrl: process.env.BASE_URL || "http://localhost:3000/",
+    baseUrl: process.env.BASE_URL || `http://localhost:${env_1.env.PORT}/`,
     appName: "pharmacy-mgmt",
-    port: Number(process.env.PORT) || 3000,
+    port: env_1.env.PORT,
     dbName: "pharmacy-management",
-    dbUrl: process.env.DB_URL ||
-        "mongodb+srv://masumkhan:pddrgj3q@drugs.dvfzpkl.mongodb.net/",
-    tokenSecret: process.env.JWT_ACCESS_TOKEN_SECRET || "i-act-as-token-secret",
-    refreshTokenSecret: process.env.JWT_REFRESH_TOKEN_SECRET || "i-act-as-refresh-token-secret",
-    tokenHeaderKey: process.env.tkn_header_key || "authorization",
-    mailHost: process.env.MAIL_HOST || "smtp.gmail.com",
+    dbUrl: env_1.env.DB_URL,
+    tokenSecret: env_1.env.JWT_ACCESS_TOKEN_SECRET,
+    refreshTokenSecret: env_1.env.JWT_REFRESH_TOKEN_SECRET,
+    tokenHeaderKey: env_1.env.tkn_header_key,
+    mailHost: env_1.env.MAIL_HOST,
     saltRounds: 12,
     jwtOptions: {
-        expiresIn: "730h", // Token will expire after 30 days
+        expiresIn: "730h", // 30 days
     },
-    // Removed duplicate mailHost property
-    senderMail: process.env.SENDER_MAIL || "masumkhan081.3s@gmail.com",
-    senderMailPassword: process.env.SENDER_MAIL_PASSWORD || "uigctmtbjzdyfxoa",
+    senderMail: env_1.env.SENDER_MAIL || "",
+    senderMailPassword: env_1.env.SENDER_MAIL_PASSWORD || "",
+    brevoApiKey: env_1.env.BREVO_API_KEY,
 };
 exports.default = config;

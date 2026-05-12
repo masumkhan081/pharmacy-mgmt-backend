@@ -9,6 +9,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 const corsMiddleware_1 = __importDefault(require("./middlewares/corsMiddleware"));
 const responseHandler_1 = require("./utils/responseHandler");
+const express_rate_limit_1 = __importDefault(require("express-rate-limit"));
 // routes
 const auth_route_1 = __importDefault(require("./routes/auth.route"));
 const unit_route_1 = __importDefault(require("./routes/unit.route"));
@@ -33,21 +34,28 @@ const invoice_route_1 = __importDefault(require("./routes/invoice.route"));
 const notification_route_1 = __importDefault(require("./routes/notification.route"));
 const payment_route_1 = __importDefault(require("./routes/payment.route"));
 const return_route_1 = __importDefault(require("./routes/return.route"));
-const unit_model_1 = __importDefault(require("./models/unit.model"));
+const inventoryAdjustment_route_1 = __importDefault(require("./routes/inventoryAdjustment.route"));
+const dashboard_route_1 = __importDefault(require("./routes/dashboard.route"));
 // 
 // middlewares
 app.use(corsMiddleware_1.default);
 app.use(express_1.default.json());
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use("/public", express_1.default.static("public"));
+const apiLimiter = (0, express_rate_limit_1.default)({
+    windowMs: 15 * 60 * 1000, // 15 minutes
+    max: 100, // Limit each IP to 100 requests per windowMs
+    standardHeaders: true,
+    legacyHeaders: false,
+    message: "Too many requests from this IP, please try again after 15 minutes",
+});
+app.use("/api", apiLimiter);
 //
 app.get("/", async (req, res) => {
-    const data = await unit_model_1.default.find({});
     res.status(200).json({
         statusCode: 200,
         success: true,
-        message: `I am functional ${req.headers.origin}`,
-        data,
+        message: "Pharmacy Engine API is functional",
     });
 });
 //
@@ -74,6 +82,8 @@ app.use("/api/invoices", invoice_route_1.default);
 app.use("/api/notifications", notification_route_1.default);
 app.use("/api/payments", payment_route_1.default);
 app.use("/api/returns", return_route_1.default);
+app.use("/api/inventory-adjustments", inventoryAdjustment_route_1.default);
+app.use("/api/dashboard", dashboard_route_1.default);
 //
 app.use((req, res) => {
     res.status(404).json({

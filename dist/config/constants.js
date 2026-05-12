@@ -58,7 +58,8 @@ exports.entities = {
     prescription: "Prescription",
     expense: "Expense",
     auditTrail: "AuditTrail",
-    report: "Report"
+    report: "Report",
+    inventoryAdjustment: "InventoryAdjustment",
 };
 exports.paginationFields = ["page", "limit", "sortBy", "sortOrder"];
 exports.defaultViewLimit = 20;
@@ -83,7 +84,8 @@ exports.mapSearchable = {
     [exports.entities.prescription]: ["prescriptionNumber", "status"],
     [exports.entities.expense]: ["description", "category"],
     [exports.entities.auditTrail]: ["action", "entityType"],
-    [exports.entities.report]: ["name", "type"]
+    [exports.entities.report]: ["name", "type"],
+    [exports.entities.inventoryAdjustment]: ["reason", "adjustmentType"],
 };
 exports.mapFilterables = {
     [exports.entities.drug]: ["brand", "formulation", "unit"],
@@ -105,7 +107,8 @@ exports.mapFilterables = {
     [exports.entities.prescription]: ["status", "customer", "doctor"],
     [exports.entities.expense]: ["category", "status", "paymentMethod"],
     [exports.entities.auditTrail]: ["action", "entityType", "createdBy"],
-    [exports.entities.report]: ["type", "status"]
+    [exports.entities.report]: ["type", "status"],
+    [exports.entities.inventoryAdjustment]: ["adjustmentType", "drug", "batch", "actor"],
 };
 // may be changed based on the outcome expected
 exports.mapDefaultSortBy = {
@@ -122,5 +125,6 @@ exports.mapDefaultSortBy = {
     [exports.entities.prescription]: "-prescriptionDate",
     [exports.entities.expense]: "-date",
     [exports.entities.auditTrail]: "-timestamp",
-    [exports.entities.report]: "-createdAt"
+    [exports.entities.report]: "-createdAt",
+    [exports.entities.inventoryAdjustment]: "-timestamp",
 };

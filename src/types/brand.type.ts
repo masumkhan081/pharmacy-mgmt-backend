@@ -1,10 +1,11 @@
-import { Document } from "mongoose";
 import { IDType } from "./requestResponse";
 
-export interface IBrand extends Document {
-  generic: IDType;
-  mfr: IDType;
+export interface IBrand {
+  id?: string;
   name: string;
+  origin?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 export interface IBrandUpdatePayload {

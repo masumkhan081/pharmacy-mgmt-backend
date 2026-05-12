@@ -1,18 +1,86 @@
- 
 import { entities } from "../config/constants";
-import Sale from "../models/sale.model";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { ISale, ISaleUpdatePayload } from "../types/sale.type";
+import { ISalePayload } from "../types/sale.type";
 import getSearchAndPagination from "../utils/queryHandler";
-//
-const getSingleSale = async (id: IDType) => Sale.findById(id);
-//
-const updateSale = async ({ id, data }: ISaleUpdatePayload) =>
-  await Sale.findByIdAndUpdate(id, data, { new: true });
-//
-const deleteSale = async (id: IDType) => await Sale.findByIdAndDelete(id);
-// 
-export const createSale = async (data: ISale) => await Sale.create(data);
+import inventoryMovementService from "./inventoryMovement.service";
+import { createAuditLog } from "../utils/auditLog";
+import { logOperationalFailure } from "../utils/logger";
+import saleRepository from "../repositories/sale.repository";
+import prisma from "../lib/prisma";
+
+const getSingleSale = async (id: IDType) => saleRepository.findById(id as string);
+
+const deleteSale = async ({ id, actor }: { id: IDType; actor: string | undefined }) => {
+  const sale = await saleRepository.findById(id as string);
+  if (!sale) throw new Error("Sale not found");
+  if (sale.isDeleted) return sale;
+
+  const beforeState = JSON.parse(JSON.stringify(sale));
+  
+  const updated = await saleRepository.softDelete(id as string, actor);
+
+  if (actor) {
+    await createAuditLog({
+      actor,
+      action: "SOFT_DELETE",
+      entityType: "Sale",
+      entityId: id as any,
+      before: beforeState,
+    });
+  }
+
+  return updated;
+};
+export const createSale = async (data: ISalePayload) => {
+  return await prisma.$transaction(async (tx) => {
+    try {
+      const saleItems = [];
+      const auditDetails = [];
+
+      // Deduct stock for each drug in the sale
+      for (const item of data.drugs) {
+        const movementReceipt = await inventoryMovementService.deductStock({
+          drugId: item.drug.toString(),
+          quantity: item.quantity,
+          tx,
+        });
+
+        saleItems.push({
+          drugId: item.drug.toString(),
+          quantity: item.quantity,
+          price: item.mrp,
+          batchMovements: movementReceipt.allocations.map(alloc => ({
+            batchId: alloc.batchId.toString(),
+            quantity: alloc.quantityMoved,
+          }))
+        });
+      }
+
+      // Create the sale record in Prisma
+      const savedSale = await saleRepository.create({
+        saleNumber: `SALE-${Date.now()}`, 
+        totalBill: data.bill,
+        actorId: data.actor || "SYSTEM",
+        items: saleItems,
+      }, tx);
+
+      if (data.actor) {
+        await createAuditLog({
+          actor: data.actor,
+          action: "CREATE_SALE",
+          entityType: "Sale",
+          entityId: savedSale.id as any,
+          after: savedSale as any,
+        });
+      }
+
+      return savedSale;
+    } catch (error) {
+      logOperationalFailure("SALE", error, { data });
+      throw error;
+    }
+  });
+};
 // 
 async function getSales(query: QueryParams) {
   try {
@@ -22,26 +90,27 @@ async function getSales(query: QueryParams) {
       viewSkip,
       sortBy,
       sortOrder,
-      filterConditions,
-      sortConditions,
+      searchTerm,
     } = getSearchAndPagination({ query, entity: entities.sale });
 
-    const fetchResult = await Sale.find(filterConditions)
-      .sort(sortConditions)
-      .skip(viewSkip)
-      .limit(viewLimit);
+    const result = await saleRepository.search({
+      searchTerm,
+      skip: viewSkip,
+      take: viewLimit,
+      sortBy: sortBy as string,
+      sortOrder: sortOrder as any,
+    });
 
-    const total = await Sale.countDocuments(filterConditions);
     return {
       meta: {
-        total,
+        total: result.total,
         limit: viewLimit,
         page: currentPage,
         skip: viewSkip,
         sortBy,
         sortOrder,
       },
-      data: fetchResult,
+      data: result.data,
     };
   } catch (error) {
     return error;
@@ -52,6 +121,5 @@ export default {
   getSales,
   getSingleSale,
   createSale,
-  updateSale,
   deleteSale,
 };

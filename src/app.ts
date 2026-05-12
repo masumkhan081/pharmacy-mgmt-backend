@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 dotenv.config();
 import originControl from "./middlewares/corsMiddleware";
 import { sendErrorResponse } from "./utils/responseHandler";
+import rateLimit from "express-rate-limit";
 // routes
 import authRoutes from "./routes/auth.route";
 import unitRoutes from "./routes/unit.route";
@@ -28,23 +29,30 @@ import invoiceRoutes from "./routes/invoice.route";
 import notificationRoutes from "./routes/notification.route";
 import paymentRoutes from "./routes/payment.route";
 import returnRoutes from "./routes/return.route";
-import unitModel from "./models/unit.model";
+import inventoryAdjustmentRoutes from "./routes/inventoryAdjustment.route";
+import dashboardRoutes from "./routes/dashboard.route";
 // 
 // middlewares
 app.use(originControl);
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use("/public", express.static("public"));
+
+const apiLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000, // 15 minutes
+  max: 100, // Limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
+  message: "Too many requests from this IP, please try again after 15 minutes",
+});
+
+app.use("/api", apiLimiter);
 //
 app.get("/", async (req: Request, res: Response) => {
-
-  const data = await unitModel.find({});
-
   res.status(200).json({
     statusCode: 200,
     success: true,
-    message: `I am functional ${req.headers.origin}`,
-    data,
+    message: "Pharmacy Engine API is functional",
   });
 });
 //
@@ -71,6 +79,8 @@ app.use("/api/invoices", invoiceRoutes);
 app.use("/api/notifications", notificationRoutes);
 app.use("/api/payments", paymentRoutes);
 app.use("/api/returns", returnRoutes);
+app.use("/api/inventory-adjustments", inventoryAdjustmentRoutes);
+app.use("/api/dashboard", dashboardRoutes);
 //
 app.use((req: Request, res: Response) => {
   res.status(404).json({

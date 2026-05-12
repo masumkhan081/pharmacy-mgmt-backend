@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteSale = exports.updateSale = exports.createSale = exports.getSingleSale = exports.getSales = void 0;
+exports.deleteSale = exports.createSale = exports.getSingleSale = exports.getSales = void 0;
 const constants_1 = require("../config/constants");
 const sale_service_1 = __importDefault(require("../services/sale.service"));
 const responseHandler_1 = require("../utils/responseHandler");
@@ -18,7 +18,7 @@ const getSales = async (req, res) => {
         (0, responseHandler_1.sendErrorResponse)({
             res,
             error,
-            entity: constants_1.entities.unit,
+            entity: constants_1.entities.sale,
         });
     }
 };
@@ -33,7 +33,7 @@ const getSingleSale = async (req, res) => {
         (0, responseHandler_1.sendErrorResponse)({
             res,
             error,
-            entity: constants_1.entities.unit,
+            entity: constants_1.entities.sale,
         });
     }
 };
@@ -41,7 +41,10 @@ exports.getSingleSale = getSingleSale;
 // 
 const createSale = async (req, res) => {
     try {
-        const result = await sale_service_1.default.createSale(req.body);
+        const result = await sale_service_1.default.createSale({
+            ...req.body,
+            actor: req.user?.id,
+        });
         (0, responseHandler_1.sendCreateResponse)({ res, result, entity: constants_1.entities.sale });
     }
     catch (error) {
@@ -49,34 +52,18 @@ const createSale = async (req, res) => {
         (0, responseHandler_1.sendErrorResponse)({
             res,
             error,
-            entity: constants_1.entities.unit,
+            entity: constants_1.entities.sale,
         });
     }
 };
 exports.createSale = createSale;
 // 
-const updateSale = async (req, res) => {
-    try {
-        const result = await sale_service_1.default.updateSale({
-            id: req.params.id,
-            data: req.body,
-        });
-        (0, responseHandler_1.sendUpdateResponse)({ res, result, entity: constants_1.entities.sale });
-    }
-    catch (error) {
-        console.error(error);
-        (0, responseHandler_1.sendErrorResponse)({
-            res,
-            error,
-            entity: constants_1.entities.unit,
-        });
-    }
-};
-exports.updateSale = updateSale;
-// 
 const deleteSale = async (req, res) => {
     try {
-        const result = await sale_service_1.default.deleteSale(req.params.id);
+        const result = await sale_service_1.default.deleteSale({
+            id: req.params.id,
+            actor: req.user?.id,
+        });
         (0, responseHandler_1.sendDeletionResponse)({ res, result, entity: constants_1.entities.sale });
     }
     catch (error) {
@@ -84,14 +71,14 @@ const deleteSale = async (req, res) => {
         (0, responseHandler_1.sendErrorResponse)({
             res,
             error,
-            entity: constants_1.entities.unit,
+            entity: constants_1.entities.sale,
         });
     }
 };
 exports.deleteSale = deleteSale;
 exports.default = {
     getSales: exports.getSales,
+    getSingleSale: exports.getSingleSale,
     createSale: exports.createSale,
-    updateSale: exports.updateSale,
     deleteSale: exports.deleteSale,
 };

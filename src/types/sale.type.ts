@@ -1,12 +1,33 @@
-import { Document } from "mongoose";
+import { Document, Types } from "mongoose";
 import { IDType } from "./requestResponse";
 
-export interface ISale extends Document {
-  name: string;
+export interface IBatchMovement {
+  batchId: Types.ObjectId | string;
+  batchNumber: string;
+  quantityMoved: number;
 }
 
-// Update the interface to use IDType
+export interface ISaleDrugInput {
+  drug: Types.ObjectId | string;
+  quantity: number;
+  mrp: number;
+  batchMovements?: IBatchMovement[];
+}
+
+export interface ISale extends Document {
+  saleAt: Date;
+  drugs: ISaleDrugInput[];
+  bill: number;
+}
+
+export interface ISalePayload {
+  saleAt: Date;
+  drugs: ISaleDrugInput[];
+  bill: number;
+  actor?: string;
+}
+
 export interface ISaleUpdatePayload {
   id: IDType;
-  data: Partial<ISale>;
+  data: Partial<ISalePayload>;
 }

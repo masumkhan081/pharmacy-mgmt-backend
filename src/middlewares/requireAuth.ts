@@ -2,9 +2,7 @@ import { Request, Response, NextFunction } from "express";
 import { verifyToken } from "../utils/tokenisation";
 import { sendUnauthorized } from "../utils/responseHandler";
 
-export interface AuthenticatedRequest extends Request {
-  user?: { userId?: string; role?: string; email?: string };
-}
+export interface AuthenticatedRequest extends Request {}
 
 const extractBearerToken = (header?: string): string | null => {
   if (!header) return null;
@@ -31,6 +29,7 @@ const requireAuth = (
   }
 
   req.user = {
+    id: payload.userId,
     userId: payload.userId,
     role: payload.role,
     email: payload.email,

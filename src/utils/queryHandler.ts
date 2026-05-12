@@ -23,10 +23,8 @@ interface SearchAndPaginationResult {
   sortConditions: Record<string, "asc" | "desc">;
 }
 
-const getSearchAndPagination = ({
-  query,
-  entity,
-}: SearchAndPaginationOptions): SearchAndPaginationResult => {
+const getSearchAndPagination = (options: SearchAndPaginationOptions): SearchAndPaginationResult => {
+  const { query, entity, additionalFilters } = options;
   const { search, page, limit, searchBy, sortBy, sortOrder } = query;
 
   const sortField = sortBy ?? "createdAt";
@@ -71,6 +69,16 @@ const getSearchAndPagination = ({
 
   if (searchConditions.length > 0) {
     filterConditions["$or"] = searchConditions;
+  }
+
+  // Default query safety: exclude deleted records unless explicitly requested
+  if (query.includeDeleted !== "true") {
+    filterConditions.isDeleted = { $ne: true };
+  }
+
+  // Apply additional filters if passed
+  if (additionalFilters) {
+    Object.assign(filterConditions, additionalFilters);
   }
 
   return {

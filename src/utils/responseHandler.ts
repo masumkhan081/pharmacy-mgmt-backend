@@ -214,9 +214,16 @@ export const sendErrorResponse = ({
   let message = "An unexpected error occurred";
   let errors: FieldError[] | undefined;
 
-  console.error("sendErrorResponse:", error?.message ?? error);
-
-  if (error?.name === "ValidationError") {
+  // Handle Zod errors directly if passed
+  if (error?.name === "ZodError" || error?.issues) {
+    statusCode = 400;
+    message = "Validation failed";
+    errors = error.issues?.map((issue: any) => ({
+      field: String(issue.path[issue.path.length - 1] ?? ""),
+      message: issue.message,
+    }));
+  } else if (error?.name === "ValidationError") {
+    // Mongoose validation
     statusCode = 400;
     message = "Invalid data";
     errors = Object.entries(
@@ -230,8 +237,8 @@ export const sendErrorResponse = ({
   } else if (error?.statusCode && error?.message) {
     statusCode = error.statusCode;
     message = error.message;
-  } else {
-    message = "Server error";
+  } else if (error instanceof Error) {
+    message = error.message;
   }
 
   send(res, statusCode, {

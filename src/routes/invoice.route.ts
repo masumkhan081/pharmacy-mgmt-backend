@@ -4,13 +4,11 @@ import {
   createInvoice,
   getInvoices,
   getSingleInvoice,
-  updateInvoice,
   deleteInvoice,
 } from "../controllers/invoice.controller";
 import validateRequest from "../middlewares/validateRequest";
 import {
   createInvoiceSchema,
-  updateInvoiceSchema,
 } from "../schemas/invoice.schema";
 import { validateObjectId } from "../middlewares/validateId";
 import { userRoles } from "../config/constants";
@@ -25,14 +23,6 @@ router.post(
   validateRequest(createInvoiceSchema),
   accessControl([userRoles.admin, userRoles.seller, userRoles.user]),
   createInvoice
-);
-
-router.patch(
-  "/:id",
-  validateObjectId,
-  validateRequest(updateInvoiceSchema),
-  accessControl([userRoles.admin, userRoles.seller]),
-  updateInvoice
 );
 
 router.delete(

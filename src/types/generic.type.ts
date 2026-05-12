@@ -1,12 +1,13 @@
-import { Document } from "mongoose";
 import { IDType } from "./requestResponse";
 
-export interface IGeneric extends Document {
-  group: IDType;
+export interface IGeneric {
+  id?: string;
   name: string;
+  description?: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-// Update the interface to use IDType
 export interface IGenericUpdatePayload {
   id: IDType;
   data: Partial<IGeneric>;

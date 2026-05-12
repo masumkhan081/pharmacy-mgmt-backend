@@ -3,37 +3,26 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const mfr_model_1 = __importDefault(require("../models/mfr.model"));
-const queryHandler_1 = __importDefault(require("../utils/queryHandler"));
 const constants_1 = require("../config/constants");
-// Create a new manufacturer
-const createManufacturer = async (data) => {
-    return await mfr_model_1.default.create(data);
-};
-// Get a single manufacturer by ID
-const getSingleManufacturer = async (id) => {
-    return await mfr_model_1.default.findById(id);
-};
-// Update a manufacturer
-const updateManufacturer = async ({ id, data }) => {
-    return await mfr_model_1.default.findByIdAndUpdate(id, data, { new: true });
-};
-// Delete a manufacturer
-const deleteManufacturer = async (id) => {
-    return await mfr_model_1.default.findByIdAndDelete(id);
-};
-// Get all manufacturers with pagination and filtering
-const getManufacturers = async (query) => {
+const prisma_1 = __importDefault(require("../lib/prisma"));
+const queryHandler_1 = __importDefault(require("../utils/queryHandler"));
+const createManufacturer = async (data) => await prisma_1.default.manufacturer.create({ data });
+const getSingleManufacturer = async (id) => await prisma_1.default.manufacturer.findUnique({ where: { id: id } });
+const updateManufacturer = async ({ id, data }) => await prisma_1.default.manufacturer.update({ where: { id: id }, data });
+const deleteManufacturer = async (id) => await prisma_1.default.manufacturer.delete({ where: { id: id } });
+async function getManufacturers(query) {
     try {
-        const { currentPage, viewLimit, viewSkip, sortBy, sortOrder, filterConditions, sortConditions, } = (0, queryHandler_1.default)({
-            query,
-            entity: constants_1.entities.manufacturer
+        const { currentPage, viewLimit, viewSkip, sortBy, sortOrder, searchTerm, } = (0, queryHandler_1.default)({ query, entity: constants_1.entities.manufacturer });
+        const where = searchTerm ? {
+            name: { contains: searchTerm, mode: "insensitive" }
+        } : {};
+        const fetchResult = await prisma_1.default.manufacturer.findMany({
+            where,
+            skip: viewSkip,
+            take: viewLimit,
+            orderBy: sortBy ? { [sortBy]: sortOrder ?? "desc" } : { createdAt: "desc" },
         });
-        const fetchResult = await mfr_model_1.default.find(filterConditions)
-            .sort(sortConditions)
-            .skip(viewSkip)
-            .limit(viewLimit);
-        const total = await mfr_model_1.default.countDocuments(filterConditions);
+        const total = await prisma_1.default.manufacturer.count({ where });
         return {
             meta: {
                 total,
@@ -49,7 +38,7 @@ const getManufacturers = async (query) => {
     catch (error) {
         return error;
     }
-};
+}
 exports.default = {
     createManufacturer,
     getSingleManufacturer,

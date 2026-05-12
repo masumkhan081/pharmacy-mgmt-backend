@@ -1,11 +1,12 @@
-import { Document } from "mongoose";
 import { IDType } from "./requestResponse";
 
-export interface IFormulation extends Document {
+export interface IFormulation {
+  id?: string;
   name: string;
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
-// Update the interface to use IDType
 export interface IFormulationUpdatePayload {
   id: IDType;
   data: Partial<IFormulation>;

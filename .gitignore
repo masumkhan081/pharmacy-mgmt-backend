@@ -3,3 +3,5 @@ reference
 dist
 .gitignore
 .env
+
+/src/generated/prisma

@@ -106,6 +106,26 @@ export const getBatchesByDrug: TypeController = async (req, res) => {
   }
 };
 
+export const getExpiringSoon: TypeController = async (req, res) => {
+  try {
+    const days = req.query.days ? Number(req.query.days) : 90;
+    const result = await inventoryBatchService.getExpiringBatches(days);
+    sendFetchResponse({ res, result, entity: "ExpiringBatches" });
+  } catch (error) {
+    sendErrorResponse({ res, error, entity: "ExpiringBatches" });
+  }
+};
+
+export const getLowStock: TypeController = async (req, res) => {
+  try {
+    const threshold = req.query.threshold ? Number(req.query.threshold) : 10;
+    const result = await inventoryBatchService.getLowStockBatches(threshold);
+    sendFetchResponse({ res, result, entity: "LowStockBatches" });
+  } catch (error) {
+    sendErrorResponse({ res, error, entity: "LowStockBatches" });
+  }
+};
+
 export default {
   getInventoryBatches,
   getSingleInventoryBatch,
@@ -113,4 +133,6 @@ export default {
   updateInventoryBatch,
   deleteInventoryBatch,
   getBatchesByDrug,
+  getExpiringSoon,
+  getLowStock,
 };

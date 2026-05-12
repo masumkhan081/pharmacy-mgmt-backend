@@ -107,7 +107,7 @@ export const markAsRead: TypeController = async (req, res) => {
   try {
     const result = await notificationService.markAsRead({
       id: req.params.id,
-      userId: req.user?.id, // To verify ownership
+      userId: req.user?.id as string, // To verify ownership
     });
     sendUpdateResponse({ res, result, entity: entities.notification });
   } catch (error) {
@@ -124,7 +124,7 @@ export const markAsRead: TypeController = async (req, res) => {
 export const markAllAsRead: TypeController = async (req, res) => {
   try {
     const result = await notificationService.markAllAsRead({
-      userId: req.user?.id,
+      userId: req.user?.id as string,
     });
     res.status(200).json({
       success: true,
@@ -144,7 +144,7 @@ export const markAllAsRead: TypeController = async (req, res) => {
 export const getUnreadCount: TypeController = async (req, res) => {
   try {
     const count = await notificationService.getUnreadCount({
-      userId: req.user?.id,
+      userId: req.user?.id as string,
     });
     res.status(200).json({
       success: true,

@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/no-explicit-any */
 const app_1 = __importDefault(require("./app"));
-const mongodb_1 = __importDefault(require("./config/mongodb"));
 const config_1 = __importDefault(require("./config"));
 //np
 async function bootstrap() {
@@ -13,8 +12,6 @@ async function bootstrap() {
     try {
         server = app_1.default.listen(config_1.default.port, async () => {
             console.log(`Server running on port ${config_1.default.port}`);
-            // Initialize the database
-            await (0, mongodb_1.default)();
         });
         const exitHandler = () => {
             if (server) {

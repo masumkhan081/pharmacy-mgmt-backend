@@ -8,9 +8,10 @@ const router = express_1.default.Router();
 const auth_controller_1 = __importDefault(require("../controllers/auth.controller"));
 const validateRequest_1 = __importDefault(require("../middlewares/validateRequest"));
 const auth_schema_1 = require("../schemas/auth.schema");
-const user_model_1 = __importDefault(require("../models/user.model"));
+const user_repository_1 = __importDefault(require("../repositories/user.repository"));
 const constants_1 = require("../config/constants");
 const tokenisation_1 = require("../utils/tokenisation");
+const rateLimiter_1 = require("../middlewares/rateLimiter");
 //
 router.post("/register-as-bidder", (0, validateRequest_1.default)(auth_schema_1.registerSchema), auth_controller_1.default.registerUser(constants_1.userRoles.admin));
 //
@@ -20,7 +21,7 @@ router.post("/email-verification", (0, validateRequest_1.default)(auth_schema_1.
 //
 router.post("/request-email-verification", (0, validateRequest_1.default)(auth_schema_1.emailSchema), auth_controller_1.default.requestEmailVerification);
 //
-router.post("/login", (0, validateRequest_1.default)(auth_schema_1.loginSchema), auth_controller_1.default.login);
+router.post("/login", rateLimiter_1.authRateLimiter, (0, validateRequest_1.default)(auth_schema_1.loginSchema), auth_controller_1.default.login);
 router.post("/recovery", (0, validateRequest_1.default)(auth_schema_1.emailSchema), auth_controller_1.default.requestAccountRecovery);
 //
 router.get("/recovery/:token", auth_controller_1.default.verifyAccountRecovery);
@@ -36,9 +37,15 @@ router.get("/get-role-wise-test-account-credentials-and-token", async (req, res)
             return { ...user, password: hashedPw }; // Replace password with hashed password
         }));
         for (const user of userData) {
-            const existingUser = await user_model_1.default.findOne({ email: user.email });
+            const existingUser = await user_repository_1.default.findByEmail(user.email);
             if (!existingUser) {
-                await user_model_1.default.create(user);
+                await user_repository_1.default.create({
+                    username: user.email,
+                    email: user.email,
+                    name: user.fullName,
+                    password: user.password,
+                    role: user.role.toUpperCase(),
+                });
             }
             else {
                 console.log(`User with email ${user.email} already exists`);

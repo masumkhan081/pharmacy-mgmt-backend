@@ -4,7 +4,6 @@ import {
   createSale,
   getSales,
   getSingleSale,
-  updateSale,
   deleteSale,
 } from "../controllers/sale.controller"; // controller functions
 import validateRequest from "../middlewares/validateRequest";
@@ -22,13 +21,6 @@ router.post(
   accessControl([userRoles.admin]),
   validateRequest(saleSchema),
   createSale
-);
-
-router.patch(
-  "/:id",
-  accessControl([userRoles.admin]),
-  validateObjectId,
-  updateSale
 );
 
 router.delete(

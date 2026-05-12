@@ -4,7 +4,6 @@ import {
   createPurchase,
   getPurchases,
   getSinglePurchase,
-  updatePurchase,
   deletePurchase,
 } from "../controllers/purchase.controller"; // controller functions
 import validateRequest from "../middlewares/validateRequest";
@@ -24,16 +23,9 @@ router.get(
 
 router.post(
   "/",
-  accessControl([userRoles.admin]),
+  accessControl([userRoles.admin, userRoles.seller]),
   validateRequest(purchaseSchema),
   createPurchase
-);
-
-router.patch(
-  "/:id",
-  accessControl([userRoles.admin]),
-  validateObjectId,
-  updatePurchase
 );
 
 router.delete(

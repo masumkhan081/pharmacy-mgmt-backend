@@ -1,0 +1,447 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ─── Enums ───────────────────────────────────────────────────────────────────
+
+enum UserRole {
+  ADMIN
+  MANAGER
+  SALESMAN
+}
+
+enum DrugStatus {
+  ACTIVE
+  INACTIVE
+}
+
+enum BatchStatus {
+  AVAILABLE
+  LOW_STOCK
+  OUT_OF_STOCK
+  EXPIRED
+  RECALLED
+  RECALLED_RETURNED
+}
+
+enum ReturnStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+enum ReturnType {
+  CUSTOMER_RETURN
+  SUPPLIER_RETURN
+}
+
+enum AdjustmentType {
+  ADDITION
+  DEDUCTION
+  CORRECTION
+}
+
+// ─── Foundation ──────────────────────────────────────────────────────────────
+
+model User {
+  id        String   @id @default(uuid())
+  username  String   @unique
+  email     String   @unique
+  name      String?
+  password  String
+  role      UserRole
+  staffId   String?  @unique // Optional link to Staff (to be migrated later)
+  isActive  Boolean  @default(true)
+  isVerified Boolean @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Audited actions
+  audits AuditLog[]
+}
+
+model Brand {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  origin    String?
+  drugs     Drug[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Manufacturer {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  address   String?
+  email     String?
+  phone     String?
+  drugs     Drug[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Generic {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  drugs       Drug[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Unit {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  drugs     Drug[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Formulation {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  drugs     Drug[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Group {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  description String?
+  drugs       Drug[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Drug {
+  id           String     @id @default(uuid())
+  name         String     // Denormalized name for fast search (Brand + Strength + Unit)
+  brandId      String?
+  brand        Brand?     @relation(fields: [brandId], references: [id])
+  genericId    String?
+  generic      Generic?   @relation(fields: [genericId], references: [id])
+  mfrId        String?
+  manufacturer Manufacturer? @relation(fields: [mfrId], references: [id])
+  formulationId String?
+  formulation  Formulation? @relation(fields: [formulationId], references: [id])
+  groupId      String?
+  group        Group?      @relation(fields: [groupId], references: [id])
+  strength     Float
+  unitId       String?
+  unit         Unit?       @relation(fields: [unitId], references: [id])
+  available    Float      @default(0)
+  purchasePrice Float     @default(0)
+  mrp          Float      @default(0)
+  status       DrugStatus @default(ACTIVE)
+  isDeleted    Boolean    @default(false)
+  deletedAt    DateTime?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  batches      InventoryBatch[]
+  saleItems    SaleItem[]
+  purchaseItems PurchaseItem[]
+  returnItems  ReturnItem[]
+  adjustments  InventoryAdjustment[]
+}
+
+model InventoryBatch {
+  id             String      @id @default(uuid())
+  drugId         String
+  drug           Drug        @relation(fields: [drugId], references: [id])
+  batchNumber    String
+  lotNumber      String?
+  expirationDate DateTime
+  initialQuantity Float
+  currentQuantity Float
+  purchasePrice  Float
+  sellingPrice   Float
+  purchaseId     String?     @unique // One batch usually corresponds to one purchase line
+  purchase       Purchase?   @relation(fields: [purchaseId], references: [id])
+  status         BatchStatus @default(AVAILABLE)
+  isActive       Boolean     @default(true)
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+
+  movements    BatchMovement[]
+  returnItems  ReturnItem[]
+  adjustments  InventoryAdjustment[]
+  @@unique([drugId, batchNumber])
+}
+
+// ─── Operational ──────────────────────────────────────────────────────────────
+
+model Customer {
+  id        String   @id @default(uuid())
+  fullName  String
+  phone     String?  @unique
+  email     String?  @unique
+  address   String?
+  sales     Sale[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Supplier {
+  id        String     @id @default(uuid())
+  name      String     @unique
+  contactPerson String?
+  phone     String?
+  email     String?
+  address   String?
+  purchases Purchase[]
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+}
+
+model Staff {
+  id        String   @id @default(uuid())
+  name      String
+  phone     String?  @unique
+  email     String?  @unique
+  role      String?
+  salary    Float?
+  attendances Attendance[]
+  salaries  Salary[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Attendance {
+  id        String   @id @default(uuid())
+  staffId   String
+  staff     Staff    @relation(fields: [staffId], references: [id])
+  date      DateTime @default(now())
+  status    String   // PRESENT, ABSENT, etc.
+  createdAt DateTime @default(now())
+}
+
+model Sale {
+  id        String     @id @default(uuid())
+  saleNumber String    @unique
+  saleAt    DateTime   @default(now())
+  totalBill Float
+  actorId   String
+  customerId String?
+  customer  Customer?  @relation(fields: [customerId], references: [id])
+  isDeleted Boolean    @default(false)
+  deletedAt DateTime?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  items     SaleItem[]
+  invoices  Invoice[]
+}
+
+model SaleItem {
+  id        String   @id @default(uuid())
+  saleId    String
+  sale      Sale     @relation(fields: [saleId], references: [id], onDelete: Cascade)
+  drugId    String
+  drug      Drug     @relation(fields: [drugId], references: [id])
+  quantity  Float
+  price     Float    // Price at time of sale
+  createdAt DateTime @default(now())
+
+  batchMovements BatchMovement[]
+}
+
+model BatchMovement {
+  id         String         @id @default(uuid())
+  saleItemId String
+  saleItem   SaleItem       @relation(fields: [saleItemId], references: [id], onDelete: Cascade)
+  batchId    String
+  batch      InventoryBatch @relation(fields: [batchId], references: [id])
+  quantity  Float
+  createdAt  DateTime       @default(now())
+}
+
+model Purchase {
+  id            String   @id @default(uuid())
+  purchaseNumber String  @unique
+  purchaseDate  DateTime
+  totalCost     Float
+  status        String   // PENDING, APPROVED, etc.
+  supplierId    String?
+  supplier      Supplier? @relation(fields: [supplierId], references: [id])
+  actorId       String?
+  isDeleted     Boolean  @default(false)
+  deletedAt     DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  batches       InventoryBatch[]
+  items         PurchaseItem[]
+}
+
+model PurchaseItem {
+  id         String   @id @default(uuid())
+  purchaseId String
+  purchase   Purchase @relation(fields: [purchaseId], references: [id], onDelete: Cascade)
+  drugId     String
+  drug       Drug     @relation(fields: [drugId], references: [id])
+  quantity   Float
+  price      Float    // Cost price at time of purchase
+  createdAt  DateTime @default(now())
+}
+
+model Return {
+  id           String       @id @default(uuid())
+  returnNumber String       @unique
+  returnType   ReturnType   @default(CUSTOMER_RETURN)
+  reason       String
+  status       ReturnStatus @default(PENDING)
+  totalAmount  Float        @default(0)
+  processedById String
+  approvedById String?
+  refundDate   DateTime?
+  isDeleted    Boolean      @default(false)
+  deletedAt    DateTime?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  items        ReturnItem[]
+}
+
+model ReturnItem {
+  id        String   @id @default(uuid())
+  returnId  String
+  return    Return   @relation(fields: [returnId], references: [id], onDelete: Cascade)
+  drugId    String
+  drug      Drug     @relation(fields: [drugId], references: [id])
+  batchId   String
+  batch     InventoryBatch @relation(fields: [batchId], references: [id])
+  quantity  Float
+  price     Float    // Price at time of return
+  createdAt DateTime @default(now())
+}
+
+model InventoryAdjustment {
+  id             String         @id @default(uuid())
+  adjustmentType AdjustmentType
+  drugId         String
+  drug           Drug           @relation(fields: [drugId], references: [id])
+  batchId        String
+  batch          InventoryBatch @relation(fields: [batchId], references: [id])
+  quantity  Float
+  reason         String
+  notes          String?
+  actorId        String
+  timestamp      DateTime       @default(now())
+  createdAt      DateTime       @default(now())
+  updatedAt      DateTime       @updatedAt
+}
+
+model Invoice {
+  id          String   @id @default(uuid())
+  invoiceNo   String   @unique
+  saleId      String
+  sale        Sale     @relation(fields: [saleId], references: [id])
+  totalAmount Float
+  paidAmount  Float    @default(0)
+  status      String   // PAID, UNPAID, PARTIALLY_PAID
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  payments    Payment[]
+}
+
+model Payment {
+  id          String   @id @default(uuid())
+  invoiceId   String
+  invoice     Invoice  @relation(fields: [invoiceId], references: [id])
+  amount      Float
+  method      String   // CASH, CARD, etc.
+  createdAt   DateTime @default(now())
+}
+
+model Prescription {
+  id          String   @id @default(uuid())
+  patientName String
+  doctorName  String?
+  details     String?
+  image       String?
+  createdAt   DateTime @default(now())
+}
+
+model Notification {
+  id        String   @id @default(uuid())
+  title     String
+  message   String
+  userId    String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model InventoryAlert {
+  id        String   @id @default(uuid())
+  drugId    String
+  title     String
+  message   String
+  severity  String   // LOW, MEDIUM, HIGH
+  isResolved Boolean @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Doctor {
+  id        String   @id @default(uuid())
+  name      String
+  phone     String?  @unique
+  email     String?  @unique
+  specialty String?
+  address   String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Expense {
+  id          String   @id @default(uuid())
+  title       String
+  amount      Float
+  category    String
+  date        DateTime @default(now())
+  notes       String?
+  actorId     String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Insurance {
+  id          String   @id @default(uuid())
+  name        String   @unique
+  policyNo    String?
+  coverage    Float?
+  contactInfo String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Salary {
+  id        String   @id @default(uuid())
+  staffId   String
+  staff     Staff    @relation(fields: [staffId], references: [id])
+  amount    Float
+  month     String
+  year      Int
+  paidAt    DateTime @default(now())
+  createdAt DateTime @default(now())
+}
+
+// ─── System ──────────────────────────────────────────────────────────────────
+
+model AuditLog {
+  id         String   @id @default(uuid())
+  actorId    String
+  actor      User     @relation(fields: [actorId], references: [id])
+  action     String
+  entityType String
+  entityId   String
+  before     Json?
+  after      Json?
+  timestamp  DateTime @default(now())
+}
+

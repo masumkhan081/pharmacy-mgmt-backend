@@ -10,9 +10,11 @@ import {
   otpVerSchema,
   resetPassSchema,
 } from "../schemas/auth.schema";
-import User from "../models/user.model";
+import userRepository from "../repositories/user.repository";
+import { UserRole } from "../types/user.type";
 import { userRoles, testUsers } from "../config/constants";
 import { createToken, getHashedPassword } from "../utils/tokenisation";
+import { authRateLimiter } from "../middlewares/rateLimiter";
 //
 router.post(
   "/register-as-bidder",
@@ -38,7 +40,7 @@ router.post(
   authController.requestEmailVerification
 );
 //
-router.post("/login", validateRequest(loginSchema), authController.login);
+router.post("/login", authRateLimiter, validateRequest(loginSchema), authController.login);
 
 router.post(
   "/recovery",
@@ -68,9 +70,15 @@ router.get(
       );
 
       for (const user of userData) {
-        const existingUser = await User.findOne({ email: user.email });
+        const existingUser = await userRepository.findByEmail(user.email);
         if (!existingUser) {
-          await User.create(user);
+          await userRepository.create({
+            username: user.email,
+            email: user.email,
+            name: user.fullName,
+            password: user.password,
+            role: user.role.toUpperCase() as UserRole,
+          });
         } else {
           console.log(`User with email ${user.email} already exists`);
         }

@@ -1,18 +1,17 @@
 import { entities } from "../config/constants";
-import Group from "../models/group.model";
+import prisma from "../lib/prisma";
 import { IDType, QueryParams } from "../types/requestResponse";
-import { Igroup, IgroupUpdatePayload } from "../types/group.type";
 import getSearchAndPagination from "../utils/queryHandler";
-//
-const createGroup = async (data: Igroup) => await Group.create(data);
-//
-const getSingleGroup = async (id: IDType) => Group.findById(id);
-//
-const updateGroup = async ({ id, data }: IgroupUpdatePayload) =>
-  await Group.findByIdAndUpdate(id, data, { new: true });
-//
-const deleteGroup = async (id: IDType) => await Group.findByIdAndDelete(id);
-//
+
+const createGroup = async (data: any) => await prisma.group.create({ data });
+
+const getSingleGroup = async (id: IDType) => await prisma.group.findUnique({ where: { id: id as string } });
+
+const updateGroup = async ({ id, data }: { id: IDType; data: any }) =>
+  await prisma.group.update({ where: { id: id as string }, data });
+
+const deleteGroup = async (id: IDType) => await prisma.group.delete({ where: { id: id as string } });
+
 async function getGroups(query: QueryParams) {
   try {
     const {
@@ -21,16 +20,22 @@ async function getGroups(query: QueryParams) {
       viewSkip,
       sortBy,
       sortOrder,
-      filterConditions,
-      sortConditions,
+      searchTerm,
     } = getSearchAndPagination({ query, entity: entities.group });
 
-    const fetchResult = await Group.find(filterConditions)
-      .sort(sortConditions)
-      .skip(viewSkip)
-      .limit(viewLimit);
+    const where = searchTerm ? {
+      name: { contains: searchTerm, mode: "insensitive" } as any
+    } : {};
 
-    const total = await Group.countDocuments(filterConditions);
+    const fetchResult = await prisma.group.findMany({
+      where,
+      skip: viewSkip,
+      take: viewLimit,
+      orderBy: sortBy ? { [sortBy]: sortOrder ?? "desc" } : { createdAt: "desc" },
+    });
+
+    const total = await prisma.group.count({ where });
+    
     return {
       meta: {
         total,
