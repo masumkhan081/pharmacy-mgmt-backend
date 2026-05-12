@@ -1,21 +1,16 @@
 import { z } from "zod";
-import { Types } from "mongoose";
-
-const objectIdValidator = (value: string) =>
-  Types.ObjectId.isValid(value) || "Invalid ObjectId format";
 
 const saleItemSchema = z.object({
-  drug: z
-    .string()
-    .refine(objectIdValidator, { message: "Invalid drug ID format" }),
-  quantity: z.number().int().min(1, "Quantity must be at least 1"),
-  mrp: z.number().min(0.01, "MRP must be at least 0.01"),
+  drugId: z.string().uuid("Invalid drug ID format"),
+  quantity: z.number().min(1, "Quantity must be at least 1"),
+  price: z.number().min(0.01, "Price must be at least 0.01"),
 });
 
 export const saleSchema = z.object({
-  saleAt: z.coerce.date(),
-  drugs: z.array(saleItemSchema).min(1, "At least one item is required"),
-  bill: z.number().min(0.01, "Bill amount must be at least 0.01"),
+  saleAt: z.coerce.date().optional(),
+  items: z.array(saleItemSchema).min(1, "At least one item is required"),
+  totalBill: z.number().min(0.01, "Bill amount must be at least 0.01"),
+  customerId: z.string().uuid("Invalid customer ID format").optional(),
 });
 
 export const updateSaleSchema = saleSchema.partial();
