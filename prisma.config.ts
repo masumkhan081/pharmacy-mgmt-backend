@@ -3,12 +3,23 @@
 import "dotenv/config";
 import { defineConfig } from "prisma/config";
 
+// If you set *_DEV or *_PROD variants in .env, pick the one matching NODE_ENV
+const nodeEnv = (process.env.NODE_ENV || "development").toLowerCase();
+const suffix = nodeEnv === "production" ? "PROD" : nodeEnv === "test" ? "TEST" : "DEV";
+
+const pick = (key: string) => {
+  const suffixed = `${key.toUpperCase()}_${suffix}`;
+  if (process.env[suffixed]) return process.env[suffixed];
+  return process.env[key];
+};
+
 export default defineConfig({
   schema: "prisma/schema.prisma",
   migrations: {
     path: "prisma/migrations",
   },
   datasource: {
-    url: process.env["DATABASE_URL"],
+    url: pick("DATABASE_URL"),
+    directUrl: pick("DIRECT_URL"),
   },
 });

@@ -1,7 +1,28 @@
 import { z } from "zod";
 import dotenv from "dotenv";
 
+// Load .env into process.env first
 dotenv.config();
+
+// If there are suffixed env keys (e.g. DATABASE_URL_DEV, DATABASE_URL_PROD),
+// pick the one matching NODE_ENV and assign it to the base key.
+const normalizeEnvByNodeEnv = () => {
+  const nodeEnv = (process.env.NODE_ENV || "development").toLowerCase();
+  const suffix = nodeEnv === "production" ? "PROD" : nodeEnv === "test" ? "TEST" : "DEV";
+
+  for (const k of Object.keys(process.env)) {
+    const m = k.match(/^(.+)_((DEV|PROD|TEST))$/i);
+    if (m) {
+      const base = m[1];
+      const keySuffix = m[2].toUpperCase();
+      if (keySuffix === suffix) {
+        process.env[base] = process.env[k];
+      }
+    }
+  }
+};
+
+normalizeEnvByNodeEnv();
 
 const envSchema = z.object({
   PORT: z.string().transform(Number).default("3000"),
