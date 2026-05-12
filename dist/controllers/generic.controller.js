@@ -7,7 +7,7 @@ exports.deleteGeneric = exports.updateGeneric = exports.createGeneric = exports.
 const constants_1 = require("../config/constants");
 const generic_service_1 = __importDefault(require("../services/generic.service"));
 const responseHandler_1 = require("../utils/responseHandler");
-const group_model_1 = __importDefault(require("../models/group.model"));
+const prisma_1 = __importDefault(require("../lib/prisma"));
 const getGenerics = async (req, res) => {
     try {
         const result = await generic_service_1.default.getGenerics(req.query);
@@ -30,7 +30,7 @@ const getSingleGeneric = async (req, res) => {
 exports.getSingleGeneric = getSingleGeneric;
 const createGeneric = async (req, res) => {
     try {
-        const group = await group_model_1.default.findById(req.body.group);
+        const group = await prisma_1.default.group.findUnique({ where: { id: req.body.group } });
         if (!group) {
             return (0, responseHandler_1.sendBadRequest)({ res, message: "Group doesn't exist" });
         }
@@ -44,7 +44,7 @@ const createGeneric = async (req, res) => {
 exports.createGeneric = createGeneric;
 const updateGeneric = async (req, res) => {
     try {
-        if (req.body.group && !(await group_model_1.default.findById(req.body.group))) {
+        if (req.body.group && !(await prisma_1.default.group.findUnique({ where: { id: req.body.group } }))) {
             return (0, responseHandler_1.sendBadRequest)({ res, message: "Group doesn't exist" });
         }
         const result = await generic_service_1.default.updateGeneric({

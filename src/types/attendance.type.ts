@@ -1,7 +1,6 @@
-import { Document } from "mongoose";
 import { IDType } from "./requestResponse";
 
-export interface IAttendance extends Document {
+export interface IAttendance {
   name: string;
 }
 

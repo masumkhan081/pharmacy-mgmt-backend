@@ -1,20 +1,19 @@
-import { Document, Types } from "mongoose";
 import { IDType } from "./requestResponse";
 
 export interface IBatchMovement {
-  batchId: Types.ObjectId | string;
+  batchId: IDType;
   batchNumber: string;
   quantityMoved: number;
 }
 
 export interface ISaleDrugInput {
-  drug: Types.ObjectId | string;
+  drug: IDType;
   quantity: number;
   mrp: number;
   batchMovements?: IBatchMovement[];
 }
 
-export interface ISale extends Document {
+export interface ISale {
   saleAt: Date;
   drugs: ISaleDrugInput[];
   bill: number;

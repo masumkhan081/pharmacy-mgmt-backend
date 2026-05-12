@@ -1,5 +1,4 @@
 import prisma from "../lib/prisma";
-import Invoice from "../models/invoice.model";
 
 const getOperationalStats = async () => {
   const now = new Date();
@@ -56,10 +55,9 @@ const getOperationalStats = async () => {
       },
     }),
 
-    // 4. Unpaid Invoices count (MongoDB - Legacy)
-    Invoice.countDocuments({
-      status: { $in: ["UNPAID", "PARTIALLY_PAID"] },
-      isDeleted: false
+    // 4. Unpaid Invoices count (Prisma)
+    prisma.invoice.count({
+      where: { status: { in: ["UNPAID", "PARTIALLY_PAID"] } }
     })
   ]);
 

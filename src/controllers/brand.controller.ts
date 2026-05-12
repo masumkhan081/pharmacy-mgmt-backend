@@ -10,8 +10,7 @@ import {
   sendBadRequest,
 } from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
-import Manufacturer from "../models/mfr.model";
-import Generic from "../models/generic.model";
+import prisma from "../lib/prisma";
 //
 
 export const getBrands: TypeController = async (req, res) => {
@@ -44,12 +43,12 @@ export const getSingleBrand: TypeController = async (req, res) => {
 
 export const createBrand: TypeController = async (req, res) => {
   try {
-    const genericExists = await Generic.findById(req.body.generic);
+    const genericExists = await prisma.generic.findUnique({ where: { id: req.body.generic } });
     if (!genericExists) {
       return sendBadRequest({ res, message: "Invalid generic reference" });
     }
 
-    const manufacturerExists = await Manufacturer.findById(req.body.manufacturer);
+    const manufacturerExists = await prisma.manufacturer.findUnique({ where: { id: req.body.manufacturer } });
     if (!manufacturerExists) {
       return sendBadRequest({ res, message: "Invalid manufacturer reference" });
     }
@@ -69,11 +68,10 @@ export const createBrand: TypeController = async (req, res) => {
 export const updateBrand: TypeController = async (req, res) => {
   try {
 
-    if (req.body.generic && !(await Generic.findById(req.body.generic))) {
+    if (req.body.generic && !(await prisma.generic.findUnique({ where: { id: req.body.generic } }))) {
       return sendBadRequest({ res, message: "Invalid generic reference" });
     }
-
-    if (req.body.manufacturer && !(await Manufacturer.findById(req.body.manufacturer))) {
+    if (req.body.manufacturer && !(await prisma.manufacturer.findUnique({ where: { id: req.body.manufacturer } }))) {
       return sendBadRequest({ res, message: "Invalid manufacturer reference" });
     }
 

@@ -35,8 +35,6 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateSupplierSchema = exports.supplierSchema = void 0;
 const z = __importStar(require("zod"));
-const mongoose_1 = require("mongoose");
-const objectIdValidator = (value) => mongoose_1.Types.ObjectId.isValid(value) || "Invalid ObjectId format";
 exports.supplierSchema = z.object({
     fullName: z
         .string()
@@ -52,9 +50,7 @@ exports.supplierSchema = z.object({
         .max(15, "Phone number must be at most 15 characters long."),
     gender: z.enum(["MALE", "FEMALE", "OTHER"]).optional(),
     email: z.string().email("Please enter a valid email address."),
-    manufacturer: z
-        .string()
-        .refine(objectIdValidator, { message: "Invalid manufacturer ID format" }),
+    manufacturer: z.string().uuid(),
     address: z
         .string()
         .max(55, "Address must be at most 55 characters long.")

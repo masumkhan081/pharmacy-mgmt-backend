@@ -1,10 +1,4 @@
 import { z } from 'zod';
-import { Types } from 'mongoose';
-
-// Custom validator for ObjectId
-const objectIdValidator = (value: string) => {
-  return Types.ObjectId.isValid(value) || 'Invalid ObjectId format';
-};
 
 // Schema for invoice items
 const invoiceItemSchema = z.object({
@@ -20,9 +14,9 @@ const invoiceItemSchema = z.object({
 // Create schema - for creating new invoices
 export const createInvoiceSchema = z.object({
   invoiceNumber: z.string().optional(), // Generated server-side
-  customer: z.string().refine(objectIdValidator, { message: 'Invalid customer ID format' }),
-  sale: z.string().refine(objectIdValidator, { message: 'Invalid sale ID format' }).optional(),
-  prescription: z.string().refine(objectIdValidator, { message: 'Invalid prescription ID format' }).optional(),
+  customer: z.string().uuid(),
+  sale: z.string().uuid().optional(),
+  prescription: z.string().uuid().optional(),
   issueDate: z.coerce.date().default(() => new Date()),
   dueDate: z.coerce.date(),
   items: z.array(invoiceItemSchema).min(1, 'At least one item is required'),
@@ -50,9 +44,9 @@ export const createInvoiceSchema = z.object({
 export const updateInvoiceSchema = z.object({
   // These fields should not be updated directly
   invoiceNumber: z.string().optional(),
-  customer: z.string().refine(objectIdValidator, { message: 'Invalid customer ID format' }).optional(),
-  sale: z.string().refine(objectIdValidator, { message: 'Invalid sale ID format' }).optional(),
-  prescription: z.string().refine(objectIdValidator, { message: 'Invalid prescription ID format' }).optional(),
+  customer: z.string().uuid().optional(),
+  sale: z.string().uuid().optional(),
+  prescription: z.string().uuid().optional(),
   
   // Updatable fields
   issueDate: z.coerce.date().optional(),

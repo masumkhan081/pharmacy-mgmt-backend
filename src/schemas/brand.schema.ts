@@ -1,8 +1,8 @@
 import * as z from "zod";
 
 export const brandSchema = z.object({
-  generic: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ObjectId"),
-  manufacturer: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ObjectId"),
+  generic: z.string().uuid(),
+  manufacturer: z.string().uuid(),
   name: z
     .string()
     .min(3, "Brand name must be at least 3 characters long")

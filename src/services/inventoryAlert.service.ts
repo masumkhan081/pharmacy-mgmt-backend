@@ -20,11 +20,6 @@ const createInventoryAlert = async (data: any) => {
 const getSingleInventoryAlert = async (id: IDType) => {
   return await prisma.inventoryAlert.findUnique({
     where: { id: id as string },
-    include: {
-      // Assuming you might want drug info, though not strictly in schema 
-      // yet as a relation, I'll stick to what's there.
-      // Wait, let's check schema.prisma if I added the relation.
-    }
   });
 };
 

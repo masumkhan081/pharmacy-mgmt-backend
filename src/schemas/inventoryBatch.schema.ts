@@ -1,17 +1,11 @@
 import { z } from 'zod';
-import { Types } from 'mongoose';
-
-// Custom validator for ObjectId
-const objectIdValidator = (value: string) => {
-  return Types.ObjectId.isValid(value) || 'Invalid ObjectId format';
-};
 
 // Create schema - for creating new inventory batches
 export const createInventoryBatchSchema = z.object({
-  drug: z.string().refine(objectIdValidator, { message: 'Invalid drug ID format' }),
+  drug: z.string().uuid(),
   batchNumber: z.string().min(1, 'Batch number is required'),
   lotNumber: z.string().min(1, 'Lot number is required'),
-  manufacturer: z.string().refine(objectIdValidator, { message: 'Invalid manufacturer ID format' }),
+  manufacturer: z.string().uuid(),
   manufactureDate: z.coerce.date(),
   expirationDate: z.coerce.date(),
   initialQuantity: z.number().int().min(1, 'Initial quantity must be at least 1'),
@@ -19,8 +13,8 @@ export const createInventoryBatchSchema = z.object({
   costPrice: z.number().min(0.01, 'Cost price must be at least 0.01'),
   sellingPrice: z.number().min(0.01, 'Selling price must be at least 0.01'),
   purchaseDate: z.coerce.date(),
-  purchase: z.string().refine(objectIdValidator, { message: 'Invalid purchase ID format' }).optional(),
-  supplier: z.string().refine(objectIdValidator, { message: 'Invalid supplier ID format' }).optional(),
+  purchase: z.string().uuid().optional(),
+  supplier: z.string().uuid().optional(),
   location: z.string().min(1, 'Storage location is required'),
   isActive: z.boolean().default(true),
   status: z.enum([
@@ -40,10 +34,10 @@ export const createInventoryBatchSchema = z.object({
 // Update schema - for updating existing inventory batches
 export const updateInventoryBatchSchema = z.object({
   // Immutable fields cannot be updated
-  drug: z.string().refine(objectIdValidator, { message: 'Invalid drug ID format' }).optional(),
+  drug: z.string().uuid().optional(),
   batchNumber: z.string().min(1, 'Batch number is required').optional(),
   lotNumber: z.string().min(1, 'Lot number is required').optional(),
-  manufacturer: z.string().refine(objectIdValidator, { message: 'Invalid manufacturer ID format' }).optional(),
+  manufacturer: z.string().uuid().optional(),
   manufactureDate: z.coerce.date().optional(),
   
   // Updatable fields

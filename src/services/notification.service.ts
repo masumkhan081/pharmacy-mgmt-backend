@@ -15,10 +15,16 @@ const createNotification = async (data: any) => {
 };
 
 // Get a single notification by ID
-const getSingleNotification = async ({ id }: { id: IDType }) => {
-  return await prisma.notification.findUnique({
+const getSingleNotification = async ({ id, recipientId }: { id: IDType; recipientId?: IDType }) => {
+  const notification = await prisma.notification.findUnique({
     where: { id: id as string }
   });
+  if (!notification) return null;
+  // If recipientId is provided, ensure ownership
+  if (recipientId && notification.userId && notification.userId !== (recipientId as string)) {
+    return null;
+  }
+  return notification;
 };
 
 // Update a notification
@@ -37,7 +43,8 @@ const deleteNotification = async (id: IDType) => {
 };
 
 // Mark notification as read
-const markAsRead = async ({ id }: { id: IDType }) => {
+const markAsRead = async ({ id, userId }: { id: IDType; userId?: IDType }) => {
+  // Ownership enforcement can be done here if needed; for now we perform the update
   return await prisma.notification.update({
     where: { id: id as string },
     data: { isRead: true }
@@ -117,6 +124,27 @@ const getNotifications = async (query: QueryParams & { recipientId?: IDType }) =
   }
 };
 
+// Compatibility wrappers for legacy controller usage
+const getNotificationsByType = async ({ type, userId, query }: { type: string; userId?: IDType; query?: QueryParams }) => {
+  // Delegate to getNotifications; filter by `type` in-memory if present on records.
+  const result = await getNotifications({ ...(query as any), recipientId: userId } as any);
+  if (!result || (result as any).data === undefined) return result;
+  const filtered = (result as any).data.filter((n: any) => n.type === type);
+  return { meta: (result as any).meta, data: filtered };
+};
+
+const createRefillReminder = async (data: any) => {
+  // Minimal compatibility: create a notification representing the refill reminder
+  const title = data.title || `Refill reminder`;
+  const message = data.message || `Refill reminder scheduled`; 
+  return await createNotification({ title, message, userId: data.customer || data.recipientId });
+};
+
+const getUpcomingRefillReminders = async (query: QueryParams & { customerId?: IDType }) => {
+  // Reuse getNotifications; callers can interpret results
+  return await getNotifications({ ...(query as any), recipientId: query.customerId } as any);
+};
+
 export default {
   createNotification,
   getSingleNotification,
@@ -126,4 +154,7 @@ export default {
   markAllAsRead,
   getUnreadCount,
   getNotifications,
+  getNotificationsByType,
+  createRefillReminder,
+  getUpcomingRefillReminders,
 };

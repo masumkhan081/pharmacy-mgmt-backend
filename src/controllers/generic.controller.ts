@@ -10,7 +10,7 @@ import {
   sendBadRequest,
 } from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
-import groupModel from "../models/group.model";
+import prisma from "../lib/prisma";
 
 export const getGenerics: TypeController = async (req, res) => {
   try {
@@ -32,7 +32,7 @@ export const getSingleGeneric: TypeController = async (req, res) => {
 
 export const createGeneric: TypeController = async (req, res) => {
   try {
-    const group = await groupModel.findById(req.body.group);
+    const group = await prisma.group.findUnique({ where: { id: req.body.group } });
     if (!group) {
       return sendBadRequest({ res, message: "Group doesn't exist" });
     }
@@ -45,7 +45,7 @@ export const createGeneric: TypeController = async (req, res) => {
 
 export const updateGeneric: TypeController = async (req, res) => {
   try {
-    if (req.body.group && !(await groupModel.findById(req.body.group))) {
+    if (req.body.group && !(await prisma.group.findUnique({ where: { id: req.body.group } }))) {
       return sendBadRequest({ res, message: "Group doesn't exist" });
     }
     const result = await genericService.updateGeneric({

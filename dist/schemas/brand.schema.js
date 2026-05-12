@@ -36,8 +36,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.brandUpdateSchema = exports.brandSchema = void 0;
 const z = __importStar(require("zod"));
 exports.brandSchema = z.object({
-    generic: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ObjectId"),
-    manufacturer: z.string().regex(/^[0-9a-fA-F]{24}$/, "Invalid ObjectId"),
+    generic: z.string().uuid(),
+    manufacturer: z.string().uuid(),
     name: z
         .string()
         .min(3, "Brand name must be at least 3 characters long")

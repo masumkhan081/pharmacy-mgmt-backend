@@ -1,7 +1,6 @@
-import { Document } from "mongoose";
 import { IDType } from "./requestResponse";
 
-export interface ISalary extends Document {
+export interface ISalary {
   name: string;
 }
 

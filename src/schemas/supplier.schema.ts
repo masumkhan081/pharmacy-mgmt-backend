@@ -1,8 +1,4 @@
 import * as z from "zod";
-import { Types } from "mongoose";
-
-const objectIdValidator = (value: string) =>
-  Types.ObjectId.isValid(value) || "Invalid ObjectId format";
 
 export const supplierSchema = z.object({
   fullName: z
@@ -19,9 +15,7 @@ export const supplierSchema = z.object({
     .max(15, "Phone number must be at most 15 characters long."),
   gender: z.enum(["MALE", "FEMALE", "OTHER"]).optional(),
   email: z.string().email("Please enter a valid email address."),
-  manufacturer: z
-    .string()
-    .refine(objectIdValidator, { message: "Invalid manufacturer ID format" }),
+  manufacturer: z.string().uuid(),
   address: z
     .string()
     .max(55, "Address must be at most 55 characters long.")

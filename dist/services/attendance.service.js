@@ -4,25 +4,40 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const constants_1 = require("../config/constants");
-const attendance_model_1 = __importDefault(require("../models/attendance.model"));
+const prisma_1 = __importDefault(require("../lib/prisma"));
 const queryHandler_1 = __importDefault(require("../utils/queryHandler"));
-//
-const createAttendance = async (data) => await attendance_model_1.default.create(data);
-//
-const getSingleAttendance = async (id) => attendance_model_1.default.findById(id);
-//
-const updateAttendance = async ({ id, data }) => await attendance_model_1.default.findByIdAndUpdate(id, data, { new: true });
-//
-const deleteAttendance = async (id) => await attendance_model_1.default.findByIdAndDelete(id);
-//
+const createAttendance = async (data) => await prisma_1.default.attendance.create({
+    data: {
+        staffId: data.staff,
+        date: data.date || new Date(),
+        status: data.status,
+    }
+});
+const getSingleAttendance = async (id) => prisma_1.default.attendance.findUnique({
+    where: { id: id },
+    include: { staff: true }
+});
+const updateAttendance = async ({ id, data }) => await prisma_1.default.attendance.update({
+    where: { id: id },
+    data
+});
+const deleteAttendance = async (id) => await prisma_1.default.attendance.delete({ where: { id: id } });
 async function getAttendances(query) {
     try {
-        const { currentPage, viewLimit, viewSkip, sortBy, sortOrder, filterConditions, sortConditions, } = (0, queryHandler_1.default)({ query, entity: constants_1.entities.attendance });
-        const fetchResult = await attendance_model_1.default.find(filterConditions)
-            .sort(sortConditions)
-            .skip(viewSkip)
-            .limit(viewLimit);
-        const total = await attendance_model_1.default.countDocuments(filterConditions);
+        const { currentPage, viewLimit, viewSkip, sortBy, sortOrder, searchTerm, } = (0, queryHandler_1.default)({ query, entity: constants_1.entities.attendance });
+        const where = searchTerm ? {
+            staff: {
+                name: { contains: searchTerm, mode: "insensitive" }
+            }
+        } : {};
+        const fetchResult = await prisma_1.default.attendance.findMany({
+            where,
+            skip: viewSkip,
+            take: viewLimit,
+            orderBy: sortBy ? { [sortBy]: sortOrder ?? "desc" } : { date: "desc" },
+            include: { staff: true }
+        });
+        const total = await prisma_1.default.attendance.count({ where });
         return {
             meta: {
                 total,

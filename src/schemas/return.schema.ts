@@ -1,15 +1,9 @@
 import { z } from 'zod';
-import { Types } from 'mongoose';
-
-// Custom validator for ObjectId
-const objectIdValidator = (value: string) => {
-  return Types.ObjectId.isValid(value) || 'Invalid ObjectId format';
-};
 
 // Schema for return item
 const returnItemSchema = z.object({
-  drug: z.string().refine(objectIdValidator, { message: 'Invalid drug ID format' }),
-  batch: z.string().refine(objectIdValidator, { message: 'Invalid batch ID format' }).optional(),
+  drug: z.string().uuid(),
+  batch: z.string().uuid().optional(),
   quantity: z.number().int().min(1, 'Quantity must be at least 1'),
   unitPrice: z.number().min(0.01, 'Unit price must be at least 0.01'),
   reason: z.enum([
@@ -32,10 +26,10 @@ const returnBase = z.object({
     errorMap: () => ({ message: 'Return type must be one of the predefined values' }),
   }),
   returnDate: z.coerce.date().default(() => new Date()),
-  customer: z.string().refine(objectIdValidator, { message: 'Invalid customer ID format' }).optional(),
-  supplier: z.string().refine(objectIdValidator, { message: 'Invalid supplier ID format' }).optional(),
-  originalInvoice: z.string().refine(objectIdValidator, { message: 'Invalid invoice ID format' }).optional(),
-  originalPurchase: z.string().refine(objectIdValidator, { message: 'Invalid purchase ID format' }).optional(),
+  customer: z.string().uuid().optional(),
+  supplier: z.string().uuid().optional(),
+  originalInvoice: z.string().uuid().optional(),
+  originalPurchase: z.string().uuid().optional(),
   items: z.array(returnItemSchema).min(1, 'At least one item is required'),
   totalAmount: z.number().min(0, 'Total amount cannot be negative'),
   refundAmount: z.number().min(0, 'Refund amount cannot be negative').optional(),
@@ -50,8 +44,8 @@ const returnBase = z.object({
   ], {
     errorMap: () => ({ message: 'Status must be one of the predefined values' }),
   }).default('PENDING'),
-  processedBy: z.string().refine(objectIdValidator, { message: 'Invalid staff ID format' }),
-  approvedBy: z.string().refine(objectIdValidator, { message: 'Invalid staff ID format' }).optional(),
+  processedBy: z.string().uuid(),
+  approvedBy: z.string().uuid().optional(),
   notes: z.string().optional(),
 });
 

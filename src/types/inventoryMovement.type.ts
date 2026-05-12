@@ -1,5 +1,5 @@
-import { Types } from "mongoose";
 import { Prisma } from "@prisma/client";
+import { IDType } from "./requestResponse";
 
 // ─── Direction ────────────────────────────────────────────────────────────────
 
@@ -12,7 +12,7 @@ export type MovementDirection = "OUT" | "IN";
  * Returned in every movement receipt so callers can store traceability data.
  */
 export interface BatchAllocation {
-  batchId: Types.ObjectId | string;
+  batchId: IDType;
   batchNumber: string;
   expirationDate: Date;
   quantityMoved: number;
@@ -28,7 +28,7 @@ export interface BatchAllocation {
  * document so full traceability is available without re-querying batches.
  */
 export interface MovementReceipt {
-  drugId: Types.ObjectId | string;
+  drugId: IDType;
   direction: MovementDirection;
   requestedQty: number;
   totalMoved: number;
@@ -40,7 +40,7 @@ export interface MovementReceipt {
 // ─── deductStock input ────────────────────────────────────────────────────────
 
 export interface DeductStockInput {
-  drugId: Types.ObjectId | string;
+  drugId: IDType;
   quantity: number;
   /** Optional Prisma transaction client. */
   tx?: Prisma.TransactionClient;
@@ -49,8 +49,8 @@ export interface DeductStockInput {
 // ─── receiveStock input ───────────────────────────────────────────────────────
 
 export interface ReceiveStockInput {
-  drugId: Types.ObjectId | string;
-  batchId: Types.ObjectId | string;
+  drugId: IDType;
+  batchId: IDType;
   quantity: number;
   tx?: Prisma.TransactionClient;
 }
@@ -58,8 +58,8 @@ export interface ReceiveStockInput {
 // ─── restoreStock input (used only by approveReturn) ─────────────────────────
 
 export interface RestoreStockInput {
-  drugId: Types.ObjectId | string;
-  batchId: Types.ObjectId | string;
+  drugId: IDType;
+  batchId: IDType;
   quantity: number;
   tx?: Prisma.TransactionClient;
 }
@@ -67,8 +67,8 @@ export interface RestoreStockInput {
 // ─── adjustStock input (used only by manual adjustments) ───────────────────────
 
 export interface AdjustStockInput {
-  drugId: Types.ObjectId | string;
-  batchId: Types.ObjectId | string;
+  drugId: IDType;
+  batchId: IDType;
   quantity: number; // Positive = add, Negative = subtract
   tx?: Prisma.TransactionClient;
 }

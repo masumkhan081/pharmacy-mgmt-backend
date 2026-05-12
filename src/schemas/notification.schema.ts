@@ -1,10 +1,4 @@
 import { z } from 'zod';
-import { Types } from 'mongoose';
-
-// Custom validator for ObjectId
-const objectIdValidator = (value: string) => {
-  return Types.ObjectId.isValid(value) || 'Invalid ObjectId format';
-};
 
 // Schema for notification recipients
 const recipientSchema = z.object({
@@ -13,7 +7,7 @@ const recipientSchema = z.object({
   ], {
     errorMap: () => ({ message: 'Recipient type must be one of the predefined values' }),
   }),
-  recipientId: z.string().refine(objectIdValidator, { message: 'Invalid recipient ID format' }),
+  recipientId: z.string().uuid(),
   channel: z.enum([
     'EMAIL', 'SMS', 'PUSH', 'IN_APP', 'WHATSAPP'
   ], {
@@ -80,13 +74,13 @@ export const createNotificationSchema = z.object({
   ], {
     errorMap: () => ({ message: 'Related entity type must be one of the predefined values' }),
   }).optional(),
-  relatedEntityId: z.string().refine(objectIdValidator, { message: 'Invalid entity ID format' }).optional(),
+  relatedEntityId: z.string().uuid().optional(),
   action: actionSchema,
   scheduledFor: z.coerce.date().default(() => new Date()),
   expiresAt: z.coerce.date().optional(),
   isRecurring: z.boolean().default(false),
   recurringPattern: recurringPatternSchema,
-  createdBy: z.string().refine(objectIdValidator, { message: 'Invalid user ID format' }).optional(),
+  createdBy: z.string().uuid().optional(),
   metadata: z.record(z.any()).optional(),
 });
 
@@ -116,9 +110,9 @@ export const updateNotificationSchema = z.object({
 
 // Create schema for refill reminders
 export const createRefillReminderSchema = z.object({
-  customer: z.string().refine(objectIdValidator, { message: 'Invalid customer ID format' }),
-  prescription: z.string().refine(objectIdValidator, { message: 'Invalid prescription ID format' }).optional(),
-  drug: z.string().refine(objectIdValidator, { message: 'Invalid drug ID format' }),
+  customer: z.string().uuid(),
+  prescription: z.string().uuid().optional(),
+  drug: z.string().uuid(),
   dueDate: z.coerce.date(),
   daysSupply: z.number().int().min(1, 'Days supply must be at least 1'),
   reminderDays: z.number().int().min(1, 'Reminder days must be at least 1').default(3),

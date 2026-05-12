@@ -1,26 +1,25 @@
-import { Document, Types } from "mongoose";
 import { IDType } from "./requestResponse";
 
 export interface IPurchaseDrugInput {
-  drug: Types.ObjectId | string;
+  drug: IDType;
   quantity: number;
   purchasePrice: number;
   mrp: number;
   batchNumber: string;
   expirationDate: Date;
-  batchId?: Types.ObjectId | string;
+  batchId?: IDType;
 }
 
-export interface IPurchase extends Document {
+export interface IPurchase {
   purchaseAt: Date;
-  supplier?: Types.ObjectId | string;
+  supplier?: IDType;
   drugs: IPurchaseDrugInput[];
   bill: number;
 }
 
 export interface IPurchasePayload {
   purchaseAt: Date;
-  supplier?: Types.ObjectId | string;
+  supplier?: IDType;
   drugs: IPurchaseDrugInput[];
   bill: number;
   actor?: string;

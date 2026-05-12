@@ -7,8 +7,7 @@ exports.deleteBrand = exports.updateBrand = exports.createBrand = exports.getSin
 const constants_1 = require("../config/constants");
 const brand_service_1 = __importDefault(require("../services/brand.service"));
 const responseHandler_1 = require("../utils/responseHandler");
-const mfr_model_1 = __importDefault(require("../models/mfr.model"));
-const generic_model_1 = __importDefault(require("../models/generic.model"));
+const prisma_1 = __importDefault(require("../lib/prisma"));
 //
 const getBrands = async (req, res) => {
     try {
@@ -42,11 +41,11 @@ const getSingleBrand = async (req, res) => {
 exports.getSingleBrand = getSingleBrand;
 const createBrand = async (req, res) => {
     try {
-        const genericExists = await generic_model_1.default.findById(req.body.generic);
+        const genericExists = await prisma_1.default.generic.findUnique({ where: { id: req.body.generic } });
         if (!genericExists) {
             return (0, responseHandler_1.sendBadRequest)({ res, message: "Invalid generic reference" });
         }
-        const manufacturerExists = await mfr_model_1.default.findById(req.body.manufacturer);
+        const manufacturerExists = await prisma_1.default.manufacturer.findUnique({ where: { id: req.body.manufacturer } });
         if (!manufacturerExists) {
             return (0, responseHandler_1.sendBadRequest)({ res, message: "Invalid manufacturer reference" });
         }
@@ -66,10 +65,10 @@ exports.createBrand = createBrand;
 // 
 const updateBrand = async (req, res) => {
     try {
-        if (req.body.generic && !(await generic_model_1.default.findById(req.body.generic))) {
+        if (req.body.generic && !(await prisma_1.default.generic.findUnique({ where: { id: req.body.generic } }))) {
             return (0, responseHandler_1.sendBadRequest)({ res, message: "Invalid generic reference" });
         }
-        if (req.body.manufacturer && !(await mfr_model_1.default.findById(req.body.manufacturer))) {
+        if (req.body.manufacturer && !(await prisma_1.default.manufacturer.findUnique({ where: { id: req.body.manufacturer } }))) {
             return (0, responseHandler_1.sendBadRequest)({ res, message: "Invalid manufacturer reference" });
         }
         const result = await brand_service_1.default.updateBrand({

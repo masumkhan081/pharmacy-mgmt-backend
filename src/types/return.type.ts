@@ -1,4 +1,3 @@
-import { Document, Types } from "mongoose";
 import { IDType } from "./requestResponse";
 
 export type ReturnType =
@@ -37,12 +36,12 @@ export type RefundMethod =
 
 // ─── Item in a return request ──────────────────────────────────────────────────
 export interface IReturnItem {
-  drug: Types.ObjectId | string;
+  drug: IDType;
   /**
    * The specific batch the item came from.
    * Required for CUSTOMER_RETURN so restoreStock knows which batch to replenish.
    */
-  batch: Types.ObjectId | string;
+  batch: IDType;
   quantity: number;
   unitPrice: number;
   reason: ReturnReason;
@@ -54,47 +53,47 @@ export interface IReturnItem {
 export interface ICreateReturnPayload {
   returnType: ReturnType;
   returnDate?: Date;
-  customer?: Types.ObjectId | string;
-  supplier?: Types.ObjectId | string;
-  originalSale?: Types.ObjectId | string;
-  originalPurchase?: Types.ObjectId | string;
+  customer?: IDType;
+  supplier?: IDType;
+  originalSale?: IDType;
+  originalPurchase?: IDType;
   items: IReturnItem[];
   totalAmount: number;
   refundAmount?: number;
   refundMethod?: RefundMethod;
-  processedBy: Types.ObjectId | string;
+  processedBy: IDType;
   notes?: string;
 }
 
 // ─── Payload for approving a return ───────────────────────────────────────────
 export interface IApproveReturnPayload {
   returnId: IDType;
-  approvedBy: Types.ObjectId | string;
+  approvedBy: IDType;
 }
 
 // ─── Payload for rejecting a return ───────────────────────────────────────────
 export interface IRejectReturnPayload {
   returnId: IDType;
-  rejectedBy: Types.ObjectId | string;
+  rejectedBy: IDType;
   rejectionReason?: string;
 }
 
 // ─── Document interface ────────────────────────────────────────────────────────
-export interface IReturn extends Document {
+export interface IReturn {
   returnNumber: string;
   returnType: ReturnType;
   returnDate: Date;
-  customer?: Types.ObjectId;
-  supplier?: Types.ObjectId;
-  originalSale?: Types.ObjectId;
-  originalPurchase?: Types.ObjectId;
+  customer?: IDType;
+  supplier?: IDType;
+  originalSale?: IDType;
+  originalPurchase?: IDType;
   items: IReturnItem[];
   totalAmount: number;
   refundAmount?: number;
   refundMethod?: RefundMethod;
   refundDate?: Date;
   status: ReturnStatus;
-  approvedBy?: Types.ObjectId;
-  processedBy: Types.ObjectId;
+  approvedBy?: IDType;
+  processedBy: IDType;
   notes?: string;
 }

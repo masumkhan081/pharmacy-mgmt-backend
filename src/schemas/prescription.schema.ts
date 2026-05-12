@@ -1,13 +1,7 @@
 import { z } from "zod";
-import { Types } from "mongoose";
-
-const objectIdValidator = (value: string) =>
-  Types.ObjectId.isValid(value) || "Invalid ObjectId format";
 
 const medicationSchema = z.object({
-  drug: z
-    .string()
-    .refine(objectIdValidator, { message: "Invalid drug ID format" }),
+  drug: z.string().uuid(),
   dosage: z.string().min(1, "Dosage is required"),
   frequency: z.string().min(1, "Frequency is required"),
   duration: z.object({
@@ -21,13 +15,9 @@ const medicationSchema = z.object({
 });
 
 export const createPrescriptionSchema = z.object({
-  customer: z
-    .string()
-    .refine(objectIdValidator, { message: "Invalid customer ID format" }),
+  customer: z.string().uuid(),
   prescriptionNumber: z.string().min(1, "Prescription number is required"),
-  doctor: z
-    .string()
-    .refine(objectIdValidator, { message: "Invalid doctor ID format" }),
+  doctor: z.string().uuid(),
   issueDate: z.coerce.date().default(() => new Date()),
   expiryDate: z.coerce.date(),
   medications: z
