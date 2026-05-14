@@ -79,7 +79,7 @@ export const deleteReturn: TypeController = async (req, res) => {
   try {
     const result = await returnService.deleteReturn({
       id: req.params.id,
-      actor: req.user?.id,
+      actor: req.user?.userId,
     });
     sendDeletionResponse({ res, result, entity: entities.return });
   } catch (error) {

@@ -94,6 +94,7 @@ export const createPurchase = async (data: IPurchasePayload) => {
           entityType: "Purchase",
           entityId: savedPurchase.id as any,
           after: savedPurchase as any,
+          tx,
         });
       }
 

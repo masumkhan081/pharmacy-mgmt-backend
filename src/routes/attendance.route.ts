@@ -8,7 +8,7 @@ import {
   deleteAttendance,
 } from "../controllers/attendance.controller";
 import validateRequest from "../middlewares/validateRequest";
-import { attendanceSchema } from "../schemas/attendance.schema";
+import { attendanceSchema, updateAttendanceSchema } from "../schemas/attendance.schema";
 import { validateObjectId } from "../middlewares/validateId";
 import accessControl from "../middlewares/aceessControl";
 import { userRoles } from "../config/constants";
@@ -27,7 +27,7 @@ router.post(
 router.patch(
   "/:id",
   validateObjectId,
-  validateRequest(attendanceSchema),
+  validateRequest(updateAttendanceSchema),
   accessControl([userRoles.admin]),
   updateAttendance
 );

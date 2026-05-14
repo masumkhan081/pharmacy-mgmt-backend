@@ -10,6 +10,7 @@ import {
   sendErrorResponse,
   sendNotFound,
   sendUnauthorized,
+  sendSuccess,
 } from "../utils/responseHandler";
 
 const registerUser =
@@ -40,11 +41,7 @@ const requestEmailVerification: TypeController = async (req, res) => {
     }
 
     if (user.isVerified) {
-      res.status(200).json({
-        statusCode: 200,
-        success: true,
-        message: "Account already verified",
-      });
+      sendSuccess({ res, message: "Account already verified", data: null });
       return;
     }
 
@@ -54,9 +51,8 @@ const requestEmailVerification: TypeController = async (req, res) => {
       return sendBadRequest({ res, message: "Failed to send OTP" });
     }
 
-    res.status(200).json({
-      statusCode: 200,
-      success: true,
+    sendSuccess({
+      res,
       message: "An OTP has been sent to your email for verification",
       data: { token },
     });
@@ -112,10 +108,10 @@ const requestAccountRecovery = async (
       });
     }
 
-    res.status(200).json({
-      statusCode: 200,
-      success: true,
+    sendSuccess({
+      res,
       message: "A password reset link has been sent to your mail",
+      data: null,
     });
   } catch (error) {
     sendErrorResponse({ res, error, entity: "user" });
@@ -152,9 +148,8 @@ const verifyAccountRecovery = async (
       return sendNotFound({ res, message: "User not found." });
     }
 
-    res.status(200).json({
-      statusCode: 200,
-      success: true,
+    sendSuccess({
+      res,
       message: "You can update your password now.",
       data: { token },
     });
@@ -215,10 +210,10 @@ const updatePassword = async (req: Request, res: Response): Promise<void> => {
       return sendBadRequest({ res, message: "Failed to update password" });
     }
 
-    res.status(200).json({
-      statusCode: 200,
-      success: true,
+    sendSuccess({
+      res,
       message: "Password updated successfully. You may log in.",
+      data: null,
     });
   } catch (error) {
     sendErrorResponse({ res, error, entity: "user" });

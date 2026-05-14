@@ -19,6 +19,16 @@ export interface ICreateAdjustmentPayload {
 }
 
 const createAdjustment = async (data: ICreateAdjustmentPayload) => {
+  // Enforce adjustmentType ↔ quantity sign consistency. The inventory movement
+  // pipeline treats `quantity` as signed (+ adds, − removes); the recorded type
+  // must match that direction so reads of historical adjustments are truthful.
+  if (data.adjustmentType === AdjustmentType.ADDITION && data.quantity <= 0) {
+    throw new Error("ADDITION adjustments require a positive quantity");
+  }
+  if (data.adjustmentType === AdjustmentType.DEDUCTION && data.quantity >= 0) {
+    throw new Error("DEDUCTION adjustments require a negative quantity");
+  }
+
   return await prisma.$transaction(async (tx) => {
     try {
       // 1. Mutate inventory via authoritative service
@@ -40,7 +50,7 @@ const createAdjustment = async (data: ICreateAdjustmentPayload) => {
         actorId: data.actor,
       }, tx);
 
-      // 3. Create Audit Log
+      // 3. Create Audit Log — on the same tx so rollback removes it too.
       await createAuditLog({
         actor: data.actor,
         action: "STOCK_ADJUSTMENT",
@@ -50,6 +60,7 @@ const createAdjustment = async (data: ICreateAdjustmentPayload) => {
           ...savedAdjustment,
           movement: movementReceipt,
         } as any,
+        tx,
       });
 
       return savedAdjustment;

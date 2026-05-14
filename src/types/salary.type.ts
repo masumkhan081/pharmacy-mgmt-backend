@@ -1,10 +1,13 @@
 import { IDType } from "./requestResponse";
 
 export interface ISalary {
-  name: string;
+  staff: IDType;
+  amount: number;
+  month: string;
+  year: number;
+  paidAt?: Date;
 }
 
-// Update the interface to use IDType
 export interface ISalaryUpdatePayload {
   id: IDType;
   data: Partial<ISalary>;

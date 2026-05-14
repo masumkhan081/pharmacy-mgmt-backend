@@ -3,7 +3,7 @@ const app: Express = express();
 import dotenv from "dotenv";
 dotenv.config();
 import originControl from "./middlewares/corsMiddleware";
-import { sendErrorResponse } from "./utils/responseHandler";
+import { sendErrorResponse, sendNotFound, sendSuccess } from "./utils/responseHandler";
 import rateLimit from "express-rate-limit";
 // routes
 import authRoutes from "./routes/auth.route";
@@ -43,16 +43,23 @@ const apiLimiter = rateLimit({
   max: 100, // Limit each IP to 100 requests per windowMs
   standardHeaders: true,
   legacyHeaders: false,
-  message: "Too many requests from this IP, please try again after 15 minutes",
+  message: {
+    statusCode: 429,
+    success: false,
+    message: "Too many requests from this IP, please try again after 15 minutes",
+    data: null,
+    meta: null,
+    errors: null,
+  },
 });
 
 app.use("/api", apiLimiter);
 //
 app.get("/", async (req: Request, res: Response) => {
-  res.status(200).json({
-    statusCode: 200,
-    success: true,
+  sendSuccess({
+    res,
     message: "Pharmacy Engine API is functional",
+    data: null,
   });
 });
 //
@@ -83,9 +90,8 @@ app.use("/api/inventory-adjustments", inventoryAdjustmentRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 //
 app.use((req: Request, res: Response) => {
-  res.status(404).json({
-    statusCode: 404,
-    success: false,
+  sendNotFound({
+    res,
     message: "API Not Found",
     errors: [{ field: "path", message: req.originalUrl }],
   });

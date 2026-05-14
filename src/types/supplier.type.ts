@@ -1,16 +1,12 @@
 import { IDType } from "./requestResponse";
 
+// Aligned to Prisma `Supplier` model.
 export interface ISupplier {
-  fullName: string;
-  phone: string;
-  altPhone: string;
-  gender: "MALE" | "FEMALE" | "OTHER";
-  email: string;
-  manufacturer: string; // Adjust type based on manufacturer reference
-  address: string;
-  deliveryFrequency: "Daily" | "Weekly" | "Monthly" | "On-demand";
-  isActive: boolean;
-  notes: string;
+  name: string;
+  contactPerson?: string;
+  phone?: string;
+  email?: string;
+  address?: string;
 }
 
 export interface ISupplierUpdatePayload {

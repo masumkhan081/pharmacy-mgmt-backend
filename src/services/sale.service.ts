@@ -58,9 +58,10 @@ export const createSale = async (data: ISalePayload) => {
 
       // Create the sale record in Prisma
       const savedSale = await saleRepository.create({
-        saleNumber: `SALE-${Date.now()}`, 
+        saleNumber: `SALE-${Date.now()}`,
         totalBill: data.bill,
         actorId: data.actor || "SYSTEM",
+        customerId: data.customerId,
         items: saleItems,
       }, tx);
 
@@ -71,6 +72,7 @@ export const createSale = async (data: ISalePayload) => {
           entityType: "Sale",
           entityId: savedSale.id as any,
           after: savedSale as any,
+          tx,
         });
       }
 

@@ -8,8 +8,10 @@ import { UserRole } from "../types/user.type";
 import { Response } from "express";
 import {
   sendBadRequest,
+  sendConflict,
   sendErrorResponse,
   sendNotFound,
+  sendSuccess,
 } from "../utils/responseHandler";
 
 // Define interfaces for expected inputs
@@ -47,7 +49,7 @@ async function register({ res, data }: { res: Response; data: RegisterData }) {
     // Check if user already exists
     const existing = await userRepository.findByEmail(email);
     if (existing) {
-      return res.status(409).json({ success: false, message: "Email already registered" });
+      return sendConflict({ res, message: "Email already registered" });
     }
 
     // Hash password (if not already handled in controller, but service is better)
@@ -65,9 +67,8 @@ async function register({ res, data }: { res: Response; data: RegisterData }) {
     const { success, token } = await sendOTPMail(email);
 
     if (success) {
-      res.status(200).json({
-        statusCode: 200,
-        success: true,
+      sendSuccess({
+        res,
         message: "An OTP has been sent to your email for verification",
         data: { token },
       });
@@ -119,11 +120,7 @@ async function verifyEmail({
     // TEMPORARY: Just update isVerified.
     await userRepository.update(userDoc.id, { isVerified: true, isActive: true });
 
-    res.status(200).json({
-      statusCode: 200,
-      success: true,
-      message: "Account verified. You may login",
-    });
+    sendSuccess({ res, message: "Account verified. You may login", data: null });
   } catch (error) {
     sendErrorResponse({ res, error, entity: "user" });
   }
@@ -160,9 +157,8 @@ async function login({
           message: "Your account is not verified yet",
         });
       }
-      res.status(200).json({
-        statusCode: 200,
-        success: true,
+      sendSuccess({
+        res,
         message: "Your account is not yet verified. We sent an OTP to your mail.",
         data: { token: otpToken },
       });
@@ -184,11 +180,10 @@ async function login({
       await userRepository.update(userDoc.id, { isActive: true });
     }
 
-    res.status(200).json({
-      statusCode: 200,
-      success: true,
+    sendSuccess({
+      res,
       message: "You are successfully logged in",
-      data: { token, user: { id: userDoc.id, role: userDoc.role } } as any,
+      data: { token, user: { userId: userDoc.id, role: userDoc.role, email: userDoc.email } },
     });
   } catch (error) {
     sendErrorResponse({ res, error, entity: "user" });

@@ -42,7 +42,7 @@ export const createSale: TypeController = async (req, res) => {
   try {
     const result = await saleService.createSale({
       ...req.body,
-      actor: req.user?.id,
+      actor: req.user?.userId,
     });
     sendCreateResponse({ res, result, entity: entities.sale });
   } catch (error) {
@@ -59,7 +59,7 @@ export const deleteSale: TypeController = async (req, res) => {
   try {
     const result = await saleService.deleteSale({
       id: req.params.id,
-      actor: req.user?.id,
+      actor: req.user?.userId,
     });
     sendDeletionResponse({ res, result, entity: entities.sale });
   } catch (error) {

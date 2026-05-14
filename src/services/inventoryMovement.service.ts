@@ -101,7 +101,7 @@ async function deductStock({
 
     // Update the denormalized cache
     const newDrugAvailable = await inventoryBatchRepository.sumAvailableStock(drugId.toString(), txClient);
-    await drugRepository.updateAvailability(drugId.toString(), newDrugAvailable);
+    await drugRepository.updateAvailability(drugId.toString(), newDrugAvailable, txClient);
 
     return {
       drugId: drugId.toString(),
@@ -159,7 +159,7 @@ async function receiveStock({
     }, txClient);
 
     const newDrugAvailable = await inventoryBatchRepository.sumAvailableStock(drugId.toString(), txClient);
-    await drugRepository.updateAvailability(drugId.toString(), newDrugAvailable);
+    await drugRepository.updateAvailability(drugId.toString(), newDrugAvailable, txClient);
 
     return {
       drugId: drugId.toString(),
@@ -226,7 +226,7 @@ async function restoreStock({
     }, txClient);
 
     const newDrugAvailable = await inventoryBatchRepository.sumAvailableStock(drugId.toString(), txClient);
-    await drugRepository.updateAvailability(drugId.toString(), newDrugAvailable);
+    await drugRepository.updateAvailability(drugId.toString(), newDrugAvailable, txClient);
 
     return {
       drugId: drugId.toString(),
@@ -295,7 +295,7 @@ async function adjustStock({
     }, txClient);
 
     const newDrugAvailable = await inventoryBatchRepository.sumAvailableStock(drugId.toString(), txClient);
-    await drugRepository.updateAvailability(drugId.toString(), newDrugAvailable);
+    await drugRepository.updateAvailability(drugId.toString(), newDrugAvailable, txClient);
 
     return {
       drugId: drugId.toString(),
@@ -331,14 +331,16 @@ async function adjustStock({
  *   - InventoryBatch.currentQuantity
  *   - Drug.available
  *
- * All three methods require a MongoDB ClientSession from the caller.
- * The caller is responsible for session lifecycle (startTransaction /
- * commitTransaction / abortTransaction / endSession).
+ * Methods optionally accept a Prisma TransactionClient (`tx`). When the
+ * caller is already inside `prisma.$transaction`, pass `tx` so batch + drug
+ * writes are part of the same atomic unit. When called standalone, the
+ * service opens its own short-lived transaction.
  *
  * Methods:
  *   deductStock   — FIFO deduction (sales)
  *   receiveStock  — increment a batch (purchases)
  *   restoreStock  — restore to a batch (return approvals only)
+ *   adjustStock   — signed delta on a specific batch (admin adjustments)
  */
 const inventoryMovementService = {
   deductStock,

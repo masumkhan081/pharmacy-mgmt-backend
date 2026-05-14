@@ -20,7 +20,7 @@ const corsOptions: CorsOptions = {
     }
   },
   methods: ["GET", "POST", "PATCH", "PUT", "DELETE", "OPTIONS"],
-  credentials: true, // Allow credentials such as cookies
+  credentials: false,
 };
 
 // Export the CORS middleware

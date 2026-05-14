@@ -28,8 +28,12 @@ const requireAuth = (
     return;
   }
 
+  if (!payload.userId || !payload.role) {
+    sendUnauthorized({ res, message: "Invalid token payload" });
+    return;
+  }
+
   req.user = {
-    id: payload.userId,
     userId: payload.userId,
     role: payload.role,
     email: payload.email,

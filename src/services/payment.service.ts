@@ -79,13 +79,14 @@ const createPayment = async (data: ICreatePaymentPayload) => {
         },
       });
 
-      // 5. Audit Log (non-blocking or part of transaction)
+      // 5. Audit Log — written on the same tx so a rollback removes it too.
       await createAuditLog({
         actor: data.processedBy,
         action: "CREATE_PAYMENT",
         entityType: "Payment",
         entityId: payment.id,
         after: payment as any,
+        tx,
       });
 
       return payment;

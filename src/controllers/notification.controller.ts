@@ -7,6 +7,7 @@ import {
   sendCreateResponse,
   sendUpdateResponse,
   sendDeletionResponse,
+  sendSuccess,
 } from "../utils/responseHandler";
 import { TypeController } from "../types/requestResponse";
 
@@ -16,7 +17,7 @@ export const getNotifications: TypeController = async (req, res) => {
     const result = await notificationService.getNotifications({
       ...req.query,
       // Optionally filter by recipient if user is not admin
-      ...(req.user?.role !== 'ADMIN' && { recipientId: req.user?.id })
+      ...(req.user?.role !== 'ADMIN' && { recipientId: req.user?.userId })
     });
     sendFetchResponse({ res, result, entity: entities.notification });
   } catch (error) {
@@ -35,7 +36,7 @@ export const getSingleNotification: TypeController = async (req, res) => {
     const result = await notificationService.getSingleNotification({
       id: req.params.id,
       // For non-admin users, ensure they can only access their own notifications
-      ...(req.user?.role !== 'ADMIN' && { recipientId: req.user?.id })
+      ...(req.user?.role !== 'ADMIN' && { recipientId: req.user?.userId })
     });
     sendSingleFetchResponse({ res, result, entity: entities.notification });
   } catch (error) {
@@ -53,7 +54,7 @@ export const createNotification: TypeController = async (req, res) => {
   try {
     const result = await notificationService.createNotification({
       ...req.body,
-      createdBy: req.user?.id, // Assuming user is attached to request by auth middleware
+      createdBy: req.user?.userId,
     });
     sendCreateResponse({ res, result, entity: entities.notification });
   } catch (error) {
@@ -73,7 +74,7 @@ export const updateNotification: TypeController = async (req, res) => {
       id: req.params.id,
       data: {
         ...req.body,
-        updatedBy: req.user?.id, // Assuming user is attached to request by auth middleware
+        updatedBy: req.user?.userId,
       },
     });
     sendUpdateResponse({ res, result, entity: entities.notification });
@@ -107,7 +108,7 @@ export const markAsRead: TypeController = async (req, res) => {
   try {
     const result = await notificationService.markAsRead({
       id: req.params.id,
-      userId: req.user?.id as string, // To verify ownership
+      userId: req.user?.userId as string,
     });
     sendUpdateResponse({ res, result, entity: entities.notification });
   } catch (error) {
@@ -124,10 +125,11 @@ export const markAsRead: TypeController = async (req, res) => {
 export const markAllAsRead: TypeController = async (req, res) => {
   try {
     const result = await notificationService.markAllAsRead({
-      userId: req.user?.id as string,
+      userId: req.user?.userId as string,
     });
-    res.status(200).json({
-      success: true,
+    sendSuccess({
+      res,
+      message: "Notifications marked as read",
       data: { updatedCount: result },
     });
   } catch (error) {
@@ -144,12 +146,9 @@ export const markAllAsRead: TypeController = async (req, res) => {
 export const getUnreadCount: TypeController = async (req, res) => {
   try {
     const count = await notificationService.getUnreadCount({
-      userId: req.user?.id as string,
+      userId: req.user?.userId as string,
     });
-    res.status(200).json({
-      success: true,
-      data: { count },
-    });
+    sendSuccess({ res, message: "Unread notification count", data: { count } });
   } catch (error) {
     console.error(error);
     sendErrorResponse({
@@ -165,7 +164,7 @@ export const getNotificationsByType: TypeController = async (req, res) => {
   try {
     const result = await notificationService.getNotificationsByType({
       type: req.params.type,
-      userId: req.user?.id, // For non-admin users
+      userId: req.user?.userId,
       query: req.query,
     });
     sendFetchResponse({ res, result, entity: entities.notification });
@@ -184,7 +183,7 @@ export const createRefillReminder: TypeController = async (req, res) => {
   try {
     const result = await notificationService.createRefillReminder({
       ...req.body,
-      createdBy: req.user?.id,
+      createdBy: req.user?.userId,
     });
     sendCreateResponse({ res, result, entity: 'refillReminder' });
   } catch (error) {
@@ -203,7 +202,7 @@ export const getUpcomingRefillReminders: TypeController = async (req, res) => {
     const result = await notificationService.getUpcomingRefillReminders({
       ...req.query,
       // For non-admin users, only return their own reminders
-      ...(req.user?.role !== 'ADMIN' && { customerId: req.user?.id })
+      ...(req.user?.role !== 'ADMIN' && { customerId: req.user?.userId })
     });
     sendFetchResponse({ res, result, entity: 'refillReminder' });
   } catch (error) {

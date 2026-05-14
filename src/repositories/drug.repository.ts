@@ -1,6 +1,6 @@
 import prisma from "../lib/prisma";
 import { IDrug, IDrugCreateInput, IDrugUpdateInput } from "../types/drug.type";
-import { DrugStatus } from "@prisma/client";
+import { DrugStatus, Prisma } from "@prisma/client";
 
 /**
  * Drug Repository (Prisma implementation)
@@ -109,8 +109,13 @@ export class DrugRepository {
     };
   }
 
-  async updateAvailability(id: string, newAvailable: number): Promise<IDrug> {
-    const drug = await prisma.drug.update({
+  async updateAvailability(
+    id: string,
+    newAvailable: number,
+    tx?: Prisma.TransactionClient
+  ): Promise<IDrug> {
+    const client = tx || prisma;
+    const drug = await client.drug.update({
       where: { id },
       data: {
         available: newAvailable,

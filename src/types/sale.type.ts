@@ -20,9 +20,10 @@ export interface ISale {
 }
 
 export interface ISalePayload {
-  saleAt: Date;
+  saleAt?: Date;
   drugs: ISaleDrugInput[];
   bill: number;
+  customerId?: string;
   actor?: string;
 }
 

@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import { mapSearchable } from "../config/constants";
+import { sendBadRequest } from "../utils/responseHandler";
 
 const validateQueryParams =
   (entity: string) => (req: Request, res: Response, next: NextFunction) => {
@@ -17,9 +18,12 @@ const validateQueryParams =
     }
 
     if (invalidParams.length > 0) {
-      return res.status(400).json({
-        error: `Invalid query parameters: ${invalidParams.join(", ")}`,
+      sendBadRequest({
+        res,
+        message: `Invalid query parameters: ${invalidParams.join(", ")}`,
+        errors: invalidParams.map((p) => ({ field: p, message: "Invalid parameter" })),
       });
+      return;
     }
 
     next();

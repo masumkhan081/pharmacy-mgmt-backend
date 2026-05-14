@@ -12,7 +12,7 @@ export const createAdjustment: TypeController = async (req, res) => {
   try {
     const result = await inventoryAdjustmentService.createAdjustment({
       ...req.body,
-      actor: req.user?.id,
+      actor: req.user?.userId,
     });
     sendCreateResponse({ res, result, entity: entities.inventoryAdjustment });
   } catch (error) {

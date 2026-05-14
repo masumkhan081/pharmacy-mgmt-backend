@@ -10,6 +10,7 @@ export class SaleRepository {
     saleNumber: string;
     totalBill: number;
     actorId: string;
+    customerId?: string;
     items: {
       drugId: string;
       quantity: number;
@@ -27,6 +28,7 @@ export class SaleRepository {
         saleNumber: data.saleNumber,
         totalBill: data.totalBill,
         actorId: data.actorId,
+        ...(data.customerId ? { customerId: data.customerId } : {}),
         items: {
           create: data.items.map(item => ({
             drugId: item.drugId,

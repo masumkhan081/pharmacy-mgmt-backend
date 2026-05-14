@@ -1,10 +1,11 @@
 import { IDType } from "./requestResponse";
 
 export interface IAttendance {
-  name: string;
+  staff: IDType;
+  status: string;
+  date?: Date;
 }
 
-// Update the interface to use IDType
 export interface IAttendanceUpdatePayload {
   id: IDType;
   data: Partial<IAttendance>;

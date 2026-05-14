@@ -43,7 +43,7 @@ export const deleteInvoice: TypeController = async (req, res) => {
   try {
     const result = await invoiceService.deleteInvoice({
       id: req.params.id,
-      actor: req.user?.id,
+      actor: req.user?.userId,
     });
     sendDeletionResponse({ res, result, entity: entities.invoice });
   } catch (error) {

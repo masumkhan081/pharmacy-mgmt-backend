@@ -34,7 +34,12 @@ const send = (
   statusCode: number,
   body: Record<string, unknown>
 ): void => {
-  res.status(statusCode).json({ statusCode, ...body });
+  const data = Object.prototype.hasOwnProperty.call(body, "data") ? body.data : null;
+  const meta = Object.prototype.hasOwnProperty.call(body, "meta") ? body.meta : null;
+  const errors = Object.prototype.hasOwnProperty.call(body, "errors")
+    ? body.errors
+    : null;
+  res.status(statusCode).json({ statusCode, data, meta, errors, ...body });
 };
 
 const isPaginatedListShape = (
@@ -162,6 +167,27 @@ export const sendBadRequest = ({
     success: false,
     message,
     ...(errors ? { errors } : {}),
+  });
+};
+
+export const sendSuccess = ({
+  res,
+  statusCode = 200,
+  message,
+  data,
+  meta,
+}: {
+  res: Response;
+  statusCode?: number;
+  message: string;
+  data?: unknown;
+  meta?: unknown;
+}): void => {
+  send(res, statusCode, {
+    success: true,
+    message,
+    ...(data !== undefined ? { data } : {}),
+    ...(meta !== undefined ? { meta } : {}),
   });
 };
 

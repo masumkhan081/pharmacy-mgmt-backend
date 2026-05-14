@@ -1,7 +1,7 @@
 {
   "name": "pharmacy-mgmt-backend",
   "version": "1.0.0",
-  "description": "Pharmacy management system backend (Express + TypeScript + MongoDB).",
+  "description": "Pharmacy management system backend (Express + TypeScript + Prisma + PostgreSQL).",
   "main": "dist/index.js",
   "engines": {
     "node": ">=18.0.0"
@@ -16,35 +16,20 @@
     "check-types": "tsc --noEmit",
     "check": "npm run lint && npm run check-types",
     "prismaa": "npx prisma generate; npx prisma migrate dev",
-    "prepare": "husky install",
-    "seed": "node seeders/seed.all.js",
-    "seed:units": "node seeders/seed.units.js",
-    "seed:formulations": "node seeders/seed.formulations.js",
-    "seed:groups": "node seeders/seed.groups.js",
-    "seed:manufacturers": "node seeders/seed.manufacturers.js",
-    "seed:generics": "node seeders/seed.generics.js",
-    "seed:brands": "node seeders/seed.brands.js",
-    "seed:drugs": "node seeders/seed.drugs.js",
-    "seed:staff": "node seeders/seed.staff.js",
-    "seed:users": "node seeders/seed.users.js",
-    "seed:suppliers": "node seeders/seed.suppliers.js",
-    "seed:purchases": "node seeders/seed.purchases.js",
-    "seed:sales": "node seeders/seed.sales.js",
-    "seed:salaries": "node seeders/seed.salaries.js",
-    "seed:attendances": "node seeders/seed.attendances.js"
+    "prepare": "husky install"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"
   },
   "lint-staged": {
-    "src/**/*.ts": "eslint --fix",
-    "seeders/**/*.js": "eslint --fix"
+    "src/**/*.ts": "eslint --fix"
   },
   "keywords": [
     "pharmacy",
     "express",
     "typescript",
-    "mongodb"
+    "prisma",
+    "postgresql"
   ],
   "author": "",
   "license": "ISC",

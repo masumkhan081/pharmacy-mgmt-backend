@@ -200,6 +200,7 @@ const approveReturn = async ({ returnId, approvedBy }: IApproveReturnPayload) =>
         entityType: "Return",
         entityId: returnId as string,
         after: updated as any,
+        tx,
       });
 
       return updated;

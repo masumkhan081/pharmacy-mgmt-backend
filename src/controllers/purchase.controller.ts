@@ -43,7 +43,7 @@ export const createPurchase: TypeController = async (req, res) => {
   try {
     const result = await purchaseService.createPurchase({
       ...req.body,
-      actor: req.user?.id,
+      actor: req.user?.userId,
     });
     sendCreateResponse({ res, result, entity: entities.purchase });
   } catch (error) {
@@ -56,7 +56,7 @@ export const deletePurchase: TypeController = async (req, res) => {
   try {
     const result = await purchaseService.deletePurchase({
       id: req.params.id,
-      actor: req.user?.id,
+      actor: req.user?.userId,
     });
     sendDeletionResponse({ res, result, entity: entities.purchase });
   } catch (error) {

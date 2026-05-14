@@ -32,7 +32,7 @@ export const createPayment: TypeController = async (req, res) => {
   try {
     const result = await paymentService.createPayment({
       ...req.body,
-      processedBy: req.user?.id,
+      processedBy: req.user?.userId,
     });
     sendCreateResponse({ res, result, entity: entities.payment });
   } catch (error) {

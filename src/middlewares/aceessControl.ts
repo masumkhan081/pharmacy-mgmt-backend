@@ -23,8 +23,9 @@ function accessControl(accessRoles: string[]) {
     try {
       let role = req.user?.role;
       let userId = req.user?.userId;
+      let email = req.user?.email;
 
-      if (!role) {
+      if (!role || !userId) {
         const token = extractBearerToken(req.headers.authorization);
         if (!token) {
           sendUnauthorized({ res, message: "Authentication required" });
@@ -37,6 +38,7 @@ function accessControl(accessRoles: string[]) {
         }
         role = payload.role;
         userId = payload.userId;
+        email = payload.email;
 
         if (payload.email) {
           const user = await userRepository.findByEmail(payload.email);
@@ -47,7 +49,12 @@ function accessControl(accessRoles: string[]) {
           userId = user.id;
         }
 
-        req.user = { userId, role, email: payload.email };
+        req.user = { userId, role, email };
+      }
+
+      if (!role || !userId) {
+        sendUnauthorized({ res, message: "Authentication required" });
+        return;
       }
 
       if (!role || !accessRoles.includes(role)) {
