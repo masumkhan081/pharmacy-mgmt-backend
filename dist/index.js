@@ -4,9 +4,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// Polyfill for SlowBuffer in Node 22+ / future Node versions for legacy jsonwebtoken / jwa / buffer-equal-constant-time
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const buffer = require("buffer");
+if (!buffer.SlowBuffer) {
+    buffer.SlowBuffer = buffer.Buffer;
+}
 const app_1 = __importDefault(require("./app"));
 const config_1 = __importDefault(require("./config"));
-//np
 async function bootstrap() {
     let server;
     try {
@@ -27,8 +32,6 @@ async function bootstrap() {
         };
         process.on("uncaughtException", unexpectedErrorHandler);
         process.on("unhandledRejection", unexpectedErrorHandler);
-        // process.on("SIGINT", exitHandler); // Handle Ctrl+C
-        // process.on("SIGTERM", exitHandler); // Handle termination
     }
     catch (error) {
         if (error.code === "EADDRINUSE") {

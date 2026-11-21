@@ -1,7 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+// Polyfill for SlowBuffer in Node 22+ / future Node versions for legacy jsonwebtoken / jwa / buffer-equal-constant-time
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const buffer = require("buffer");
+if (!buffer.SlowBuffer) {
+  buffer.SlowBuffer = buffer.Buffer;
+}
+
 import app from "./app";
 import config from "./config";
-//np
+
 async function bootstrap() {
   let server: any;
 
@@ -25,8 +32,6 @@ async function bootstrap() {
     };
     process.on("uncaughtException", unexpectedErrorHandler);
     process.on("unhandledRejection", unexpectedErrorHandler);
-    // process.on("SIGINT", exitHandler); // Handle Ctrl+C
-    // process.on("SIGTERM", exitHandler); // Handle termination
   } catch (error: any) {
     if (error.code === "EADDRINUSE") {
       console.error(`Port ${config.port} is already in use.`);
