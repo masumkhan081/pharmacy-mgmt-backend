@@ -2,11 +2,16 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.genericUpdateSchema = exports.genericSchema = void 0;
 const zod_1 = require("zod");
+// Aligned to Prisma `Generic` model:
+// { name(unique), description? }
 exports.genericSchema = zod_1.z.object({
-    group: zod_1.z.string().uuid(),
     name: zod_1.z
         .string()
-        .min(3, "Generic name must be at least 3 characters long")
-        .max(35, "Generic name cannot exceed 35 characters"),
+        .min(1, "Generic name is required")
+        .max(50, "Generic name must be at most 50 characters long"),
+    description: zod_1.z
+        .string()
+        .max(500, "Description must be at most 500 characters long")
+        .optional(),
 });
 exports.genericUpdateSchema = exports.genericSchema.partial();

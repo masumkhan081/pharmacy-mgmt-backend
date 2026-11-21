@@ -17,7 +17,7 @@ async function register({ res, data }) {
         // Check if user already exists
         const existing = await user_repository_1.default.findByEmail(email);
         if (existing) {
-            return res.status(409).json({ success: false, message: "Email already registered" });
+            return (0, responseHandler_1.sendConflict)({ res, message: "Email already registered" });
         }
         // Hash password (if not already handled in controller, but service is better)
         // Actually auth.controller calls getHashedPassword
@@ -31,9 +31,8 @@ async function register({ res, data }) {
         // Email verification logic remains same
         const { success, token } = await (0, mail_1.sendOTPMail)(email);
         if (success) {
-            res.status(200).json({
-                statusCode: 200,
-                success: true,
+            (0, responseHandler_1.sendSuccess)({
+                res,
                 message: "An OTP has been sent to your email for verification",
                 data: { token },
             });
@@ -70,11 +69,7 @@ async function verifyEmail({ data, res, }) {
         // For now, let's assume verification is a flag we can add.
         // TEMPORARY: Just update isVerified.
         await user_repository_1.default.update(userDoc.id, { isVerified: true, isActive: true });
-        res.status(200).json({
-            statusCode: 200,
-            success: true,
-            message: "Account verified. You may login",
-        });
+        (0, responseHandler_1.sendSuccess)({ res, message: "Account verified. You may login", data: null });
     }
     catch (error) {
         (0, responseHandler_1.sendErrorResponse)({ res, error, entity: "user" });
@@ -100,9 +95,8 @@ async function login({ res, email, password, }) {
                     message: "Your account is not verified yet",
                 });
             }
-            res.status(200).json({
-                statusCode: 200,
-                success: true,
+            (0, responseHandler_1.sendSuccess)({
+                res,
                 message: "Your account is not yet verified. We sent an OTP to your mail.",
                 data: { token: otpToken },
             });
@@ -117,11 +111,10 @@ async function login({ res, email, password, }) {
         if (!userDoc.isActive) {
             await user_repository_1.default.update(userDoc.id, { isActive: true });
         }
-        res.status(200).json({
-            statusCode: 200,
-            success: true,
+        (0, responseHandler_1.sendSuccess)({
+            res,
             message: "You are successfully logged in",
-            data: { token, user: { id: userDoc.id, role: userDoc.role } },
+            data: { token, user: { userId: userDoc.id, role: userDoc.role, email: userDoc.email } },
         });
     }
     catch (error) {

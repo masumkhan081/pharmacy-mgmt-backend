@@ -42,7 +42,7 @@ const createPurchase = async (req, res) => {
     try {
         const result = await purchase_service_1.default.createPurchase({
             ...req.body,
-            actor: req.user?.id,
+            actor: req.user?.userId,
         });
         (0, responseHandler_1.sendCreateResponse)({ res, result, entity: constants_1.entities.purchase });
     }
@@ -56,7 +56,7 @@ const deletePurchase = async (req, res) => {
     try {
         const result = await purchase_service_1.default.deletePurchase({
             id: req.params.id,
-            actor: req.user?.id,
+            actor: req.user?.userId,
         });
         (0, responseHandler_1.sendDeletionResponse)({ res, result, entity: constants_1.entities.purchase });
     }

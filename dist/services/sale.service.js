@@ -58,6 +58,7 @@ const createSale = async (data) => {
                 saleNumber: `SALE-${Date.now()}`,
                 totalBill: data.bill,
                 actorId: data.actor || "SYSTEM",
+                customerId: data.customerId,
                 items: saleItems,
             }, tx);
             if (data.actor) {
@@ -67,6 +68,7 @@ const createSale = async (data) => {
                     entityType: "Sale",
                     entityId: savedSale.id,
                     after: savedSale,
+                    tx,
                 });
             }
             return savedSale;

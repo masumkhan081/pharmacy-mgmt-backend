@@ -47,15 +47,22 @@ const apiLimiter = (0, express_rate_limit_1.default)({
     max: 100, // Limit each IP to 100 requests per windowMs
     standardHeaders: true,
     legacyHeaders: false,
-    message: "Too many requests from this IP, please try again after 15 minutes",
+    message: {
+        statusCode: 429,
+        success: false,
+        message: "Too many requests from this IP, please try again after 15 minutes",
+        data: null,
+        meta: null,
+        errors: null,
+    },
 });
 app.use("/api", apiLimiter);
 //
 app.get("/", async (req, res) => {
-    res.status(200).json({
-        statusCode: 200,
-        success: true,
+    (0, responseHandler_1.sendSuccess)({
+        res,
         message: "Pharmacy Engine API is functional",
+        data: null,
     });
 });
 //
@@ -86,9 +93,8 @@ app.use("/api/inventory-adjustments", inventoryAdjustment_route_1.default);
 app.use("/api/dashboard", dashboard_route_1.default);
 //
 app.use((req, res) => {
-    res.status(404).json({
-        statusCode: 404,
-        success: false,
+    (0, responseHandler_1.sendNotFound)({
+        res,
         message: "API Not Found",
         errors: [{ field: "path", message: req.originalUrl }],
     });

@@ -14,6 +14,6 @@ const constants_1 = require("../config/constants");
 router.get("/", attendance_controller_1.getAttendances);
 router.get("/:id", validateId_1.validateObjectId, attendance_controller_1.getSingleAttendance);
 router.post("/", (0, validateRequest_1.default)(attendance_schema_1.attendanceSchema), (0, aceessControl_1.default)([constants_1.userRoles.admin]), attendance_controller_1.createAttendance);
-router.patch("/:id", validateId_1.validateObjectId, (0, validateRequest_1.default)(attendance_schema_1.attendanceSchema), (0, aceessControl_1.default)([constants_1.userRoles.admin]), attendance_controller_1.updateAttendance);
+router.patch("/:id", validateId_1.validateObjectId, (0, validateRequest_1.default)(attendance_schema_1.updateAttendanceSchema), (0, aceessControl_1.default)([constants_1.userRoles.admin]), attendance_controller_1.updateAttendance);
 router.delete("/:id", validateId_1.validateObjectId, (0, aceessControl_1.default)([constants_1.userRoles.admin]), attendance_controller_1.deleteAttendance);
 exports.default = router;

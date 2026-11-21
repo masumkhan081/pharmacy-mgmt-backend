@@ -12,6 +12,7 @@ const user_repository_1 = __importDefault(require("../repositories/user.reposito
 const constants_1 = require("../config/constants");
 const tokenisation_1 = require("../utils/tokenisation");
 const rateLimiter_1 = require("../middlewares/rateLimiter");
+const responseHandler_1 = require("../utils/responseHandler");
 //
 router.post("/register-as-bidder", (0, validateRequest_1.default)(auth_schema_1.registerSchema), auth_controller_1.default.registerUser(constants_1.userRoles.admin));
 //
@@ -31,7 +32,6 @@ router.post("/reset-password", (0, validateRequest_1.default)(auth_schema_1.rese
 // test user generation to get token to check accessControl middlewre
 router.get("/get-role-wise-test-account-credentials-and-token", async (req, res) => {
     try {
-        // Step 1: Hash passwords and prepare user data
         const userData = await Promise.all(constants_1.testUsers.map(async (user) => {
             const hashedPw = await (0, tokenisation_1.getHashedPassword)(user.password);
             return { ...user, password: hashedPw }; // Replace password with hashed password
@@ -47,46 +47,37 @@ router.get("/get-role-wise-test-account-credentials-and-token", async (req, res)
                     role: user.role.toUpperCase(),
                 });
             }
-            else {
-                console.log(`User with email ${user.email} already exists`);
-            }
         }
-        // Step 3: Create JWT tokens for each inserted user
-        const response = constants_1.testUsers.map((user) => {
-            const payload = {
-                email: user.email,
-                role: user.role,
-                fullName: user.fullName,
-            };
-            // Generate token for each user
+        const accounts = await Promise.all(constants_1.testUsers.map(async (user) => {
+            const dbUser = await user_repository_1.default.findByEmail(user.email);
             const token = (0, tokenisation_1.createToken)({
-                payload,
-                expireTime: "750h", // Set expiration time for the token
+                payload: {
+                    userId: dbUser?.id,
+                    role: user.role.toUpperCase(),
+                    email: user.email,
+                },
+                expireTime: "750h",
             });
             return {
+                userId: dbUser?.id,
                 email: user.email,
                 password: user.password,
                 fullName: user.fullName,
-                role: user.role,
+                role: user.role.toUpperCase(),
                 phone: user.phone,
                 address: user.address,
                 token,
             };
-        });
-        // Step 4: Send the response with user data and tokens
-        res.status(201).json({
-            message: "These are test accounts--- (salesman,admin,manager) for the sole purpose of testing." +
-                "Set a token in header naming authentication inside postman, and good to go !",
-            accounts: response,
+        }));
+        (0, responseHandler_1.sendSuccess)({
+            res,
+            statusCode: 201,
+            message: "Test accounts generated for integration testing (SALESMAN/ADMIN/MANAGER). Use the returned token as Bearer token in the Authorization header.",
+            data: { accounts },
         });
     }
     catch (error) {
-        if (error instanceof Error) {
-            console.error("Error creating test accounts:", error.message);
-            res
-                .status(500)
-                .json({ message: `Internal server error ${error.message}` });
-        }
+        (0, responseHandler_1.sendErrorResponse)({ res, error, entity: "TestAccounts" });
     }
 });
 exports.default = router;

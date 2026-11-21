@@ -1,8 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.responseMap = exports.sendErrorResponse = exports.sendForbidden = exports.sendUnauthorized = exports.sendConflict = exports.sendNotFound = exports.sendBadRequest = exports.sendDeletionResponse = exports.sendUpdateResponse = exports.sendCreateResponse = exports.sendListResponse = exports.sendSingleFetchResponse = exports.sendFetchResponse = void 0;
+exports.responseMap = exports.sendErrorResponse = exports.sendForbidden = exports.sendUnauthorized = exports.sendConflict = exports.sendNotFound = exports.sendSuccess = exports.sendBadRequest = exports.sendDeletionResponse = exports.sendUpdateResponse = exports.sendCreateResponse = exports.sendListResponse = exports.sendSingleFetchResponse = exports.sendFetchResponse = void 0;
 const send = (res, statusCode, body) => {
-    res.status(statusCode).json({ statusCode, ...body });
+    const data = Object.prototype.hasOwnProperty.call(body, "data") ? body.data : null;
+    const meta = Object.prototype.hasOwnProperty.call(body, "meta") ? body.meta : null;
+    const errors = Object.prototype.hasOwnProperty.call(body, "errors")
+        ? body.errors
+        : null;
+    res.status(statusCode).json({ statusCode, data, meta, errors, ...body });
 };
 const isPaginatedListShape = (value) => {
     return (typeof value === "object" &&
@@ -96,6 +101,15 @@ const sendBadRequest = ({ res, message, errors, }) => {
     });
 };
 exports.sendBadRequest = sendBadRequest;
+const sendSuccess = ({ res, statusCode = 200, message, data, meta, }) => {
+    send(res, statusCode, {
+        success: true,
+        message,
+        ...(data !== undefined ? { data } : {}),
+        ...(meta !== undefined ? { meta } : {}),
+    });
+};
+exports.sendSuccess = sendSuccess;
 const sendNotFound = ({ res, message, errors }) => {
     send(res, 404, {
         success: false,

@@ -83,6 +83,7 @@ const createPurchase = async (data) => {
                     entityType: "Purchase",
                     entityId: savedPurchase.id,
                     after: savedPurchase,
+                    tx,
                 });
             }
             return savedPurchase;

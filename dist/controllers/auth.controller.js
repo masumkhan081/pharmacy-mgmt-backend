@@ -32,20 +32,15 @@ const requestEmailVerification = async (req, res) => {
             });
         }
         if (user.isVerified) {
-            res.status(200).json({
-                statusCode: 200,
-                success: true,
-                message: "Account already verified",
-            });
+            (0, responseHandler_1.sendSuccess)({ res, message: "Account already verified", data: null });
             return;
         }
         const { success, token } = await (0, mail_1.sendOTPMail)(req.body.email);
         if (!success) {
             return (0, responseHandler_1.sendBadRequest)({ res, message: "Failed to send OTP" });
         }
-        res.status(200).json({
-            statusCode: 200,
-            success: true,
+        (0, responseHandler_1.sendSuccess)({
+            res,
             message: "An OTP has been sent to your email for verification",
             data: { token },
         });
@@ -93,10 +88,10 @@ const requestAccountRecovery = async (req, res) => {
                 message: "Failed to send reset link. Please try again.",
             });
         }
-        res.status(200).json({
-            statusCode: 200,
-            success: true,
+        (0, responseHandler_1.sendSuccess)({
+            res,
             message: "A password reset link has been sent to your mail",
+            data: null,
         });
     }
     catch (error) {
@@ -124,9 +119,8 @@ const verifyAccountRecovery = async (req, res) => {
         if (!user) {
             return (0, responseHandler_1.sendNotFound)({ res, message: "User not found." });
         }
-        res.status(200).json({
-            statusCode: 200,
-            success: true,
+        (0, responseHandler_1.sendSuccess)({
+            res,
             message: "You can update your password now.",
             data: { token },
         });
@@ -176,10 +170,10 @@ const updatePassword = async (req, res) => {
         if (result instanceof Error) {
             return (0, responseHandler_1.sendBadRequest)({ res, message: "Failed to update password" });
         }
-        res.status(200).json({
-            statusCode: 200,
-            success: true,
+        (0, responseHandler_1.sendSuccess)({
+            res,
             message: "Password updated successfully. You may log in.",
+            data: null,
         });
     }
     catch (error) {

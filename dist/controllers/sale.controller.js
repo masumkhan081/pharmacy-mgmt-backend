@@ -43,7 +43,7 @@ const createSale = async (req, res) => {
     try {
         const result = await sale_service_1.default.createSale({
             ...req.body,
-            actor: req.user?.id,
+            actor: req.user?.userId,
         });
         (0, responseHandler_1.sendCreateResponse)({ res, result, entity: constants_1.entities.sale });
     }
@@ -62,7 +62,7 @@ const deleteSale = async (req, res) => {
     try {
         const result = await sale_service_1.default.deleteSale({
             id: req.params.id,
-            actor: req.user?.id,
+            actor: req.user?.userId,
         });
         (0, responseHandler_1.sendDeletionResponse)({ res, result, entity: constants_1.entities.sale });
     }

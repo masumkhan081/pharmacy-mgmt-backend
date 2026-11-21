@@ -40,7 +40,7 @@ const getSingleDrug = async (req, res) => {
 exports.getSingleDrug = getSingleDrug;
 const createDrug = async (req, res) => {
     try {
-        const result = await drug_service_1.default.createDrug({ ...req.body, actor: req.user?.id });
+        const result = await drug_service_1.default.createDrug({ ...req.body, actor: req.user?.userId });
         (0, responseHandler_1.sendCreateResponse)({ res, result, entity: constants_1.entities.drug });
     }
     catch (error) {
@@ -54,7 +54,7 @@ const updateDrug = async (req, res) => {
         const result = await drug_service_1.default.updateDrug({
             id: req.params.id,
             data: req.body,
-            actor: req.user?.id,
+            actor: req.user?.userId,
         });
         (0, responseHandler_1.sendUpdateResponse)({ res, result, entity: constants_1.entities.drug });
     }
@@ -66,7 +66,7 @@ const updateDrug = async (req, res) => {
 exports.updateDrug = updateDrug;
 const deleteDrug = async (req, res) => {
     try {
-        const result = await drug_service_1.default.deleteDrug({ id: req.params.id, actor: req.user?.id });
+        const result = await drug_service_1.default.deleteDrug({ id: req.params.id, actor: req.user?.userId });
         (0, responseHandler_1.sendDeletionResponse)({ res, result, entity: constants_1.entities.drug });
     }
     catch (error) {

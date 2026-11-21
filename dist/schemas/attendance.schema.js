@@ -1,10 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.attendanceSchema = void 0;
+exports.updateAttendanceSchema = exports.attendanceSchema = void 0;
 const zod_1 = require("zod");
+// Aligned to Prisma `Attendance` model via `attendance.service.createAttendance`:
+// service maps `data.staff -> staffId`. Fields: staff(uuid), status, date?
 exports.attendanceSchema = zod_1.z.object({
-    name: zod_1.z
+    staff: zod_1.z.string().uuid("Invalid staff ID"),
+    status: zod_1.z
         .string()
-        .min(1, { message: "Name is required" })
-        .max(50, { message: "Name cannot exceed 50 characters" }),
+        .min(1, "Status is required")
+        .max(20, "Status must be at most 20 characters long"),
+    date: zod_1.z.coerce.date().optional(),
 });
+exports.updateAttendanceSchema = exports.attendanceSchema.partial();
